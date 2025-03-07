@@ -18,13 +18,13 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
-    android {
-        publishing {
-            singleVariant("release") {
-                withSourcesJar()
-            }
-        }
-    }
+//    android {
+//        publishing {
+//            singleVariant("release") {
+//                withSourcesJar()
+//            }
+//        }
+//    }
 
     buildTypes {
         release {
@@ -60,16 +60,16 @@ dependencies {
 }
 
 publishing {
-    repositories {
-        maven {
-            name = "arcverseRepository"
-            url = uri("https://repo.arcver.se/private")
-            credentials(PasswordCredentials::class)
-            authentication {
-                create<BasicAuthentication>("basic")
-            }
-        }
-    }
+//    repositories {
+//        maven {
+//            name = "arcverseRepository"
+//            url = uri("https://repo.arcver.se/private")
+//            credentials(PasswordCredentials::class)
+//            authentication {
+//                create<BasicAuthentication>("basic")
+//            }
+//        }
+//    }
     publications {
         create<MavenPublication>("release") {
             groupId = "com.xenon.commons"

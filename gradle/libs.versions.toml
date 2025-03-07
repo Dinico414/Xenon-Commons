@@ -2,7 +2,7 @@
 accesspoint = "1.0"
 agp = "8.6.1"
 kotlin = "1.9.24"
-core-ktx = "1.13.1"
+core-ktx = "1.15.0"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.2.1"
 espresso-core = "3.6.1"
@@ -13,8 +13,8 @@ navigation-fragment-ktx = "2.8.2"
 navigation-ui-ktx = "2.8.2"
 foundation-android = "1.7.3"
 material3 = "1.3.0"
-ui-graphics-android = "1.7.3"
-material3-android = "1.3.0"
+ui-graphics-android = "1.7.8"
+material3-android = "1.3.1"
 
 [libraries]
 accesspoint = { module = "com.xenon.commons:accesspoint", version.ref = "accesspoint" }

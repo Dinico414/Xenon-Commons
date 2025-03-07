@@ -18,13 +18,6 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
-//    android {
-//        publishing {
-//            singleVariant("release") {
-//                withSourcesJar()
-//            }
-//        }
-//    }
 
     buildTypes {
         release {
@@ -38,6 +31,11 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
+    }
+    tasks.register("printJavaVersion") {
+        doLast {
+            println("Java version used by Gradle: ${System.getProperty("java.version")}")
+        }
     }
     kotlinOptions {
         jvmTarget = "21"
@@ -59,14 +57,18 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("release") {
-
-                groupId = "com.github.dinico414"
-                artifactId = "accesspoint"
-                version = project.version.toString()
+publishing {
+    repositories {
+        mavenCentral()
+        maven(url = uri("https://jitpack.io"))
+    }
+    publications {
+        create<MavenPublication>("release") {
+            groupId = "com.xenon.commons"
+            artifactId = "accesspoint"
+            version = project.version.toString()
+            afterEvaluate {
+                from(components["release"])
             }
         }
     }

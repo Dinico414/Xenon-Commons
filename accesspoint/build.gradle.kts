@@ -5,11 +5,11 @@ plugins {
 }
 
 group = "com.xenon.commons"
-version = "1.0.8-4"
+version = "1.0"
 
 android {
     namespace = "com.xenon.commons.accesspoint"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 31
@@ -59,24 +59,14 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 }
 
-publishing {
-//    repositories {
-//        maven {
-//            name = "arcverseRepository"
-//            url = uri("https://repo.arcver.se/private")
-//            credentials(PasswordCredentials::class)
-//            authentication {
-//                create<BasicAuthentication>("basic")
-//            }
-//        }
-//    }
-    publications {
-        create<MavenPublication>("release") {
-            groupId = "com.xenon.commons"
-            artifactId = "accesspoint"
-            version = project.version.toString()
-            afterEvaluate {
-                from(components["release"])
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+
+                groupId = "com.github.dinico414"
+                artifactId = "accesspoint"
+                version = project.version.toString()
             }
         }
     }

@@ -42,7 +42,7 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.accesspoint)
+//    implementation(libs.accesspoint)
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)

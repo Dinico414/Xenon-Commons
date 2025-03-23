@@ -13,7 +13,7 @@
       "packageName": "com.xenon.calculator"
     },
     {
-      "name": "Nocturne",
+      "name": "Noctutest",
       "icon": "@mipmap/nocturne",
       "githubUrl": "https://github.com/Dinico414/NocturneNative",
       "packageName": "com.xenon.nocturne"

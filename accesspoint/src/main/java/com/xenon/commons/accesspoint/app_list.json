@@ -14,7 +14,7 @@
     },
     {
       "name": "Nocturne",
-      "icon": "@mipmap/files",
+      "icon": "@mipmap/nocturne",
       "githubUrl": "https://github.com/Dinico414/NocturneNative",
       "packageName": "com.xenon.nocturne"
     }

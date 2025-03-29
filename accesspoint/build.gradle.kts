@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.xenon.commons"
-version = "1.3"
+version = "1.4"
 
 android {
     namespace = "com.xenon.commons.accesspoint"

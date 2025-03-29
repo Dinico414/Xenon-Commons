@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="xenon_store">Xenon Store</string>
     <string name="nocturne">Nocturne</string>
     <string name="calculator">Rechner</string>
     <string name="todo_list">Todo Liste</string>

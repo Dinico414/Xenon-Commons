@@ -1,19 +1,19 @@
 {
   "appList": [
     {
-      "name": "@string/todo_list",
+      "name": "Todo List",
       "icon": "@mipmap/todo_list",
       "githubUrl": "https://github.com/Dinico414/TodoList",
       "packageName": "com.xenon.todolist"
     },
     {
-      "name": "@string/calculator",
+      "name": "Calculator",
       "icon": "@mipmap/calculator",
       "githubUrl": "https://github.com/Dinico414/Calculator",
       "packageName": "com.xenon.calculator"
     },
     {
-      "name": "@string/nocturne",
+      "name": "Nocturne",
       "icon": "@mipmap/nocturne",
       "githubUrl": "https://github.com/Dinico414/NocturneNative",
       "packageName": "com.xenon.nocturne"

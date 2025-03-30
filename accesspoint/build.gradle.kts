@@ -5,14 +5,14 @@ plugins {
 }
 
 group = "com.xenon.commons"
-version = "1.4"
+version = "1.5"
 
 android {
     namespace = "com.xenon.commons.accesspoint"
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 31
+        minSdk = 30
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")

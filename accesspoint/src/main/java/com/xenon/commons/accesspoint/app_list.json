@@ -1,4 +1,5 @@
 {
+  "protocolVersion": "v0.1",
   "appList": [
     {
       "name": "To-Do List",

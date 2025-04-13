@@ -1,13 +1,13 @@
 {
   "appList": [
     {
-      "name": "Todo List",
+      "names": {"en": "Todo List", "de": "Todo-Liste"},
       "icon": "@mipmap/todo_list",
       "githubUrl": "https://github.com/Dinico414/TodoList",
       "packageName": "com.xenon.todolist"
     },
     {
-      "name": "Calculator",
+      "names": {"en": "Calculator", "de": "Rechner"},
       "icon": "@mipmap/calculator",
       "githubUrl": "https://github.com/Dinico414/Calculator",
       "packageName": "com.xenon.calculator"

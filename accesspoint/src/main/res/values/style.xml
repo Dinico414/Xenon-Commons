@@ -43,7 +43,7 @@
         <item name="android:paddingTop">@dimen/border_margin</item>
         <item name="android:paddingEnd">@dimen/border_margin</item>
         <item name="android:paddingBottom">@dimen/border_margin</item>
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textAlignment">center</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -55,7 +55,15 @@
     </style>
 
     <style name="SettingsSelectionTitle">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginVertical">5dp</item>
+    </style>
+    <style name="SettingsSelectionSwitches">
+        <item name="android:paddingStart">@dimen/border_margin</item>
+        <item name="android:paddingEnd">@dimen/border_margin</item>
+        <item name="android:paddingBottom">@dimen/border_margin</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_marginVertical">5dp</item>
     </style>
@@ -64,8 +72,7 @@
         <item name="android:layout_marginTop">5dp</item>
         <item name="android:layout_marginBottom">15dp</item>
         <item name="android:layout_marginStart">10dp</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:textFontWeight">500</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:alpha">0.6</item>
     </style>
 

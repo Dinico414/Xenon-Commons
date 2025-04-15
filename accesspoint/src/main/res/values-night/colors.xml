@@ -6,6 +6,7 @@
     <color name="icon">@color/onSurface</color>
     <color name="checkbox">@color/onSurface</color>
     <color name="transparent">#00000000</color>
+    <color name="black">#000000</color>
 
     <color name="textOnPrimary">@android:color/primary_text_dark</color>
     <color name="textOnPrimaryInvert">@android:color/primary_text_light</color>

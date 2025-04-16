@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <color name="delete">@color/onErrorContainer</color>
+    <color name="delete_red">@color/errorContainer</color>
+    <color name="icon">@color/onSurface</color>
+    <color name="checkbox">@color/onSurface</color>
+    <color name="transparent">#00000000</color>
+    <color name="black">#000000</color>
+
+    <color name="textOnPrimary">@android:color/primary_text_dark</color>
+    <color name="textOnPrimaryInvert">@android:color/primary_text_light</color>
+
+    <color name="surfaceBright">@color/m3_sys_color_dynamic_dark_surface_bright</color>
+    <color name="surfaceDim">@color/m3_sys_color_dynamic_dark_surface_dim</color>
+    <color name="surfaceContainer">@color/m3_sys_color_dynamic_dark_surface_container</color>
+    <color name="surfaceContainerLow">@color/m3_sys_color_dynamic_dark_surface_container_low</color>
+    <color name="surfaceContainerLowest">@color/m3_sys_color_dynamic_dark_surface_container_lowest
+    </color>
+    <color name="surfaceContainerHigh">@color/m3_sys_color_dynamic_dark_surface_container_high
+    </color>
+    <color name="surfaceContainerHighest">
+        @color/m3_sys_color_dynamic_dark_surface_container_highest
+    </color>
+
+    <color name="primary">@color/material_dynamic_primary80</color>
+    <color name="onPrimary">@color/material_dynamic_primary20</color>
+    <color name="primaryContainer">@color/material_dynamic_primary30</color>
+    <color name="onPrimaryContainer">@color/material_dynamic_primary90</color>
+    <color name="secondary">@color/material_dynamic_secondary80</color>
+    <color name="onSecondary">@color/material_dynamic_secondary20</color>
+    <color name="secondaryContainer">@color/material_dynamic_secondary30</color>
+    <color name="onSecondaryContainer">@color/material_dynamic_secondary90</color>
+    <color name="tertiary">@color/material_dynamic_tertiary80</color>
+    <color name="onTertiary">@color/material_dynamic_tertiary20</color>
+    <color name="tertiaryContainer">@color/material_dynamic_tertiary30</color>
+    <color name="onTertiaryContainer">@color/material_dynamic_tertiary90</color>
+    <color name="error">#ffb4ab</color>
+    <color name="errorContainer">#93000a</color>
+    <color name="onError">#690005</color>
+    <color name="onErrorContainer">#ffdad6</color>
+    <color name="background">@color/surfaceContainerLowest</color>
+    <color name="onBackground">@color/material_dynamic_neutral90</color>
+    <color name="surface">@color/surfaceDim</color>
+    <color name="onSurface">@color/material_dynamic_neutral90</color>
+    <color name="surfaceVariant">@color/material_dynamic_neutral_variant30</color>
+    <color name="onSurfaceVariant">@color/material_dynamic_neutral_variant80</color>
+    <color name="outline">@color/material_dynamic_neutral_variant60</color>
+    <color name="inverseOnSurface">@color/material_dynamic_neutral10</color>
+    <color name="inverseSurface">@color/material_dynamic_neutral90</color>
+    <color name="inversePrimary">@color/material_dynamic_primary40</color>
+    <color name="shadow">@color/material_dynamic_primary0</color>
+    <color name="surfaceTint">@color/material_dynamic_primary80</color>
+    <color name="outlineVariant">@color/material_dynamic_neutral_variant30</color>
+    <color name="scrim">@color/material_dynamic_primary0</color>
+</resources>

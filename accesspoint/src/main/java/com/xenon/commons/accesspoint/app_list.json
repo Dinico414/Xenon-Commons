@@ -22,11 +22,11 @@
       "packageName": "com.xenon.nocturne"
     },
     {
-      "name": "Calculator-compose",
-      "names": {"en": "Calculator-compose", "de": "Rechner-compose"},
+      "name": "Calculator-cm",
+      "names": {"en": "Calculator-cm", "de": "Rechner-cm"},
       "icon": "@mipmap/calculator",
       "githubUrl": "https://github.com/Dinico414/Calculator-compose",
-      "packageName": "com.xenon.calculator"
+      "packageName": "com.xenon.calculator.compose"
     }
   ]
 }

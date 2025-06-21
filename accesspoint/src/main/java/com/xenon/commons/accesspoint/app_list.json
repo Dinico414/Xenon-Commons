@@ -20,6 +20,13 @@
       "icon": "@mipmap/nocturne",
       "githubUrl": "https://github.com/Dinico414/NocturneNative",
       "packageName": "com.xenon.nocturne"
+    },
+    {
+      "name": "ToDo List (alpha)",
+      "names": {"en": "ToDo List (alpha)", "de": "ToDo Liste (alpha)"},
+      "icon": "@mipmap/todo_list",
+      "githubUrl": "https://github.com/Dinico414/TodoListCompose",
+      "packageName": "com.xenon.todolist.compose"
     }
   ]
 }

@@ -22,8 +22,8 @@
       "packageName": "com.xenon.nocturne"
     },
     {
-      "name": "ToDo List (alpha)",
-      "names": {"en": "ToDo List (alpha)", "de": "ToDo Liste (alpha)"},
+      "name": "To-Do List (beta)",
+      "names": {"en": "To-Do List (beta)", "de": "To-Do Liste (beta)"},
       "icon": "@mipmap/todo_list",
       "githubUrl": "https://github.com/Dinico414/TodoListCompose",
       "packageName": "com.xenon.todolist.compose"

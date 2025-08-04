@@ -17,6 +17,7 @@
     },
     {
       "name": "Nocturne (alpha)",
+      "names" : {"en": "Nocturne (alpha)",  "de": "Nocturne (alpha)"}, 
       "icon": "@mipmap/nocturne",
       "githubUrl": "https://github.com/Dinico414/NocturneNative",
       "packageName": "com.xenon.nocturne"

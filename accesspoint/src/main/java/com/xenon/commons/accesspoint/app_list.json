@@ -27,7 +27,7 @@
       "names": {"en": "To-Do (beta)", "de": "To-Do (beta)"},
       "icon": "@mipmap/todo_list",
       "githubUrl": "https://github.com/Dinico414/TodoListCompose",
-      "packageName": "com.xenon.todolist.compose"
+      "packageName": "com.xenonware.todolist"
     }
   ]
 }

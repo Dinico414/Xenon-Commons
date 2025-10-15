@@ -40,6 +40,9 @@ android {
     kotlinOptions {
         jvmTarget = "21"
     }
+    publishing {
+        singleVariant("release")
+    }
 }
 
 dependencies {
@@ -84,17 +87,14 @@ dependencies {
     implementation (libs.coil.compose)
 }
 
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            afterEvaluate {
+afterEvaluate {
+    publishing {
+        publications {
+            register<MavenPublication>("release") {
                 from(components["release"])
                 groupId = "com.xenon.commons"
                 artifactId = "mylibrary"
                 version = project.version.toString()
-                afterEvaluate {
-                    from(components["release"])
-                }
             }
         }
     }

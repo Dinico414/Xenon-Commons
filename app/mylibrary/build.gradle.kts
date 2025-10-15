@@ -5,6 +5,9 @@ plugins {
     id("maven-publish")
 }
 
+group = "com.xenon.commons"
+version = "1.7"
+
 android {
     namespace = "com.xenon.mylibrary"
     compileSdk = 36
@@ -26,11 +29,16 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+    tasks.register("printJavaVersion") {
+        doLast {
+            println("Java version used by Gradle: ${System.getProperty("java.version")}")
+        }
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "21"
     }
 }
 
@@ -81,9 +89,12 @@ publishing {
         register<MavenPublication>("release") {
             afterEvaluate {
                 from(components["release"])
-                groupId = "com.github.sagar"
-                artifactId = "neopop-compose"
-                version = "1.0.0"
+                groupId = "com.xenon.commons"
+                artifactId = "mylibrary"
+                version = project.version.toString()
+                afterEvaluate {
+                    from(components["release"])
+                }
             }
         }
     }

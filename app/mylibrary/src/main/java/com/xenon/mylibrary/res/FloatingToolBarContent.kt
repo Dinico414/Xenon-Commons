@@ -367,7 +367,7 @@ fun FloatingToolbarContent(
                             LaunchedEffect(isSearchActive, isSelectionActive, isAddModeActive) {
                                 if (isSearchActive || isSelectionActive || isAddModeActive) {
                                     delay(
-                                        if (isSearchActive || isSelectionActive)700 else 0)
+                                        if (isSearchActive)700 else 0)
                                     rotationAngle.animateTo(
                                         targetValue = 45f, animationSpec = spring(
                                             dampingRatio = Spring.DampingRatioMediumBouncy,
@@ -473,7 +473,7 @@ fun FloatingToolbarContent(
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     AnimatedVisibility(
                                         visible = showActionIconsExceptSearch && !isSearchActive,
-                                        enter = fadeIn(animationSpec = tween(durationMillis = 500)),
+                                        enter = fadeIn(animationSpec = tween(durationMillis = 450)),
                                         exit = shrinkHorizontally(
                                             animationSpec = tween(
                                                 durationMillis = iconGroupExitAnimationDuration,

@@ -2,13 +2,6 @@
   "protocolVersion": "v0.0",
   "appList": [
     {
-      "name": "To-Do List",
-      "names": {"en": "To-Do List", "de": "To-Do Liste"},
-      "icon": "@mipmap/todo_list",
-      "githubUrl": "https://github.com/Dinico414/TodoList",
-      "packageName": "com.xenon.todolist"
-    },
-    {
       "name": "Calculator",
       "names": {"en": "Calculator", "de": "Rechner"},
       "icon": "@mipmap/calculator",

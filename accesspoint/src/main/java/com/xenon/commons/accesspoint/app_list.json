@@ -1,13 +1,13 @@
 {
   "protocolVersion": "v0.0",
   "appList": [
-    {
-      "name": "To-Do List",
-      "names": {"en": "To-Do List", "de": "To-Do Liste"},
+{
+      "name": "To-Do",
+      "names": {"en": "To-Do", "de": "To-Do"},
       "icon": "@mipmap/todo_list",
-      "githubUrl": "https://github.com/Dinico414/TodoList",
-      "packageName": "com.xenon.todolist"
-    },
+      "githubUrl": "https://github.com/Dinico414/TodoListCompose",
+      "packageName": "com.xenonware.todolist"
+    }
     {
       "name": "Calculator",
       "names": {"en": "Calculator", "de": "Rechner"},
@@ -17,17 +17,11 @@
     },
     {
       "name": "Nocturne",
-      "names" : {"en": "Nocturne (pre-alpha)",  "de": "Nocturne (pre-alpha)"}, 
+      "names" : {"en": "Nocturne (pre-alpha)",  "de": "Nocturne (pre-alpha)"},
       "icon": "@mipmap/nocturne",
       "githubUrl": "https://github.com/Dinico414/NocturneNative",
       "packageName": "com.xenon.nocturne"
     },
-    {
-      "name": "To-Do",
-      "names": {"en": "To-Do", "de": "To-Do"},
-      "icon": "@mipmap/todo_list",
-      "githubUrl": "https://github.com/Dinico414/TodoListCompose",
-      "packageName": "com.xenonware.todolist"
-    }
+
   ]
 }

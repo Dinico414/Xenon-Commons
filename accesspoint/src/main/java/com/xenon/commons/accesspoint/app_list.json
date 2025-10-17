@@ -7,7 +7,7 @@
       "icon": "@mipmap/todo_list",
       "githubUrl": "https://github.com/Dinico414/TodoListCompose",
       "packageName": "com.xenonware.todolist"
-    }
+    }, 
     {
       "name": "Calculator",
       "names": {"en": "Calculator", "de": "Rechner"},

@@ -15,6 +15,12 @@
       "githubUrl": "https://github.com/Dinico414/Calculator",
       "packageName": "com.xenon.calculator"
     },
+    {"name": "Notes",
+      "names": {"en": "Notes", "de": "Notizen"},
+      "icon": "@mipmap/notes",
+      "githubUrl": "https://github.com/Dinico414/Notes",
+      "packageName": "com.xenonware.notes"
+      },
     {
       "name": "Nocturne",
       "names" : {"en": "Nocturne (pre-alpha)",  "de": "Nocturne (pre-alpha)"},

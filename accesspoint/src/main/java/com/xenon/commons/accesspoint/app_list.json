@@ -1,19 +1,25 @@
 {
   "protocolVersion": "v0.0",
   "appList": [
-{
+    {
       "name": "To-Do",
       "names": {"en": "To-Do", "de": "To-Do"},
       "icon": "@mipmap/todo_list",
       "githubUrl": "https://github.com/Dinico414/TodoListCompose",
       "packageName": "com.xenonware.todolist"
-    }, 
+    },
     {
       "name": "Calculator",
       "names": {"en": "Calculator", "de": "Rechner"},
       "icon": "@mipmap/calculator",
       "githubUrl": "https://github.com/Dinico414/Calculator",
       "packageName": "com.xenon.calculator"
+    },
+    {"name": "Notes",
+      "names": {"en": "Notes", "de": "Notizen"},
+      "icon": "@mipmap/notes",
+      "githubUrl": "https://github.com/Dinico414/Notes",
+      "packageName": "com.xenonware.notes"
     },
     {
       "name": "Nocturne",

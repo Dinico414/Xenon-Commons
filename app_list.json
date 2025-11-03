@@ -13,7 +13,7 @@
       "names": {"en": "Calculator", "de": "Rechner"},
       "icon": "@mipmap/calculator",
       "githubUrl": "https://github.com/Dinico414/Calculator",
-      "packageName": "com.xenon.calculator"
+      "packageName": "com.xenonware.calculator"
     },
     {"name": "Notes",
       "names": {"en": "Notes (alpha)", "de": "Notizen (alpha)"},

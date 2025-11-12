@@ -31,7 +31,7 @@
 {
 "name": "Better xCloud",
 "names": {"en": "Better xCloud",  "de": "Better xCloud"}, 
-"icon": "@mipmap/nocturne",
+"icon": "@mipmap/better_xcloud",
 "githubUrl": "https://github.com/redphx/better-xcloud-android",
 "packageName": "com.redphx.betterxc"
 }

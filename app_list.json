@@ -27,7 +27,13 @@
       "icon": "@mipmap/nocturne",
       "githubUrl": "https://github.com/Dinico414/NocturneNative",
       "packageName": "com.xenon.nocturne"
-    }
+    }, 
+"name" : "Better xCloud",
+"names" : {"en": "Better xCloud",  "de" : "Better xCloud"}, 
+"icon" : "@mipmap/nocturne",
+"githubUrl": "https://github.com/redphx/better-xcloud-android",
+"packageName": "com.redphx.betterxc"
+}
     
   ]
 }

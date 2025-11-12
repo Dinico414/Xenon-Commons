@@ -41,6 +41,83 @@
 "icon": "@mipmap/u_tag",
 "githubUrl": "https://github.com/KieronQuinn/uTag",
 "packageName": "com.kieronquinn.app.utag"
+},
+{
+"name": "chrono",
+"names": {"en": "chrono", "de": "chrono"},
+"icon": "@mipmap/chrono",
+"githubUrl": "https://github.com/vicolo-dev/chrono",
+"packageName": "com.vicolo.chrono"
+},
+{
+"name": "breezy-weather",
+"names": {"en": "breezy-weather", "de": "breezy-weather"},
+"icon": "@mipmap/breezy_weather",
+"githubUrl": "https://github.com/breezy-weather/breezy-weather",
+"packageName": "org.breezyweather"
+},
+{
+"name": "Redomi",
+"names": {"en": "Redomi", "de": "Redomi"},
+"icon": "@mipmap/redomi",
+"githubUrl": "https://github.com/acszo/Redomi",
+"packageName": "com.acszo.redomi"
+},
+{
+"name": "ShizuTools",
+"names": {"en": "ShizuTools", "de": "ShizuTools"},
+"icon": "@mipmap/shizu_tools",
+"githubUrl": "https://github.com/legendsayantan/ShizuTools",
+"packageName": "com.legendsayantan.adbtools"
+},
+{
+"name": "tidy",
+"names": {"en": "tidy", "de": "tidy"},
+"icon": "@mipmap/tidy",
+"githubUrl": "https://github.com/slavabarkov/tidy",
+"packageName": "com.slavabarkov.tidy"
+},
+{
+"name": "NetGuard",
+"names": {"en": "NetGuard", "de": "NetGuard"},
+"icon": "@mipmap/net_guard",
+"githubUrl": "https://github.com/M66B/NetGuard",
+"packageName": "eu.faircode.netguard"
+},
+{
+"name": "FileNavigator",
+"names": {"en": "FileNavigator", "de": "FileNavigator"},
+"icon": "@mipmap/file_navigator",
+"githubUrl": "https://github.com/w2sv/FileNavigator",
+"packageName": "com.w2sv.filenavigator"
+},
+{
+"name": "InstallWithOptions",
+"names": {"en": "InstallWithOptions", "de": "InstallWithOptions"},
+"icon": "@mipmap/install_with_options",
+"githubUrl": "https://github.com/zacharee/InstallWithOptions",
+"packageName": "dev.zwander.installwithoptions"
+},
+{
+"name": "Canta",
+"names": {"en": "Canta", "de": "Canta"},
+"icon": "@mipmap/canta",
+"githubUrl": "https://github.com/samolego/Canta",
+"packageName": "io.github.samolego.canta"
+},
+{
+"name": "Paperize",
+"names": {"en": "Paperize", "de": "Paperize"},
+"icon": "@mipmap/paperize",
+"githubUrl": "https://github.com/Anthonyy232/Paperize",
+"packageName": "com.anthonyla.paperize"
+},
+{
+"name": "QuickTiles",
+"names": {"en": "QuickTiles", "de": "QuickTiles"},
+"icon": "@mipmap/quick_tiles",
+"githubUrl": "https://github.com/flxholle/QuickTiles",
+"packageName": "com.flxholle.quicktiles"
 }
   ]
 }

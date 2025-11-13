@@ -85,13 +85,6 @@
 "packageName": "eu.faircode.netguard"
 },
 {
-"name": "FileNavigator",
-"names": {"en": "FileNavigator", "de": "FileNavigator"},
-"icon": "@mipmap/file_navigator",
-"githubUrl": "https://github.com/w2sv/FileNavigator",
-"packageName": "com.w2sv.filenavigator"
-},
-{
 "name": "InstallWithOptions",
 "names": {"en": "InstallWithOptions", "de": "InstallWithOptions"},
 "icon": "@mipmap/install_with_options",

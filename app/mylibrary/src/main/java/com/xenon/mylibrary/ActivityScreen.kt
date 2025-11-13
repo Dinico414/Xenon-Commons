@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -61,6 +62,7 @@ fun ActivityScreen(
     navigationIconStartPadding: Dp = SmallPadding,
     navigationIconPadding: Dp = SmallPadding,
     navigationIconSpacing: Dp = SmallPadding,
+    expandedHeight: Dp = LocalConfiguration.current.screenHeightDp.dp.times(0.3f),
     expandable: Boolean = true,
     modifier: Modifier = Modifier,
     contentModifier: Modifier = Modifier,
@@ -68,6 +70,7 @@ fun ActivityScreen(
     dialogs: @Composable () -> Unit = {},
 ) {
     CollapsingAppBarLayout(
+        expandedHeight = expandedHeight,
         title = { fraction ->
             Text(
                 text = titleText, fontFamily = QuicksandTitleVariable, color = lerp(
@@ -106,10 +109,12 @@ fun ActivityScreen(
                 ) {
                     CompositionLocalProvider(LocalContentColor provides appBarNavigationIconContentColor) {
                         Row(
-                            modifier = Modifier.padding(
-                                start = navigationIconStartPadding,
-                                end = navigationIconPadding
-                            ).padding(vertical = navigationIconPadding),
+                            modifier = Modifier
+                                .padding(
+                                    start = navigationIconStartPadding,
+                                    end = navigationIconPadding
+                                )
+                                .padding(vertical = navigationIconPadding),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(navigationIconSpacing)
                         ) {

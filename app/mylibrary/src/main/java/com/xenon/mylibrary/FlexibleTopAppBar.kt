@@ -53,6 +53,7 @@ val QuicksandTitleVariable = FontFamily(
 fun CollapsingAppBarLayout(
     modifier: Modifier = Modifier,
     collapsedHeight: Dp = 64.dp,
+    expandedHeight: Dp = LocalConfiguration.current.screenHeightDp.dp.times(0.3f),
     title: @Composable (fraction: Float) -> Unit = { _ -> },
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
@@ -65,9 +66,8 @@ fun CollapsingAppBarLayout(
     actionIconContentColor: Color = MaterialTheme.colorScheme.onSurface,
     content: @Composable (paddingValues: PaddingValues) -> Unit
 ) {
-    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val expandedHeight = remember(expandable) {
-        if (expandable) screenHeight * 0.3f else collapsedHeight
+        if (expandable) expandedHeight else collapsedHeight
     }
 
     val scrollBehavior: TopAppBarScrollBehavior =

@@ -109,7 +109,7 @@
 "name": "QuickTiles",
 "names": {"en": "QuickTiles", "de": "QuickTiles"},
 "icon": "@mipmap/quick_tiles",
-"githubUrl": "https://github.com/flxholle/QuickTiles",
+"githubUrl": "https://github.com/asdoi/QuickTiles",
 "packageName": "com.asdoi.quicktiles"
 }
   ]

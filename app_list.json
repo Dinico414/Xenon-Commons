@@ -3,114 +3,163 @@
   "appList": [
     {
       "name": "To-Do",
-      "names": {"en": "To-Do", "de": "To-Do"},
+      "names": {
+        "en": "To-Do",
+        "de": "To-Do"
+      },
       "icon": "@mipmap/todo_list",
       "githubUrl": "https://github.com/Dinico414/TodoListCompose",
       "packageName": "com.xenonware.todolist"
-    }, 
-  {
+    },
+    {
       "name": "Calculator",
-      "names": {"en": "Calculator", "de": "Rechner"},
+      "names": {
+        "en": "Calculator",
+        "de": "Rechner"
+      },
       "icon": "@mipmap/calculator",
       "githubUrl": "https://github.com/Dinico414/Calculator",
       "packageName": "com.xenonware.calculator"
     },
-    {"name": "Notes",
-      "names": {"en": "Notes (alpha)", "de": "Notizen (alpha)"},
+    {
+      "name": "Notes",
+      "names": {
+        "en": "Notes (alpha)",
+        "de": "Notizen (alpha)"
+      },
       "icon": "@mipmap/notes",
       "githubUrl": "https://github.com/Dinico414/Notes",
       "packageName": "com.xenonware.notes"
-      },
+    },
     {
       "name": "Nocturne",
-      "names": {"en": "Nocturne (pre-alpha)",  "de": "Nocturne (pre-alpha)"},
+      "names": {
+        "en": "Nocturne (pre-alpha)",
+        "de": "Nocturne (pre-alpha)"
+      },
       "icon": "@mipmap/nocturne",
       "githubUrl": "https://github.com/Dinico414/NocturneNative",
       "packageName": "com.xenon.nocturne"
-    }, 
-{
-"name": "Better xCloud",
-"names": {"en": "Better xCloud",  "de": "Better xCloud"}, 
-"icon": "@mipmap/better_xcloud",
-"githubUrl": "https://github.com/redphx/better-xcloud-android",
-"packageName": "com.redphx.betterxc"
-},
-{
-"name": "uTag",
-"names": {"en": "uTag",  "de": "uTag"}, 
-"icon": "@mipmap/u_tag",
-"githubUrl": "https://github.com/KieronQuinn/uTag",
-"packageName": "com.kieronquinn.app.utag"
-},
-{
-"name": "chrono",
-"names": {"en": "chrono", "de": "chrono"},
-"icon": "@mipmap/chrono",
-"githubUrl": "https://github.com/vicolo-dev/chrono",
-"packageName": "com.vicolo.chrono"
-},
-{
-"name": "breezy-weather",
-"names": {"en": "breezy-weather", "de": "breezy-weather"},
-"icon": "@mipmap/breezy_weather",
-"githubUrl": "https://github.com/breezy-weather/breezy-weather",
-"packageName": "org.breezyweather"
-},
-{
-"name": "Redomi",
-"names": {"en": "Redomi", "de": "Redomi"},
-"icon": "@mipmap/redomi",
-"githubUrl": "https://github.com/acszo/Redomi",
-"packageName": "com.acszo.redomi"
-},
-{
-"name": "ShizuTools",
-"names": {"en": "ShizuTools", "de": "ShizuTools"},
-"icon": "@mipmap/shizu_tools",
-"githubUrl": "https://github.com/legendsayantan/ShizuTools",
-"packageName": "com.legendsayantan.adbtools"
-},
-{
-"name": "tidy",
-"names": {"en": "tidy", "de": "tidy"},
-"icon": "@mipmap/tidy",
-"githubUrl": "https://github.com/slavabarkov/tidy",
-"packageName": "com.slavabarkov.tidy"
-},
-{
-"name": "NetGuard",
-"names": {"en": "NetGuard", "de": "NetGuard"},
-"icon": "@mipmap/net_guard",
-"githubUrl": "https://github.com/M66B/NetGuard",
-"packageName": "eu.faircode.netguard"
-},
-{
-"name": "InstallWithOptions",
-"names": {"en": "InstallWithOptions", "de": "InstallWithOptions"},
-"icon": "@mipmap/install_with_options",
-"githubUrl": "https://github.com/zacharee/InstallWithOptions",
-"packageName": "dev.zwander.installwithoptions"
-},
-{
-"name": "Canta",
-"names": {"en": "Canta", "de": "Canta"},
-"icon": "@mipmap/canta",
-"githubUrl": "https://github.com/samolego/Canta",
-"packageName": "io.github.samolego.canta"
-},
-{
-"name": "Paperize",
-"names": {"en": "Paperize", "de": "Paperize"},
-"icon": "@mipmap/paperize",
-"githubUrl": "https://github.com/Anthonyy232/Paperize",
-"packageName": "com.anthonyla.paperize"
-},
-{
-"name": "QuickTiles",
-"names": {"en": "QuickTiles", "de": "QuickTiles"},
-"icon": "@mipmap/quick_tiles",
-"githubUrl": "https://github.com/asdoi/QuickTiles",
-"packageName": "com.asdoi.quicktiles"
-}
+    },
+    {
+      "name": "Better xCloud",
+      "names": {
+        "en": "Better xCloud",
+        "de": "Better xCloud"
+      },
+      "icon": "@mipmap/better_xcloud",
+      "githubUrl": "https://github.com/redphx/better-xcloud-android",
+      "packageName": "com.redphx.betterxc"
+    },
+    {
+      "name": "uTag",
+      "names": {
+        "en": "uTag",
+        "de": "uTag"
+      },
+      "icon": "@mipmap/u_tag",
+      "githubUrl": "https://github.com/KieronQuinn/uTag",
+      "packageName": "com.kieronquinn.app.utag"
+    },
+    {
+      "name": "chrono",
+      "names": {
+        "en": "chrono",
+        "de": "chrono"
+      },
+      "icon": "@mipmap/chrono",
+      "githubUrl": "https://github.com/vicolo-dev/chrono",
+      "packageName": "com.vicolo.chrono"
+    },
+    {
+      "name": "breezy-weather",
+      "names": {
+        "en": "breezy-weather",
+        "de": "breezy-weather"
+      },
+      "icon": "@mipmap/breezy_weather",
+      "githubUrl": "https://github.com/breezy-weather/breezy-weather",
+      "packageName": "org.breezyweather"
+    },
+    {
+      "name": "Redomi",
+      "names": {
+        "en": "Redomi",
+        "de": "Redomi"
+      },
+      "icon": "@mipmap/redomi",
+      "githubUrl": "https://github.com/acszo/Redomi",
+      "packageName": "com.acszo.redomi"
+    },
+    {
+      "name": "ShizuTools",
+      "names": {
+        "en": "ShizuTools",
+        "de": "ShizuTools"
+      },
+      "icon": "@mipmap/shizu_tools",
+      "githubUrl": "https://github.com/legendsayantan/ShizuTools",
+      "packageName": "com.legendsayantan.adbtools"
+    },
+    {
+      "name": "tidy",
+      "names": {
+        "en": "tidy",
+        "de": "tidy"
+      },
+      "icon": "@mipmap/tidy",
+      "githubUrl": "https://github.com/slavabarkov/tidy",
+      "packageName": "com.slavabarkov.tidy"
+    },
+    {
+      "name": "NetGuard",
+      "names": {
+        "en": "NetGuard",
+        "de": "NetGuard"
+      },
+      "icon": "@mipmap/net_guard",
+      "githubUrl": "https://github.com/M66B/NetGuard",
+      "packageName": "eu.faircode.netguard"
+    },
+    {
+      "name": "InstallWithOptions",
+      "names": {
+        "en": "InstallWithOptions",
+        "de": "InstallWithOptions"
+      },
+      "icon": "@mipmap/install_with_options",
+      "githubUrl": "https://github.com/zacharee/InstallWithOptions",
+      "packageName": "dev.zwander.installwithoptions"
+    },
+    {
+      "name": "Canta",
+      "names": {
+        "en": "Canta",
+        "de": "Canta"
+      },
+      "icon": "@mipmap/canta",
+      "githubUrl": "https://github.com/samolego/Canta",
+      "packageName": "io.github.samolego.canta"
+    },
+    {
+      "name": "Paperize",
+      "names": {
+        "en": "Paperize",
+        "de": "Paperize"
+      },
+      "icon": "@mipmap/paperize",
+      "githubUrl": "https://github.com/Anthonyy232/Paperize",
+      "packageName": "com.anthonyla.paperize"
+    },
+    {
+      "name": "QuickTiles",
+      "names": {
+        "en": "QuickTiles",
+        "de": "QuickTiles"
+      },
+      "icon": "@mipmap/quick_tiles",
+      "githubUrl": "https://github.com/asdoi/QuickTiles",
+      "packageName": "com.asdoi.quicktiles"
+    }
   ]
 }

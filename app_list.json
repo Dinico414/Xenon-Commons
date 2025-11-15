@@ -32,16 +32,6 @@
       "packageName": "com.xenonware.notes"
     },
     {
-      "name": "Nocturne",
-      "names": {
-        "en": "Nocturne (pre-alpha)",
-        "de": "Nocturne (pre-alpha)"
-      },
-      "icon": "@mipmap/nocturne",
-      "githubUrl": "https://github.com/Dinico414/NocturneNative",
-      "packageName": "com.xenon.nocturne"
-    },
-    {
       "name": "Better xCloud",
       "names": {
         "en": "Better xCloud",

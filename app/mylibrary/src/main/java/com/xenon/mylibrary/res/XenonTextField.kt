@@ -19,8 +19,11 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
@@ -32,7 +35,7 @@ import com.xenon.mylibrary.values.TextFieldCornerRadius
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun XenonTextFieldV2(
+fun XenonTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -52,12 +55,21 @@ fun XenonTextFieldV2(
     interactionSource: MutableInteractionSource? = null,
     shape: Shape = RoundedCornerShape(TextFieldCornerRadius),
     colors: TextFieldColors = xenonTextFieldColors(),
-    selectionColor: Color = MaterialTheme.colorScheme.primary
+    selectionColor: Color = MaterialTheme.colorScheme.primary,
+    forceRequest: Boolean = false
 ) {
     @Suppress("NAME_SHADOWING")
     val internalInteractionSource = interactionSource ?: remember { MutableInteractionSource() }
 
     val isFocused = internalInteractionSource.collectIsFocusedAsState().value
+
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(forceRequest) {
+        if (forceRequest) {
+            focusRequester.requestFocus()
+        }
+    }
 
     val resolvedTextColor: Color = colors.textColor(
         enabled = enabled,
@@ -74,6 +86,7 @@ fun XenonTextFieldV2(
             minWidth = OutlinedTextFieldDefaults.MinWidth,
             minHeight = 48.dp
         )
+        .focusRequester(focusRequester)
 
     val currentSelectionColors: TextSelectionColors = remember(colors) {
         TextSelectionColors(

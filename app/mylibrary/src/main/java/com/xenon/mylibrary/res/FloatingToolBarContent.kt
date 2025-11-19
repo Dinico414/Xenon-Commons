@@ -492,7 +492,7 @@ fun FloatingToolbarContent(
                                     }
                                 }
 
-                                XenonTextFieldV2(
+                                XenonTextField(
                                     value = currentSearchQuery,
                                     enabled = canShowTextField,
                                     onValueChange = {

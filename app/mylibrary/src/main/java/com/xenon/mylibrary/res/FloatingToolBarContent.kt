@@ -130,6 +130,7 @@ fun FloatingToolbarContent(
     addModeContentOverride: @Composable (RowScope.() -> Unit)? = null,
     defaultContent: @Composable ((iconsAlphaDuration: Int, showActionIconsExceptSearch: Boolean) -> Unit)? = null,
     contentOverride: @Composable (RowScope.() -> Unit)? = null,
+    isSelectedColor: Color = extendedMaterialColorScheme.inverseErrorContainer
 ) {
     val isSelectionActive = selectedNoteIds.isNotEmpty()
     val isTextEditorActive = contentOverride != null
@@ -163,6 +164,8 @@ fun FloatingToolbarContent(
     val maxTextFieldWidth = (screenWidthDp - totalSubtractionInDp).coerceIn(0.dp, 280.dp)
 
     var toolbarVisibleState by rememberSaveable { mutableStateOf(true) }
+
+    val isSelectedColor = isSelectedColor
 
     LaunchedEffect(isSelectionActive) {
         if (isSelectionActive && isSearchActive) {
@@ -292,7 +295,7 @@ fun FloatingToolbarContent(
         val animatedToolbarColor by animateColorAsState(
             targetValue = when {
                 isTextEditorActive -> colorScheme.surfaceDim
-                isSelectionActive -> extendedMaterialColorScheme.inverseErrorContainer
+                isSelectionActive -> isSelectedColor
                 isAddModeActive -> colorScheme.secondaryContainer
                 else -> colorScheme.surfaceDim
             }, animationSpec = tween(durationMillis = 500), label = "toolbarColor"

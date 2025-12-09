@@ -14,9 +14,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material.icons.rounded.ChevronRight
-import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -38,17 +38,16 @@ import com.xenon.mylibrary.values.LargeCornerRadius
 import com.xenon.mylibrary.values.LargerPadding
 import com.xenon.mylibrary.values.LargestPadding
 import com.xenon.mylibrary.values.MediumPadding
-
 @Composable
 fun SettingsSwitchMenuTile(
+    modifier: Modifier = Modifier,
     title: String,
     subtitle: String = "",
     checked: Boolean,
-    onCheckedChange: ((enabled: Boolean) -> Unit)?,
+    onCheckedChange: ((Boolean) -> Unit)? = null,
     onClick: (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
     icon: (@Composable () -> Unit)? = null,
-    backgroundColor: Color = MaterialTheme.colorScheme.surfaceBright,
+    backgroundColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     contentColor: Color = MaterialTheme.colorScheme.onSurface,
     subtitleColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     arrowColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -63,55 +62,36 @@ fun SettingsSwitchMenuTile(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .height(IntrinsicSize.Min)
             .clip(shape)
             .background(backgroundColor)
-            .padding(end = horizontalPadding)
-            .height(IntrinsicSize.Min),
+            .padding(horizontal = horizontalPadding, vertical = verticalPadding),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        // Left clickable area (icon + text + chevron)
         Row(
             modifier = Modifier
                 .weight(1f)
-                .fillMaxHeight()
-                .then(
-                    if (onClick != null) {
-                        Modifier.clickable(onClick = onClick, role = Role.Button)
-                    } else {
-                        Modifier
-                    }
-                )
-                .padding(
-                    start = horizontalPadding,
-                    top = verticalPadding,
-                    bottom = verticalPadding
-                ),
+                .then(if (onClick != null) Modifier.clickable(onClick = onClick, role = Role.Button) else Modifier),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            icon?.let {
-                it()
-                Spacer(modifier = Modifier.width(iconSpacing))
-            }
+            icon?.invoke()
+
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = iconSpacing)
             ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = contentColor
-                )
+                Text(text = title, style = MaterialTheme.typography.titleMedium, color = contentColor)
                 if (subtitle.isNotEmpty()) {
-                    Text(
-                        text = subtitle,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = subtitleColor
-                    )
+                    Text(text = subtitle, style = MaterialTheme.typography.bodyMedium, color = subtitleColor)
                 }
             }
 
-            if (onClick != null) {
+            onClick?.let {
                 Spacer(modifier = Modifier.width(MediumPadding))
                 Icon(
-                    imageVector = Icons.Rounded.ChevronRight,
+                    imageVector = Icons.Filled.ChevronRight,
                     contentDescription = "Navigate",
                     tint = arrowColor,
                     modifier = Modifier.size(24.dp)
@@ -120,42 +100,30 @@ fun SettingsSwitchMenuTile(
             }
         }
 
-        if (onCheckedChange != null) {
-            Row(
+        // Switch with divider
+        onCheckedChange?.let {
+            VerticalDivider(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .padding(vertical = verticalPadding),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                VerticalDivider(
-                    modifier = Modifier.fillMaxHeight(),
-                    thickness = 1.dp,
-                    color = dividerColor
-                )
-                Spacer(modifier = Modifier.width(tileSpacing))
-                Switch(
-                    checked = checked,
-                    onCheckedChange = onCheckedChange,
-                    colors = switchColors,
-                    thumbContent = {
-                        if (checked) {
-                            Icon(
-                                imageVector = Icons.Rounded.Check,
-                                contentDescription = "Checked",
-                                modifier = Modifier.size(SwitchDefaults.IconSize),
-                                tint = MaterialTheme.colorScheme.onPrimaryContainer
-                            )
-                        } else {
-                            Icon(
-                                imageVector = Icons.Rounded.Close,
-                                contentDescription = "Not Checked",
-                                modifier = Modifier.size(SwitchDefaults.IconSize),
-                                tint = MaterialTheme.colorScheme.surfaceDim
-                            )
-                        }
+                    .padding(vertical = 8.dp),
+                thickness = 1.dp,
+                color = dividerColor
+            )
+            Spacer(modifier = Modifier.width(tileSpacing))
+            Switch(
+                checked = checked,
+                onCheckedChange = it,
+                colors = switchColors,
+                thumbContent = {
+                    if (checked) {
+                        Icon(Icons.Filled.Check, "Checked", Modifier.size(SwitchDefaults.IconSize),
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                    } else {
+                        Icon(Icons.Filled.Close, "Not Checked", Modifier.size(SwitchDefaults.IconSize),
+                            tint = MaterialTheme.colorScheme.surfaceDim)
                     }
-                )
-            }
+                }
+            )
         }
     }
 }

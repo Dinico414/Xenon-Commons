@@ -25,6 +25,8 @@ data class VersionInfo(
 @Composable
 fun DialogVersionNumber(
     onDismiss: () -> Unit,
+    dialogTitle: String,
+    confirmText: String,
     versionInfo: VersionInfo
 ) {
     val context = LocalContext.current
@@ -41,8 +43,8 @@ fun DialogVersionNumber(
 
     XenonDialog(
         onDismissRequest = onDismiss,
-        title = "Version",
-        confirmButtonText = "More Infos",
+        title = dialogTitle,
+        confirmButtonText = confirmText,
         onConfirmButtonClick = onMoreInfoClick,
         properties = DialogProperties(usePlatformDefaultWidth = true),
 

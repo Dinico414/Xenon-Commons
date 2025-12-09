@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -36,14 +36,14 @@ import com.xenon.mylibrary.values.LargestPadding
 
 @Composable
 fun SettingsSwitchTile(
+    modifier: Modifier = Modifier,
     title: String,
     subtitle: String = "",
     checked: Boolean,
-    onCheckedChange: ((enabled: Boolean) -> Unit)?,
+    onCheckedChange: ((Boolean) -> Unit)? = null,
     onClick: (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
     icon: (@Composable () -> Unit)? = null,
-    backgroundColor: Color = MaterialTheme.colorScheme.surfaceBright,
+    backgroundColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     contentColor: Color = MaterialTheme.colorScheme.onSurface,
     subtitleColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     shape: Shape = RoundedCornerShape(LargeCornerRadius),
@@ -56,58 +56,43 @@ fun SettingsSwitchTile(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .height(IntrinsicSize.Min)
             .clip(shape)
             .background(backgroundColor)
-            .then(
-                if (onClick != null) {
-                    Modifier.clickable(onClick = onClick, role = Role.Button)
-                } else {
-                    Modifier
-                }
-            )
-            .padding(horizontal = horizontalPadding, vertical = verticalPadding)
-            .height(IntrinsicSize.Min),
+            .then(if (onClick != null) Modifier.clickable(onClick = onClick, role = Role.Button) else Modifier)
+            .padding(horizontal = horizontalPadding, vertical = verticalPadding),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        icon?.let {
-            it()
-        }
+        icon?.invoke()
+
         Column(
             modifier = Modifier
                 .weight(1f)
                 .padding(start = iconSpacing)
         ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                color = contentColor
-            )
+            Text(text = title, style = MaterialTheme.typography.titleMedium, color = contentColor)
             if (subtitle.isNotEmpty()) {
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = subtitleColor
-                )
+                Text(text = subtitle, style = MaterialTheme.typography.bodyMedium, color = subtitleColor)
             }
         }
-        if (onCheckedChange != null) {
-            Spacer(modifier = Modifier.width(tileSpacing))
 
+        onCheckedChange?.let {
+            Spacer(modifier = Modifier.width(tileSpacing))
             Switch(
                 checked = checked,
-                onCheckedChange = onCheckedChange,
+                onCheckedChange = it,
                 colors = switchColors,
                 thumbContent = {
                     if (checked) {
                         Icon(
-                            imageVector = Icons.Rounded.Check,
+                            Icons.Filled.Check,
                             contentDescription = "Checked",
                             modifier = Modifier.size(SwitchDefaults.IconSize),
                             tint = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     } else {
                         Icon(
-                            imageVector = Icons.Rounded.Close,
+                            Icons.Filled.Close,
                             contentDescription = "Not Checked",
                             modifier = Modifier.size(SwitchDefaults.IconSize),
                             tint = MaterialTheme.colorScheme.surfaceDim

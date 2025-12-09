@@ -10,21 +10,21 @@ import androidx.compose.ui.window.DialogProperties
 fun DialogResetSettingsConfirmation(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
-    titleText: String,
-    confirmButtonText: String,
+    dialogTitle: String,
+    confirmText: String,
     descriptionText: String
 ) {
     val textColor = MaterialTheme.colorScheme.onErrorContainer
 
     XenonDialog(
         onDismissRequest = onDismiss,
-        title = titleText,
+        title = dialogTitle,
         containerColor = MaterialTheme.colorScheme.errorContainer,
         dismissIconButtonContainerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.15f),
         dismissIconButtonContentColor = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.8f),
         confirmContainerColor = MaterialTheme.colorScheme.error,
         confirmContentColor = MaterialTheme.colorScheme.onError,
-        confirmButtonText = confirmButtonText,
+        confirmButtonText = confirmText,
         onConfirmButtonClick = { onConfirm() },
         properties = DialogProperties(usePlatformDefaultWidth = true),
         contentManagesScrolling = false,

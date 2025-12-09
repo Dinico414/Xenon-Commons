@@ -9,14 +9,14 @@ import androidx.compose.ui.window.DialogProperties
 fun DialogSignOut(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
-    titleText: String,
-    confirmButtonText: String,
+    dialogTitle: String,
+    confirmText: String,
     descriptionText: String
 ) {
     XenonDialog(
         onDismissRequest = onDismiss,
-        title = titleText,
-        confirmButtonText = confirmButtonText,
+        title = dialogTitle,
+        confirmButtonText = confirmText,
         onConfirmButtonClick = { onConfirm() },
         properties = DialogProperties(usePlatformDefaultWidth = true),
         contentManagesScrolling = false,

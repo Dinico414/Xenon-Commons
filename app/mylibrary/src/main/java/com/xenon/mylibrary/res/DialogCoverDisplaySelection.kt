@@ -16,17 +16,17 @@ import androidx.compose.ui.window.DialogProperties
 fun DialogCoverDisplaySelection(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
-    titleText: String,
-    confirmButtonText: String,
-    actionButton2Text: String,
+    dialogTitle: String,
+    confirmText: String,
+    action2Text: String,
     descriptionText: String
 ) {
     XenonDialog(
         onDismissRequest = onDismiss,
-        title = titleText,
-        confirmButtonText = confirmButtonText,
+        title = dialogTitle,
+        confirmButtonText = confirmText,
         onConfirmButtonClick = { onConfirm() },
-        actionButton2Text = actionButton2Text,
+        actionButton2Text = action2Text,
         onActionButton2Click = { onDismiss() },
         properties = DialogProperties(usePlatformDefaultWidth = true),
         contentManagesScrolling = false,

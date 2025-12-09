@@ -28,8 +28,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.xenon.mylibrary.QuicksandTitleVariable
-import com.xenon.mylibrary.sign_in.SignInState
-import com.xenon.mylibrary.sign_in.UserData
 import com.xenon.mylibrary.values.ExtraLargePadding
 import com.xenon.mylibrary.values.LargeCornerRadius
 import com.xenon.mylibrary.values.LargestPadding
@@ -37,13 +35,13 @@ import com.xenon.mylibrary.values.LargestPadding
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SettingsGoogleTile(
-    title: String?,
-    subtitle: String?,
-    state: SignInState,
-    userData: UserData?,
-    onClick: (() -> Unit)?,
-    onLongClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
+    title: String,
+    subtitle: String? = null,
+    profilePictureUrl: String? = null,
+    isSignedIn: Boolean = false,
+    onClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null,
     backgroundColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     contentColor: Color = MaterialTheme.colorScheme.onSurface,
     subtitleColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -51,7 +49,7 @@ fun SettingsGoogleTile(
     shape: Shape = RoundedCornerShape(LargeCornerRadius),
     horizontalPadding: Dp = LargestPadding,
     verticalPadding: Dp = ExtraLargePadding,
-    iconContentDescription: String,
+    iconContentDescription: String = "Profile picture",
 ) {
     Row(
         modifier = modifier
@@ -69,31 +67,27 @@ fun SettingsGoogleTile(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(ExtraLargePadding)
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-        ) {
+        Box(contentAlignment = Alignment.Center) {
             GoogleProfilBorder(
-                state = state,
+                isSignedIn = isSignedIn,
                 modifier = Modifier.size(48.dp),
+                strokeWidth = 2.5.dp
             )
             GoogleProfilePicture(
-                state = state,
-                userData = userData,
-                modifier = Modifier.size(40.dp),
+                profilePictureUrl = profilePictureUrl,
                 iconContentDescription = iconContentDescription,
+                modifier = Modifier.size(40.dp)
             )
-
         }
+
         Column(modifier = Modifier.weight(1f)) {
-            if (title != null) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontFamily = QuicksandTitleVariable
-                    ),
-                    color = contentColor
-                )
-            }
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontFamily = QuicksandTitleVariable
+                ),
+                color = contentColor
+            )
             if (!subtitle.isNullOrEmpty()) {
                 Text(
                     text = subtitle,
@@ -104,6 +98,7 @@ fun SettingsGoogleTile(
                 )
             }
         }
+
         Icon(
             imageVector = Icons.Rounded.ChevronRight,
             contentDescription = "Navigate",

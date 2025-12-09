@@ -16,18 +16,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 
-data class VersionInfo(
-    val appVersion: String,
-    val xenonUIVersion: String,
-    val xenonCommonsVersion: String
-)
-
 @Composable
 fun DialogVersionNumber(
     onDismiss: () -> Unit,
     dialogTitle: String,
     confirmText: String,
-    versionInfo: VersionInfo
+    appString: String,
+    appVersion: String,
+    xenonUiString: String,
+    xenonUIVersion: String,
+    xenonCommonsString: String,
+    xenonCommonsVersion: String,
 ) {
     val context = LocalContext.current
 
@@ -54,9 +53,9 @@ fun DialogVersionNumber(
                 .fillMaxWidth()
                 .padding(vertical = 4.dp)
         ) {
-            VersionItem(label = "App Version", version = versionInfo.appVersion)
-            VersionItem(label = "XenonUi Version", version = versionInfo.xenonUIVersion)
-            VersionItem(label = "XenonCommons Version", version = versionInfo.xenonCommonsVersion)
+            VersionItem(label = appString, version = appVersion)
+            VersionItem(label = xenonUiString, version = xenonUIVersion)
+            VersionItem(label = xenonCommonsString, version = xenonCommonsVersion)
         }
     }
 }

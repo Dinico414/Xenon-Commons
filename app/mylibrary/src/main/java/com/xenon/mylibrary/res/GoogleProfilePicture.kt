@@ -12,19 +12,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.xenon.mylibrary.R
-import com.xenon.mylibrary.sign_in.SignInState
-import com.xenon.mylibrary.sign_in.UserData
 
 @Composable
 fun GoogleProfilePicture(
-    state: SignInState,
-    userData: UserData?,
+    profilePictureUrl: String?,
     iconContentDescription: String,
     modifier: Modifier = Modifier
 ) {
-    if (state.isSignInSuccessful && userData?.profilePictureUrl != null) {
+    if (profilePictureUrl != null) {
         AsyncImage(
-            model = userData.profilePictureUrl,
+            model = profilePictureUrl,
             contentDescription = "Profile Picture",
             modifier = modifier
                 .size(40.dp)

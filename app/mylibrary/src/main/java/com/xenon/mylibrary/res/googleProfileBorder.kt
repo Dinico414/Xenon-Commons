@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.xenon.mylibrary.sign_in.SignInState
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -33,11 +32,11 @@ import kotlin.random.Random
 
 @Composable
 fun GoogleProfilBorder(
+    isSignedIn: Boolean,
     modifier: Modifier = Modifier,
-    state: SignInState,
-    strokeWidth: Dp = 2.dp,
+    strokeWidth: Dp = 2.5.dp,
     gapAngle: Float = 15f,
-    angleChangeIntervalMillis: Long = 2000,
+    angleChangeIntervalMillis: Long = 2000L,
     sweepAnimationSpec: AnimationSpec<Float> = spring(
         dampingRatio = Spring.DampingRatioMediumBouncy,
         stiffness = Spring.StiffnessVeryLow
@@ -45,19 +44,21 @@ fun GoogleProfilBorder(
 ) {
     val googleColors = remember {
         listOf(
-            Color(0xFF4285F4),
-            Color(0xFFDB4437),
-            Color(0xFFF4B400),
-            Color(0xFF0F9D58)
+            Color(0xFF4285F4), // Blue
+            Color(0xFFDB4437), // Red
+            Color(0xFFF4B400), // Yellow
+            Color(0xFF0F9D58)  // Green
         )
     }
-    val greyColor = Color.Gray
+    val greyColor = Color.Gray.copy(alpha = 0.6f)
     val numColors = googleColors.size
 
-    val animatedColors = List(numColors) {
+    // Animate each segment color based on sign-in status
+    val animatedColors = List(numColors) { index ->
         animateColorAsState(
-            targetValue = if (state.isSignInSuccessful) googleColors[it] else greyColor,
-            animationSpec = tween(1000)
+            targetValue = if (isSignedIn) googleColors[index] else greyColor,
+            animationSpec = tween(1000),
+            label = "SegmentColor$index"
         ).value
     }
 
@@ -69,41 +70,42 @@ fun GoogleProfilBorder(
 
     val equalSweepAngle = (360f - numColors * gapAngle) / numColors
 
-    var targetSweepAnglesHolder by remember {
+    var targetSweepAngles by remember {
         mutableStateOf(List(numColors) { equalSweepAngle })
     }
 
-    LaunchedEffect(state.isSignInSuccessful) {
-        if (state.isSignInSuccessful) {
-            launch {
-                rotationAngleAnim.animateTo(
-                    targetValue = 360f,
-                    animationSpec = infiniteRepeatable(
-                        animation = tween(durationMillis = 4000, easing = LinearEasing),
-                        repeatMode = RepeatMode.Restart
-                    )
+    // Continuous rotation when signed in
+    LaunchedEffect(isSignedIn) {
+        if (isSignedIn) {
+            rotationAngleAnim.animateTo(
+                targetValue = 360f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(durationMillis = 4000, easing = LinearEasing),
+                    repeatMode = RepeatMode.Restart
                 )
-            }
+            )
         } else {
             rotationAngleAnim.stop()
             rotationAngleAnim.snapTo(0f)
         }
     }
 
-    LaunchedEffect(state.isSignInSuccessful, angleChangeIntervalMillis, numColors, gapAngle) {
-        if (state.isSignInSuccessful) {
+    // Randomly vary segment sizes every few seconds when signed in
+    LaunchedEffect(isSignedIn, angleChangeIntervalMillis) {
+        if (isSignedIn) {
             while (true) {
-                targetSweepAnglesHolder = generateRandomSweepAngles(numColors, gapAngle)
+                targetSweepAngles = generateRandomSweepAngles(numColors, gapAngle)
                 delay(angleChangeIntervalMillis)
             }
         } else {
-            targetSweepAnglesHolder = List(numColors) { equalSweepAngle }
+            targetSweepAngles = List(numColors) { equalSweepAngle }
         }
     }
 
-    LaunchedEffect(targetSweepAnglesHolder) {
+    // Animate sweep angles toward current targets
+    LaunchedEffect(targetSweepAngles) {
         coroutineScope {
-            targetSweepAnglesHolder.forEachIndexed { index, targetAngle ->
+            targetSweepAngles.forEachIndexed { index, targetAngle ->
                 launch {
                     sweepAngleAnimatables[index].animateTo(
                         targetValue = targetAngle,
@@ -115,11 +117,11 @@ fun GoogleProfilBorder(
     }
 
     val density = LocalDensity.current
+    val strokeWidthPx = with(density) { strokeWidth.toPx() }
 
     Canvas(modifier = modifier) {
-        val strokeWidthPx = with(density) { strokeWidth.toPx() }
         val canvasSize = size.minDimension
-        val arcRadius = canvasSize / 2 - strokeWidthPx / 2
+        val radius = canvasSize / 2f - strokeWidthPx / 2f
 
         var currentStartAngle = rotationAngleAnim.value - 90f
 
@@ -133,32 +135,33 @@ fun GoogleProfilBorder(
                 sweepAngle = sweep,
                 useCenter = false,
                 topLeft = Offset(
-                    (size.width - 2 * arcRadius - strokeWidthPx) / 2,
-                    (size.height - 2 * arcRadius - strokeWidthPx) / 2
+                    x = (size.width - canvasSize) / 2f,
+                    y = (size.height - canvasSize) / 2f
                 ),
-                size = Size(arcRadius * 2 + strokeWidthPx, arcRadius * 2 + strokeWidthPx),
+                size = Size(canvasSize, canvasSize),
                 style = Stroke(width = strokeWidthPx, cap = StrokeCap.Round)
             )
+
             currentStartAngle += sweep + gapAngle
         }
     }
 }
 
+// Helper: generate random but balanced arc lengths
 private fun generateRandomSweepAngles(count: Int, gapAngle: Float): List<Float> {
     if (count <= 0) return emptyList()
-    val totalGapAngles = count * gapAngle
-    val totalSweepRequired = (360f - totalGapAngles).coerceAtLeast(0f)
 
-    if (totalSweepRequired == 0f) {
-        return List(count) { 0f }
+    val totalGap = count * gapAngle
+    val totalSweep = (360f - totalGap).coerceAtLeast(0f)
+    if (totalSweep <= 0f) return List(count) { 0f }
+
+    // Random values biased toward larger arcs (10°–100°)
+    val randoms = List(count) { Random.nextFloat() * 90f + 10f }
+    val sum = randoms.sum()
+
+    return if (sum == 0f) {
+        List(count) { totalSweep / count }
+    } else {
+        randoms.map { (it / sum) * totalSweep }
     }
-
-    val randomValues = List(count) { Random.nextFloat() * 90f + 10f }
-    val sumRandomValues = randomValues.sum()
-
-    if (sumRandomValues == 0f) {
-        return List(count) { totalSweepRequired / count }
-    }
-
-    return randomValues.map { (it / sumRandomValues) * totalSweepRequired }
 }

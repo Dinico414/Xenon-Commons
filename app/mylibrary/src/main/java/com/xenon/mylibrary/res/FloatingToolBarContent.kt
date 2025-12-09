@@ -82,6 +82,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import com.xenon.mylibrary.R
+import com.xenon.mylibrary.theme.extendedMaterialColorScheme
 import com.xenon.mylibrary.values.LargePadding
 import com.xenon.mylibrary.values.SmallElevation
 import dev.chrisbanes.haze.HazeState
@@ -291,7 +292,7 @@ fun FloatingToolbarContent(
         val animatedToolbarColor by animateColorAsState(
             targetValue = when {
                 isTextEditorActive -> colorScheme.surfaceDim
-                isSelectionActive -> colorScheme.errorContainer
+                isSelectionActive -> extendedMaterialColorScheme.inverseErrorContainer
                 isAddModeActive -> colorScheme.secondaryContainer
                 else -> colorScheme.surfaceDim
             }, animationSpec = tween(durationMillis = 500), label = "toolbarColor"

@@ -1,11 +1,13 @@
 package com.xenon.mylibrary.res
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
@@ -18,13 +20,16 @@ fun GoogleProfilePicture(
     contentDescription: String?,
     modifier: Modifier = Modifier
 ) {
+    val loadingBackground = Color(0xFFD4D4D4)
+
     if (!profilePictureUrl.isNullOrBlank()) {
         AsyncImage(
             model = profilePictureUrl,
             contentDescription = contentDescription,
             modifier = modifier
                 .size(40.dp)
-                .clip(CircleShape),
+                .clip(CircleShape)
+                .background(loadingBackground),
             contentScale = ContentScale.Crop,
         )
     } else {

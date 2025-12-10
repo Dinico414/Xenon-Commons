@@ -1,6 +1,5 @@
 package com.xenon.mylibrary.res
 
-// Assume ThemeSetting, SignInState, UserData are now in com.xenon.mylibrary.data
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -16,23 +15,27 @@ import com.xenon.mylibrary.R
 @Composable
 fun GoogleProfilePicture(
     profilePictureUrl: String?,
-    iconContentDescription: String,
+//    fallbackPainter: Painter,
+    contentDescription: String?,
     modifier: Modifier = Modifier
 ) {
-    if (profilePictureUrl != null) {
+    if (!profilePictureUrl.isNullOrBlank()) {
         AsyncImage(
             model = profilePictureUrl,
-            contentDescription = "Profile Picture",
+            contentDescription = contentDescription,
             modifier = modifier
                 .size(40.dp)
                 .clip(CircleShape),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
     } else {
         Image(
             painter = painterResource(id = R.mipmap.default_icon),
-            contentDescription = iconContentDescription,
-            modifier = modifier.size(40.dp)
+            contentDescription = contentDescription,
+            modifier = modifier
+                .size(40.dp)
+                .clip(CircleShape),
+            contentScale = ContentScale.Crop
         )
     }
 }

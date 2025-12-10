@@ -75,7 +75,7 @@ fun SettingsGoogleTile(
             )
             GoogleProfilePicture(
                 profilePictureUrl = profilePictureUrl,
-                iconContentDescription = iconContentDescription,
+                contentDescription = iconContentDescription,
                 modifier = Modifier.size(40.dp)
             )
         }

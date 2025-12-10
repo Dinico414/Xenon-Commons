@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import com.xenon.mylibrary.QuicksandTitleVariable
@@ -49,6 +50,7 @@ fun XenonDrawer(
     title: String,
     profilePictureUrl: String? = null,
     isSignedIn: Boolean = false,
+    noAccIcon: Painter,
     backgroundColor: Color = colorScheme.surfaceContainerHigh,
     profilePicDesc: String? = null,
     hasBottomContent: Boolean = false,
@@ -105,6 +107,7 @@ fun XenonDrawer(
                                     strokeWidth = 2.5.dp
                                 )
                                 GoogleProfilePicture(
+                                    noAccIcon = noAccIcon,
                                     profilePictureUrl = profilePictureUrl,
                                     contentDescription = profilePicDesc ?: "",
                                     modifier = Modifier.size(26.dp)

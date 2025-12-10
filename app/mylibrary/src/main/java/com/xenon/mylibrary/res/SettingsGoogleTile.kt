@@ -24,16 +24,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.xenon.mylibrary.QuicksandTitleVariable
-import com.xenon.mylibrary.R
 import com.xenon.mylibrary.values.ExtraLargePadding
 import com.xenon.mylibrary.values.LargeCornerRadius
 import com.xenon.mylibrary.values.LargestPadding
 
+@Suppress("unused")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SettingsGoogleTile(
@@ -52,6 +52,7 @@ fun SettingsGoogleTile(
     horizontalPadding: Dp = LargestPadding,
     verticalPadding: Dp = ExtraLargePadding,
     iconContentDescription: String = "Profile picture",
+    noAccIcon: Painter
 ) {
     Row(
         modifier = modifier
@@ -76,7 +77,7 @@ fun SettingsGoogleTile(
                 strokeWidth = 2.5.dp
             )
             GoogleProfilePicture(
-                noAccIcon = painterResource(R.mipmap.default_icon),
+                noAccIcon = noAccIcon,
                 profilePictureUrl = profilePictureUrl,
                 contentDescription = iconContentDescription,
                 modifier = Modifier.size(40.dp)

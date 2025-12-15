@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.xenon.mylibrary.res
 
 import android.annotation.SuppressLint
@@ -21,9 +23,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,6 +44,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.rounded.SwapHoriz
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
@@ -66,6 +71,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.Path
@@ -79,6 +86,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import com.xenon.mylibrary.R
@@ -102,7 +110,102 @@ data class ScrollState(
     val canScrollForward: Boolean,
 )
 
-@Suppress("unused")
+@OptIn(ExperimentalHazeMaterialsApi::class)
+@Composable
+public fun SpannedModeFAB(
+    modifier: Modifier = Modifier,
+    hazeState: HazeState,
+    onClick: () -> Unit,
+    isSheetOpen: Boolean = false,
+) {
+    Box(
+        modifier = modifier.size(64.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        val density = LocalDensity.current
+        val fabShape = FloatingActionButtonDefaults.shape
+        val interactionSource = remember { MutableInteractionSource() }
+        val isPressed by interactionSource.collectIsPressedAsState()
+        val isHovered by interactionSource.collectIsHoveredAsState()
+
+        val fabIconTint = if (isSheetOpen) {
+            colorScheme.onPrimary
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            colorScheme.onPrimaryContainer
+        } else {
+            colorScheme.onPrimary
+        }
+
+        val hazeThinColor = colorScheme.primary
+        val smallElevationPx = with(density) { SmallElevation.toPx() }
+        val baseShadowAlpha = 0.7f
+        val interactiveShadowAlpha = 0.9f
+
+        val currentShadowRadius =
+            if (isPressed || isHovered) smallElevationPx * 1.5f else smallElevationPx
+        val currentShadowAlpha =
+            if (isPressed || isHovered) interactiveShadowAlpha else baseShadowAlpha
+        val currentShadowColor = colorScheme.scrim.copy(alpha = currentShadowAlpha)
+        val currentYOffsetPx = with(density) { 1.dp.toPx() }
+
+        val fabSize = FloatingActionButtonDefaults.LargeIconSize + 24.dp
+        val extraSize = if (isPressed || isHovered) 8.dp else 5.dp
+        val canvasSize = fabSize + extraSize
+
+        Canvas(modifier = Modifier.size(canvasSize)) {
+            val fabOutline = fabShape.createOutline(
+                size = Size(fabSize.toPx(), fabSize.toPx()),
+                layoutDirection = layoutDirection,
+                density = density
+            )
+
+            val offsetX = (size.width - fabSize.toPx()) / 2f
+            val offsetY = (size.height - fabSize.toPx()) / 2f
+
+            val centeredPath = Path().apply {
+                addOutline(fabOutline)
+                translate(Offset(offsetX, offsetY))
+            }
+
+            drawIntoCanvas { canvas ->
+                val paint = android.graphics.Paint().apply {
+                    isAntiAlias = true
+                    style = android.graphics.Paint.Style.STROKE
+                    strokeWidth = with(density) { 0.5.dp.toPx() }
+                    color = Color.Transparent.toArgb()
+                    setShadowLayer(
+                        currentShadowRadius,
+                        0f,
+                        currentYOffsetPx,
+                        currentShadowColor.toArgb()
+                    )
+                }
+                canvas.nativeCanvas.drawPath(centeredPath.asAndroidPath(), paint)
+            }
+        }
+
+        FloatingActionButton(
+            onClick = onClick,
+            containerColor = if (isSheetOpen) colorScheme.primary else Color.Transparent,
+            contentColor = fabIconTint,
+            shape = fabShape,
+            elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp),
+            interactionSource = interactionSource,
+            modifier = Modifier
+                .size(fabSize)
+                .clip(fabShape)
+                .then(if (!isSheetOpen) Modifier.background(colorScheme.primary) else Modifier)
+                .hazeEffect(state = hazeState, style = HazeMaterials.ultraThin(hazeThinColor))
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.SwapHoriz,
+                contentDescription = null,
+                tint = fabIconTint
+            )
+        }
+    }
+}
+
 @SuppressLint("ConfigurationScreenWidthHeight")
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -130,7 +233,134 @@ fun FloatingToolbarContent(
     addModeContentOverride: @Composable (RowScope.() -> Unit)? = null,
     defaultContent: @Composable ((iconsAlphaDuration: Int, showActionIconsExceptSearch: Boolean) -> Unit)? = null,
     contentOverride: @Composable (RowScope.() -> Unit)? = null,
-    isSelectedColor: Color = extendedMaterialColorScheme.inverseErrorContainer
+    isSelectedColor: Color = extendedMaterialColorScheme.inverseErrorContainer,
+    // Spanned mode parameters
+    isSpannedMode: Boolean = false,
+    fabOnLeftInSpannedMode: Boolean = true,
+    spannedModeHingeGap: Dp = 0.dp,
+    spannedModeFab: @Composable ((onClick: () -> Unit) -> Unit)? = null,
+) {
+    if (isSpannedMode) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                if (fabOnLeftInSpannedMode) {
+                    SingleToolbarInstance(
+                        hazeState = hazeState,
+                        onSearchQueryChanged = onSearchQueryChanged,
+                        currentSearchQuery = currentSearchQuery,
+                        lazyListState = lazyListState,
+                        allowToolbarScrollBehavior = allowToolbarScrollBehavior,
+                        selectedNoteIds = selectedNoteIds,
+                        onClearSelection = onClearSelection,
+                        isAddModeActive = isAddModeActive,
+                        onAddModeToggle = onAddModeToggle,
+                        isSearchActive = isSearchActive,
+                        onIsSearchActiveChange = onIsSearchActiveChange,
+                        isSearchEnabled = isSearchEnabled,
+                        isFabEnabled = isFabEnabled,
+                        fabOverride = fabOverride,
+                        selectionContentOverride = selectionContentOverride,
+                        addModeContentOverride = addModeContentOverride,
+                        defaultContent = defaultContent,
+                        contentOverride = contentOverride,
+                        isSelectedColor = isSelectedColor
+                    )
+                } else {
+                    spannedModeFab?.invoke { }
+                        ?: SpannedModeFAB(
+                            hazeState = hazeState,
+                            onClick = { }
+                        )
+                }
+            }
+
+            Spacer(modifier = Modifier.width(spannedModeHingeGap))
+
+            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                if (!fabOnLeftInSpannedMode) {
+                    SingleToolbarInstance(
+                        hazeState = hazeState,
+                        onSearchQueryChanged = onSearchQueryChanged,
+                        currentSearchQuery = currentSearchQuery,
+                        lazyListState = lazyListState,
+                        allowToolbarScrollBehavior = allowToolbarScrollBehavior,
+                        selectedNoteIds = selectedNoteIds,
+                        onClearSelection = onClearSelection,
+                        isAddModeActive = isAddModeActive,
+                        onAddModeToggle = onAddModeToggle,
+                        isSearchActive = isSearchActive,
+                        onIsSearchActiveChange = onIsSearchActiveChange,
+                        isSearchEnabled = isSearchEnabled,
+                        isFabEnabled = isFabEnabled,
+                        fabOverride = fabOverride,
+                        selectionContentOverride = selectionContentOverride,
+                        addModeContentOverride = addModeContentOverride,
+                        defaultContent = defaultContent,
+                        contentOverride = contentOverride,
+                        isSelectedColor = isSelectedColor
+                    )
+                } else {
+                    spannedModeFab?.invoke { }
+                        ?: SpannedModeFAB(
+                            hazeState = hazeState,
+                            onClick = { }
+                        )
+                }
+            }
+        }
+    } else {
+        SingleToolbarInstance(
+            hazeState = hazeState,
+            onSearchQueryChanged = onSearchQueryChanged,
+            currentSearchQuery = currentSearchQuery,
+            lazyListState = lazyListState,
+            allowToolbarScrollBehavior = allowToolbarScrollBehavior,
+            selectedNoteIds = selectedNoteIds,
+            onClearSelection = onClearSelection,
+            isAddModeActive = isAddModeActive,
+            onAddModeToggle = onAddModeToggle,
+            isSearchActive = isSearchActive,
+            onIsSearchActiveChange = onIsSearchActiveChange,
+            isSearchEnabled = isSearchEnabled,
+            isFabEnabled = isFabEnabled,
+            fabOverride = fabOverride,
+            selectionContentOverride = selectionContentOverride,
+            addModeContentOverride = addModeContentOverride,
+            defaultContent = defaultContent,
+            contentOverride = contentOverride,
+            isSelectedColor = isSelectedColor
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, FlowPreview::class,
+    ExperimentalHazeMaterialsApi::class
+)
+@Composable
+private fun SingleToolbarInstance(
+    hazeState: HazeState,
+    onSearchQueryChanged: (String) -> Unit,
+    currentSearchQuery: String,
+    lazyListState: LazyListState,
+    allowToolbarScrollBehavior: Boolean,
+    selectedNoteIds: List<Int>,
+    onClearSelection: () -> Unit,
+    isAddModeActive: Boolean,
+    onAddModeToggle: () -> Unit,
+    isSearchActive: Boolean,
+    onIsSearchActiveChange: (Boolean) -> Unit,
+    isSearchEnabled: Boolean,
+    isFabEnabled: Boolean,
+    fabOverride: @Composable (() -> Unit)?,
+    selectionContentOverride: @Composable (RowScope.() -> Unit)?,
+    addModeContentOverride: @Composable (RowScope.() -> Unit)?,
+    defaultContent: @Composable ((iconsAlphaDuration: Int, showActionIconsExceptSearch: Boolean) -> Unit)?,
+    contentOverride: @Composable (RowScope.() -> Unit)?,
+    isSelectedColor: Color
 ) {
     val isSelectionActive = selectedNoteIds.isNotEmpty()
     val isTextEditorActive = contentOverride != null
@@ -142,7 +372,6 @@ fun FloatingToolbarContent(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val iconsAlphaDuration = 500
-    val iconGroupExitAnimationDuration = 100
     val iconsClearanceTime = iconsAlphaDuration + 200
     val textFieldExistenceDelay = iconsAlphaDuration - 100
     val textFieldAnimationDuration = 500
@@ -164,8 +393,6 @@ fun FloatingToolbarContent(
     val maxTextFieldWidth = (screenWidthDp - totalSubtractionInDp).coerceIn(0.dp, 280.dp)
 
     var toolbarVisibleState by rememberSaveable { mutableStateOf(true) }
-
-    val isSelectedColor = isSelectedColor
 
     LaunchedEffect(isSelectionActive) {
         if (isSelectionActive && isSearchActive) {
@@ -264,20 +491,18 @@ fun FloatingToolbarContent(
     }
 
     val animatedBottomPadding by animateDpAsState(
-        targetValue = targetBottomPadding, animationSpec = spring(
-            dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessLow
-        ), label = "bottomPaddingAnimation"
+        targetValue = targetBottomPadding,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessLow),
+        label = "bottomPaddingAnimation"
     )
 
-
     val toolbarHeight = 64.dp
-    val toolbarOffsetTarget =
-        if (toolbarVisibleState) 0.dp else toolbarHeight + LargePadding + 50.dp
+    val toolbarOffsetTarget = if (toolbarVisibleState) 0.dp else toolbarHeight + LargePadding + 50.dp
 
     val animatedToolbarOffset by animateDpAsState(
-        targetValue = toolbarOffsetTarget, animationSpec = spring(
-            dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessMediumLow
-        ), label = "toolbarOffsetAnimation"
+        targetValue = toolbarOffsetTarget,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessMediumLow),
+        label = "toolbarOffsetAnimation"
     )
 
     val textFieldFraction by animateFloatAsState(
@@ -290,7 +515,8 @@ fun FloatingToolbarContent(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = animatedBottomPadding.coerceAtLeast(0.dp))
-            .offset(y = animatedToolbarOffset), contentAlignment = Alignment.Center
+            .offset(y = animatedToolbarOffset),
+        contentAlignment = Alignment.Center
     ) {
         val animatedToolbarColor by animateColorAsState(
             targetValue = when {
@@ -298,14 +524,17 @@ fun FloatingToolbarContent(
                 isSelectionActive -> isSelectedColor
                 isAddModeActive -> colorScheme.secondaryContainer
                 else -> colorScheme.surfaceDim
-            }, animationSpec = tween(durationMillis = 500), label = "toolbarColor"
+            },
+            animationSpec = tween(durationMillis = 500),
+            label = "toolbarColor"
         )
+
         val floatingBtnWidth by remember {
             derivedStateOf {
-                if (!isFabEnabled) 64.dp.times(1 - textFieldFraction)
-                else 0.dp
+                if (!isFabEnabled) 64.dp.times(1 - textFieldFraction) else 0.dp
             }
         }
+
         HorizontalFloatingToolbar(
             expanded = true,
             floatingActionButton = {
@@ -314,10 +543,9 @@ fun FloatingToolbarContent(
                 } else {
                     AnimatedVisibility(
                         visible = isSearchActive || isFabEnabled,
-                        enter = slideInHorizontally { fullWidth -> -fullWidth / 2 } +
-                                fadeIn(animationSpec = tween(delayMillis = 600)),
-                        exit = slideOutHorizontally { fullWidth -> -fullWidth / 2 } + fadeOut()) {
-
+                        enter = slideInHorizontally { fullWidth -> -fullWidth / 2 } + fadeIn(animationSpec = tween(delayMillis = 600)),
+                        exit = slideOutHorizontally { fullWidth -> -fullWidth / 2 } + fadeOut()
+                    ) {
                         Box(contentAlignment = Alignment.Center) {
                             val fabShape = FloatingActionButtonDefaults.shape
                             val interactionSource = remember { MutableInteractionSource() }
@@ -333,10 +561,8 @@ fun FloatingToolbarContent(
                             val smallElevationPx = with(density) { SmallElevation.toPx() }
                             val baseShadowAlpha = 0.7f
                             val interactiveShadowAlpha = 0.9f
-                            val currentShadowRadius =
-                                if (isPressed || isHovered) smallElevationPx * 1.5f else smallElevationPx
-                            val currentShadowAlpha =
-                                if (isPressed || isHovered) interactiveShadowAlpha else baseShadowAlpha
+                            val currentShadowRadius = if (isPressed || isHovered) smallElevationPx * 1.5f else smallElevationPx
+                            val currentShadowAlpha = if (isPressed || isHovered) interactiveShadowAlpha else baseShadowAlpha
                             val currentShadowColor = colorScheme.scrim.copy(alpha = currentShadowAlpha)
                             val currentYOffsetPx = with(density) { 1.dp.toPx() }
 
@@ -345,8 +571,7 @@ fun FloatingToolbarContent(
                                     FloatingActionButtonDefaults.LargeIconSize + 24.dp + if (isPressed || isHovered) 8.dp else 5.dp
                                 )
                             ) {
-                                val outline =
-                                    fabShape.createOutline(this.size, layoutDirection, density)
+                                val outline = fabShape.createOutline(this.size, layoutDirection, density)
                                 val composePath = Path().apply { addOutline(outline) }
                                 drawIntoCanvas { canvas ->
                                     val frameworkPaint = Paint().asFrameworkPaint().apply {
@@ -361,29 +586,22 @@ fun FloatingToolbarContent(
                                             currentShadowColor.toArgb()
                                         )
                                     }
-                                    canvas.nativeCanvas.drawPath(
-                                        composePath.asAndroidPath(), frameworkPaint
-                                    )
+                                    canvas.nativeCanvas.drawPath(composePath.asAndroidPath(), frameworkPaint)
                                 }
                             }
 
                             val rotationAngle = remember { Animatable(0f) }
                             LaunchedEffect(isSearchActive, isSelectionActive, isAddModeActive) {
                                 if (isSearchActive || isSelectionActive || isAddModeActive) {
-                                    delay(
-                                        if (isSearchActive)700 else 0)
+                                    delay(if (isSearchActive) 700 else 0)
                                     rotationAngle.animateTo(
-                                        targetValue = 45f, animationSpec = spring(
-                                            dampingRatio = Spring.DampingRatioMediumBouncy,
-                                            stiffness = Spring.StiffnessLow,
-                                        )
+                                        targetValue = 45f,
+                                        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow)
                                     )
                                 } else {
                                     rotationAngle.animateTo(
-                                        targetValue = 0f, animationSpec = spring(
-                                            dampingRatio = Spring.DampingRatioMediumBouncy,
-                                            stiffness = Spring.StiffnessLow,
-                                        )
+                                        targetValue = 0f,
+                                        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow)
                                     )
                                 }
                             }
@@ -397,31 +615,21 @@ fun FloatingToolbarContent(
                                             keyboardController?.hide()
                                             onIsSearchActiveChange(false)
                                         }
-
                                         else -> onAddModeToggle()
                                     }
                                 },
                                 containerColor = Color.Transparent,
                                 shape = fabShape,
-                                elevation = FloatingActionButtonDefaults.elevation(
-                                    0.dp, 0.dp, 0.dp, 0.dp
-                                ),
+                                elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp),
                                 interactionSource = interactionSource,
                                 modifier = Modifier
                                     .clip(FloatingActionButtonDefaults.shape)
                                     .background(colorScheme.primary)
-                                    .hazeEffect(
-                                        state = hazeState,
-                                        style = HazeMaterials.ultraThin(hazeThinColor),
-                                    )
+                                    .hazeEffect(state = hazeState, style = HazeMaterials.ultraThin(hazeThinColor))
                             ) {
                                 Icon(
                                     imageVector = Icons.Filled.Add,
-                                    contentDescription = if (isSearchActive || isSelectionActive) stringResource(
-                                        R.string.cancel
-                                    ) else stringResource(
-                                        R.string.add
-                                    ),
+                                    contentDescription = if (isSearchActive || isSelectionActive) stringResource(R.string.cancel) else stringResource(R.string.add),
                                     tint = fabIconTint,
                                     modifier = Modifier.rotate(rotationAngle.value)
                                 )
@@ -444,26 +652,16 @@ fun FloatingToolbarContent(
                     textEditorActive -> {
                         contentOverride?.invoke(this)
                     }
-
                     selectionActive -> {
-                        if (selectionContentOverride != null) {
-                            selectionContentOverride()
-                        }
+                        selectionContentOverride?.invoke(this)
                     }
-
                     addModeActive -> {
-                        if (addModeContentOverride != null) {
-                            addModeContentOverride()
-                        }
+                        addModeContentOverride?.invoke(this)
                     }
-
                     else -> {
-
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             if (isSearchEnabled) {
-                                IconButton(onClick = {
-                                    onIsSearchActiveChange(true)
-                                }) {
+                                IconButton(onClick = { onIsSearchActiveChange(true) }) {
                                     Icon(
                                         Icons.Filled.Search,
                                         contentDescription = stringResource(R.string.search),
@@ -471,49 +669,30 @@ fun FloatingToolbarContent(
                                     )
                                 }
                             }
-                            Box(
-                                contentAlignment = Alignment.Center
-                            ) {
+                            Box(contentAlignment = Alignment.Center) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     AnimatedVisibility(
                                         visible = showActionIconsExceptSearch && !isSearchActive,
                                         enter = fadeIn(animationSpec = tween(durationMillis = 450)),
-                                        exit = shrinkHorizontally(
-                                            animationSpec = tween(
-                                                durationMillis = iconGroupExitAnimationDuration,
-                                                delayMillis = iconsClearanceTime
-                                            )
-                                        ) + fadeOut(
-                                            animationSpec = tween(
-                                                durationMillis = iconGroupExitAnimationDuration,
-                                                delayMillis = iconsClearanceTime
-                                            )
-                                        )
+                                        exit = shrinkHorizontally(animationSpec = tween(durationMillis = 100, delayMillis = iconsClearanceTime)) +
+                                                fadeOut(animationSpec = tween(durationMillis = 100, delayMillis = iconsClearanceTime))
                                     ) {
-                                        if (defaultContent != null) defaultContent(
-                                            iconsAlphaDuration, showActionIconsExceptSearch
-                                        )
+                                        defaultContent?.invoke(iconsAlphaDuration, showActionIconsExceptSearch)
                                     }
                                 }
 
                                 XenonTextField(
                                     value = currentSearchQuery,
                                     enabled = canShowTextField,
-                                    onValueChange = {
-                                        onSearchQueryChanged(it)
-                                    },
+                                    onValueChange = onSearchQueryChanged,
                                     modifier = Modifier
-                                        .width(
-                                            maxTextFieldWidth.times(textFieldFraction)
-                                        )
+                                        .width(maxTextFieldWidth.times(textFieldFraction))
                                         .alpha(textFieldFraction * textFieldFraction)
                                         .focusRequester(focusRequester),
                                     placeholder = { Text(stringResource(R.string.search)) },
                                     singleLine = true,
                                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                                    keyboardActions = KeyboardActions(onSearch = {
-                                        keyboardController?.hide()
-                                    })
+                                    keyboardActions = KeyboardActions(onSearch = { keyboardController?.hide() })
                                 )
                             }
                         }

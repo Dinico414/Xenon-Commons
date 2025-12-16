@@ -37,7 +37,7 @@ import kotlin.math.sqrt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CollapsingAppBarLayout(
+fun FlexTopAppBar(
     modifier: Modifier = Modifier,
     collapsedHeight: Dp = 64.dp,
     expandedHeight: Dp = LocalConfiguration.current.screenHeightDp.dp.times(0.3f),

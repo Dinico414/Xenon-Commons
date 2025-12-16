@@ -50,7 +50,8 @@ import kotlin.math.roundToInt
 fun ActivityScreen(
     modifier: Modifier = Modifier,
     contentModifier: Modifier = Modifier,
-    titleText: String,
+    flexModel: String,
+    titleText: String = "",
     hasNavigationIconExtraContent: Boolean = false,
     navigationIcon: @Composable () -> Unit = {},
     onNavigationIconClick: (() -> Unit)? = null,
@@ -68,99 +69,146 @@ fun ActivityScreen(
     navigationIconSpacing: Dp = SmallPadding,
     expandedHeight: Dp = LocalConfiguration.current.screenHeightDp.dp.times(0.3f),
     expandable: Boolean = true,
+    headerContent: @Composable (fraction: Float) -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
     dialogs: @Composable () -> Unit = {},
 ) {
-    CollapsingAppBarLayout(
-        expandedHeight = expandedHeight,
-        title = { fraction ->
-            Text(
-                text = titleText, fontFamily = QuicksandTitleVariable, color = lerp(
-                    expandedAppBarTextColor, collapsedAppBarTextColor, fraction
-                ), fontSize = lerp(32F, 22F, fraction).sp, fontWeight = FontWeight(
-                    lerp(700F, 100F, fraction).roundToInt()
+    val flexModel = flexModel != "FlexTopContainer"
+    if (flexModel) {
+        FlexTopAppBar(
+            expandedHeight = expandedHeight,
+            title = { fraction ->
+                Text(
+                    text = titleText, fontFamily = QuicksandTitleVariable, color = lerp(
+                        expandedAppBarTextColor, collapsedAppBarTextColor, fraction
+                    ), fontSize = lerp(32F, 22F, fraction).sp, fontWeight = FontWeight(
+                        lerp(700F, 100F, fraction).roundToInt()
+                    )
                 )
-            )
-        },
-        navigationIcon = {
-            val iconButtonContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
-            val interactionSource = remember { MutableInteractionSource() }
+            },
+            navigationIcon = {
+                val iconButtonContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
+                val interactionSource = remember { MutableInteractionSource() }
 
-            val minButtonSize = 32.dp
+                val minButtonSize = 32.dp
 
-            var boxModifier =
-                Modifier
-                    .defaultMinSize(minWidth = minButtonSize)
-                    .clip(RoundedCornerShape(100.0f))
-                    .background(iconButtonContainerColor)
+                var boxModifier =
+                    Modifier
+                        .defaultMinSize(minWidth = minButtonSize)
+                        .clip(RoundedCornerShape(100.0f))
+                        .background(iconButtonContainerColor)
 
-            if (onNavigationIconClick != null) {
-                boxModifier = boxModifier.clickable(
-                    onClick = onNavigationIconClick,
-                    role = Role.Button,
-                    interactionSource = interactionSource,
-                    indication = ripple(bounded = true)
-                )
-            }
+                if (onNavigationIconClick != null) {
+                    boxModifier = boxModifier.clickable(
+                        onClick = onNavigationIconClick,
+                        role = Role.Button,
+                        interactionSource = interactionSource,
+                        indication = ripple(bounded = true)
+                    )
+                }
 
-            Box(
-                Modifier.width(72.dp), contentAlignment = Alignment.Center
-            ) {
                 Box(
-                    modifier = boxModifier, contentAlignment = Alignment.Center
+                    Modifier.width(72.dp), contentAlignment = Alignment.Center
                 ) {
-                    CompositionLocalProvider(LocalContentColor provides appBarNavigationIconContentColor) {
-                        Row(
-                            modifier = Modifier
-                                .padding(
-                                    start = navigationIconStartPadding, end = navigationIconPadding
-                                )
-                                .padding(vertical = navigationIconPadding),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(navigationIconSpacing)
-                        ) {
-                            navigationIcon()
-                            if (hasNavigationIconExtraContent) {
-                                navigationIconExtraContent()
+                    Box(
+                        modifier = boxModifier, contentAlignment = Alignment.Center
+                    ) {
+                        CompositionLocalProvider(LocalContentColor provides appBarNavigationIconContentColor) {
+                            Row(
+                                modifier = Modifier
+                                    .padding(
+                                        start = navigationIconStartPadding,
+                                        end = navigationIconPadding
+                                    )
+                                    .padding(vertical = navigationIconPadding),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(navigationIconSpacing)
+                            ) {
+                                navigationIcon()
+                                if (hasNavigationIconExtraContent) {
+                                    navigationIconExtraContent()
+                                }
                             }
                         }
-                    }
 
+                    }
                 }
-            }
-        },
-        actions = actions,
-        expandable = expandable,
-        titleAlignment = if (onNavigationIconClick == null && !hasNavigationIconExtraContent) Alignment.Center else Alignment.CenterStart,
-        collapsedContainerColor = screenBackgroundColor,
-        expandedContainerColor = screenBackgroundColor,
-        navigationIconContentColor = appBarNavigationIconContentColor,
-        actionIconContentColor = appBarActionIconContentColor,
-        modifier = modifier,
-    ) { paddingValuesFromAppBar ->
+            },
+            actions = actions,
+            expandable = expandable,
+            titleAlignment = if (onNavigationIconClick == null && !hasNavigationIconExtraContent) Alignment.Center else Alignment.CenterStart,
+            collapsedContainerColor = screenBackgroundColor,
+            expandedContainerColor = screenBackgroundColor,
+            navigationIconContentColor = appBarNavigationIconContentColor,
+            actionIconContentColor = appBarActionIconContentColor,
+            modifier = modifier,
+        ) { paddingValuesFromAppBar ->
+            SharedScreenContent(
+                modifier = contentModifier,
+                paddingValuesFromAppBar = paddingValuesFromAppBar,
+                screenBackgroundColor = screenBackgroundColor,
+                contentBackgroundColor = contentBackgroundColor,
+                contentCornerRadius = contentCornerRadius,
+                content = content,
+                dialogs = dialogs
+            )
+        }
+    } else {
+        FlexTopContainer(
+            modifier = modifier,
+            collapsedHeight = 64.dp,
+            expandedHeight = expandedHeight,
+            expandable = expandable,
+            expandedContainerColor = screenBackgroundColor,
+            collapsedContainerColor = screenBackgroundColor,
+            headerContent = headerContent
+        ) { paddingValuesFromContainer ->
+            SharedScreenContent(
+                modifier = contentModifier,
+                paddingValuesFromAppBar = paddingValuesFromContainer,
+                screenBackgroundColor = screenBackgroundColor,
+                contentBackgroundColor = contentBackgroundColor,
+                contentCornerRadius = contentCornerRadius,
+                content = content,
+                dialogs = dialogs
+            )
+        }
+    }
+}
+
+@Composable
+private fun SharedScreenContent(
+    modifier: Modifier,
+    paddingValuesFromAppBar: PaddingValues,
+    screenBackgroundColor: Color,
+    contentBackgroundColor: Color,
+    contentCornerRadius: Dp,
+    content: @Composable (PaddingValues) -> Unit,
+    dialogs: @Composable () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(screenBackgroundColor)
+            .padding(top = paddingValuesFromAppBar.calculateTopPadding())
+            .padding(
+                WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)
+                    .asPaddingValues()
+            )
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(screenBackgroundColor)
-                .padding(top = paddingValuesFromAppBar.calculateTopPadding())
-                .padding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues()
-                )
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .then(contentModifier)
-                    .clip(
-                        RoundedCornerShape(
-                            topStart = contentCornerRadius, topEnd = contentCornerRadius
-                        )
+                .then(modifier)
+                .clip(
+                    RoundedCornerShape(
+                        topStart = contentCornerRadius, topEnd = contentCornerRadius
                     )
-                    .background(contentBackgroundColor)
-            ) {
-                content(paddingValuesFromAppBar)
-            }
+                )
+                .background(contentBackgroundColor)
+        ) {
+            content(paddingValuesFromAppBar)
         }
-        dialogs()
     }
+    dialogs()
 }

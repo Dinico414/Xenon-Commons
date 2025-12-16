@@ -50,7 +50,7 @@ import kotlin.math.roundToInt
 fun ActivityScreen(
     modifier: Modifier = Modifier,
     contentModifier: Modifier = Modifier,
-    flexModel: String,
+    flexModel: String?,
     titleText: String = "",
     hasNavigationIconExtraContent: Boolean = false,
     navigationIcon: @Composable () -> Unit = {},

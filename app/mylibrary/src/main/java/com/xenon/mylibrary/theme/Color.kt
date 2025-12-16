@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.xenon.mylibrary.theme
 import androidx.compose.ui.graphics.Color
 

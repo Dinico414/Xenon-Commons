@@ -39,13 +39,17 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import com.xenon.mylibrary.theme.QuicksandTitleVariable
 import com.xenon.mylibrary.values.LargerCornerRadius
 import com.xenon.mylibrary.values.SmallPadding
 import kotlin.math.roundToInt
 
+@Suppress("unused")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ActivityScreen(
+    modifier: Modifier = Modifier,
+    contentModifier: Modifier = Modifier,
     titleText: String,
     hasNavigationIconExtraContent: Boolean = false,
     navigationIcon: @Composable () -> Unit = {},
@@ -64,8 +68,6 @@ fun ActivityScreen(
     navigationIconSpacing: Dp = SmallPadding,
     expandedHeight: Dp = LocalConfiguration.current.screenHeightDp.dp.times(0.3f),
     expandable: Boolean = true,
-    modifier: Modifier = Modifier,
-    contentModifier: Modifier = Modifier,
     content: @Composable (PaddingValues) -> Unit,
     dialogs: @Composable () -> Unit = {},
 ) {
@@ -111,8 +113,7 @@ fun ActivityScreen(
                         Row(
                             modifier = Modifier
                                 .padding(
-                                    start = navigationIconStartPadding,
-                                    end = navigationIconPadding
+                                    start = navigationIconStartPadding, end = navigationIconPadding
                                 )
                                 .padding(vertical = navigationIconPadding),
                             verticalAlignment = Alignment.CenterVertically,

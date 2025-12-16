@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.xenon.mylibrary.res
 
 import androidx.compose.foundation.layout.Column

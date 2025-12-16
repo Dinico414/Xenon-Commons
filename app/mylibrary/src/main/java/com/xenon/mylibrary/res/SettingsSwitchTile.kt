@@ -34,6 +34,7 @@ import com.xenon.mylibrary.values.LargeCornerRadius
 import com.xenon.mylibrary.values.LargerPadding
 import com.xenon.mylibrary.values.LargestPadding
 
+@Suppress("unused")
 @Composable
 fun SettingsSwitchTile(
     modifier: Modifier = Modifier,

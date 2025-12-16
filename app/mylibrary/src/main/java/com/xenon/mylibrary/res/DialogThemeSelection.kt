@@ -29,12 +29,14 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.window.DialogProperties
 import com.xenon.mylibrary.values.LargerPadding
 
+@Suppress("unused")
 enum class ThemeSetting(val title: String, val nightModeFlag: Int) {
     LIGHT("Light", AppCompatDelegate.MODE_NIGHT_NO),
     DARK("Dark", AppCompatDelegate.MODE_NIGHT_YES),
     SYSTEM("System", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
 }
 
+@Suppress("unused")
 @Composable
 fun DialogThemeSelection(
     themeOptions: Array<ThemeSetting>,

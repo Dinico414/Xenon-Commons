@@ -29,24 +29,11 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.xenon.mylibrary.values.LargestPadding
 import kotlin.math.sqrt
 
-@OptIn(ExperimentalTextApi::class)
-val QuicksandTitleVariable = FontFamily(
-    Font(
-        R.font.quicksand_variable_font_wght,
-        variationSettings = FontVariation.Settings(
-            FontVariation.weight(700)
-        )
-    )
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -121,6 +108,7 @@ fun CollapsingAppBarLayout(
                                 }
                             )
                             .onGloballyPositioned { layoutCoordinates ->
+                                @Suppress("AssignedValueIsNeverRead")
                                 if(layoutCoordinates.size.width != boxWidth)
                                     boxWidth = layoutCoordinates.size.width
                             },
@@ -144,7 +132,10 @@ fun CollapsingAppBarLayout(
                                     .padding(start = titlePadding.dp)
                             ),
                     ) {
-                        title(fraction)
+                        Row {
+                            title(fraction)
+                            Spacer(modifier = Modifier.width(LargestPadding))
+                        }
                     }
                     // actions
                     Box(
@@ -162,7 +153,7 @@ fun CollapsingAppBarLayout(
                     ) {
                         Row {
                             actions()
-                            Spacer(modifier = Modifier.Companion.width(LargestPadding))
+                            Spacer(modifier = Modifier.width(LargestPadding))
                         }
                     }
                 },

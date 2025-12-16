@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.DialogProperties
 
 
+@Suppress("unused")
 @Composable
 fun DialogClearDataConfirmation(
     onConfirm: () -> Unit,

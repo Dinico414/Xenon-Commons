@@ -38,6 +38,7 @@ import com.xenon.mylibrary.values.LargeCornerRadius
 import com.xenon.mylibrary.values.LargerPadding
 import com.xenon.mylibrary.values.LargestPadding
 import com.xenon.mylibrary.values.MediumPadding
+@Suppress("unused")
 @Composable
 fun SettingsSwitchMenuTile(
     modifier: Modifier = Modifier,

@@ -99,7 +99,6 @@ fun GoogleProfilBorderNoGoogle(
         val strokeWidthPx = with(density) { strokeWidth.toPx() }
         val canvasSize = size.minDimension
         val arcRadius = canvasSize / 2 - strokeWidthPx / 2
-        val componentStrokeWidth = strokeWidthPx
 
         var currentStartAngle = rotationAngleAnim.value - 90f
 
@@ -113,11 +112,11 @@ fun GoogleProfilBorderNoGoogle(
                 sweepAngle = sweep,
                 useCenter = false,
                 topLeft = Offset(
-                    (size.width - 2 * arcRadius - componentStrokeWidth) / 2,
-                    (size.height - 2 * arcRadius - componentStrokeWidth) / 2
+                    (size.width - 2 * arcRadius - strokeWidthPx) / 2,
+                    (size.height - 2 * arcRadius - strokeWidthPx) / 2
                 ),
-                size = Size(arcRadius * 2 + componentStrokeWidth, arcRadius * 2 + componentStrokeWidth),
-                style = Stroke(width = componentStrokeWidth, cap = StrokeCap.Round)
+                size = Size(arcRadius * 2 + strokeWidthPx, arcRadius * 2 + strokeWidthPx),
+                style = Stroke(width = strokeWidthPx, cap = StrokeCap.Round)
             )
             currentStartAngle += sweep + gapAngle
         }

@@ -21,7 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.xenon.mylibrary.QuicksandTitleVariable
+import com.xenon.mylibrary.theme.QuicksandTitleVariable
 
 object XenonSnackbarDefault {
     val backgroundColor: Color @Composable get() = MaterialTheme.colorScheme.inverseSurface
@@ -42,6 +42,7 @@ object XenonSnackbarDefault {
     )
 }
 
+@Suppress("unused")
 @Composable
 fun XenonSnackbar(
     snackbarData: SnackbarData,

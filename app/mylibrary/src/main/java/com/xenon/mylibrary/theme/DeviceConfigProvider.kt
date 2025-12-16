@@ -1,5 +1,6 @@
 package com.xenon.mylibrary.theme
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Build
 import androidx.compose.runtime.Composable
@@ -15,14 +16,16 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 
+@SuppressLint("LocalContextResourcesRead")
+@Suppress("unused", "AssignedValueIsNeverRead")
 @Composable
-public fun DeviceConfigProvider(
+fun DeviceConfigProvider(
     appSize: IntSize, // You already have this
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
-    val density = LocalDensity.current
+    LocalDensity.current
 
     /* === Surface Duo Values === */
     val modelUpper = remember { Build.MODEL.uppercase() }

@@ -1,6 +1,7 @@
+@file:Suppress("unused")
+
 package com.xenon.mylibrary
 
-import androidx.appcompat.app.AppCompatActivity
 import kotlin.math.pow
 import kotlin.math.sqrt
 

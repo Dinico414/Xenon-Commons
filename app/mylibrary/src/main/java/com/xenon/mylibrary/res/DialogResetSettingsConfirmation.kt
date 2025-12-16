@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 // REMOVE: import androidx.compose.ui.res.stringResource // No longer needed
 import androidx.compose.ui.window.DialogProperties
 
+@Suppress("unused")
 @Composable
 fun DialogResetSettingsConfirmation(
     onConfirm: () -> Unit,

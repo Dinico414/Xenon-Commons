@@ -32,6 +32,7 @@ import com.xenon.mylibrary.values.LargerPadding
 
 data class LanguageOption(val displayName: String, val localeTag: String)
 
+@Suppress("unused")
 @Composable
 fun DialogLanguageSelection(
     availableLanguages: List<LanguageOption>,

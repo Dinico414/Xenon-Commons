@@ -112,7 +112,7 @@ data class ScrollState(
 
 @OptIn(ExperimentalHazeMaterialsApi::class)
 @Composable
-public fun SpannedModeFAB(
+fun SpannedModeFAB(
     modifier: Modifier = Modifier,
     hazeState: HazeState,
     onClick: () -> Unit,
@@ -337,6 +337,8 @@ fun FloatingToolbarContent(
     }
 }
 
+@Suppress("AssignedValueIsNeverRead")
+@SuppressLint("ConfigurationScreenWidthHeight")
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, FlowPreview::class,
     ExperimentalHazeMaterialsApi::class
 )

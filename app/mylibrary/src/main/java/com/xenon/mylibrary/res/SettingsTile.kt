@@ -24,6 +24,7 @@ import com.xenon.mylibrary.values.ExtraLargePadding
 import com.xenon.mylibrary.values.LargeCornerRadius
 import com.xenon.mylibrary.values.LargestPadding
 
+@Suppress("unused")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SettingsTile(

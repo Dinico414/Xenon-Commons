@@ -3,7 +3,7 @@ package com.xenon.mylibrary.theme
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.Dp
 
-public data class DeviceLayoutConfig(
+data class DeviceLayoutConfig(
     val isSurfaceDuo: Boolean,
     val isSpannedMode: Boolean,
     val hingeGapDp: Dp,
@@ -11,6 +11,6 @@ public data class DeviceLayoutConfig(
     val toggleFabSide: () -> Unit
 )
 
-public val LocalDeviceConfig = compositionLocalOf<DeviceLayoutConfig> {
+val LocalDeviceConfig = compositionLocalOf<DeviceLayoutConfig> {
     error("No DeviceLayoutConfig provided. Wrap your UI with DeviceConfigProvider.")
 }

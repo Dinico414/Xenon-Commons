@@ -121,7 +121,7 @@ fun GoogleProfilBorder(
 
     Canvas(modifier = modifier) {
         val canvasSize = size.minDimension
-        val radius = canvasSize / 2f - strokeWidthPx / 2f
+        @Suppress("UnusedVariable", "unused") val radius = canvasSize / 2f - strokeWidthPx / 2f
 
         var currentStartAngle = rotationAngleAnim.value - 90f
 

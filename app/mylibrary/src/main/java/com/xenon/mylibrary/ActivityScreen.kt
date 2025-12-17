@@ -67,6 +67,8 @@ fun ActivityScreen(
     navigationIconStartPadding: Dp = SmallPadding,
     navigationIconPadding: Dp = SmallPadding,
     navigationIconSpacing: Dp = SmallPadding,
+    collapsedByDefault: Boolean = false,
+    collapsedHeight: Dp = 64.dp,
     expandedHeight: Dp = LocalConfiguration.current.screenHeightDp.dp.times(0.3f),
     expandable: Boolean = true,
     headerContent: @Composable (fraction: Float) -> Unit = {},
@@ -76,7 +78,10 @@ fun ActivityScreen(
     val flexModel = flexModel != "FlexTopContainer"
     if (flexModel) {
         FlexTopAppBar(
+            collapsedHeight = collapsedHeight,
             expandedHeight = expandedHeight,
+            collapsedByDefault = collapsedByDefault,
+            expandable = expandable,
             title = { fraction ->
                 Text(
                     text = titleText, fontFamily = QuicksandTitleVariable, color = lerp(
@@ -135,7 +140,6 @@ fun ActivityScreen(
                 }
             },
             actions = actions,
-            expandable = expandable,
             titleAlignment = if (onNavigationIconClick == null && !hasNavigationIconExtraContent) Alignment.Center else Alignment.CenterStart,
             collapsedContainerColor = screenBackgroundColor,
             expandedContainerColor = screenBackgroundColor,
@@ -156,8 +160,9 @@ fun ActivityScreen(
     } else {
         FlexTopContainer(
             modifier = modifier,
-            collapsedHeight = 64.dp,
+            collapsedHeight = collapsedHeight,
             expandedHeight = expandedHeight,
+            collapsedByDefault = collapsedByDefault,
             expandable = expandable,
             expandedContainerColor = screenBackgroundColor,
             collapsedContainerColor = screenBackgroundColor,

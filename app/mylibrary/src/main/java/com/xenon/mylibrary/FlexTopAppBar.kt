@@ -34,13 +34,13 @@ import androidx.compose.ui.unit.dp
 import com.xenon.mylibrary.values.LargestPadding
 import kotlin.math.sqrt
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlexTopAppBar(
     modifier: Modifier = Modifier,
     collapsedHeight: Dp = 64.dp,
     expandedHeight: Dp = LocalConfiguration.current.screenHeightDp.dp.times(0.3f),
+    collapsedByDefault: Boolean = false,
     title: @Composable (fraction: Float) -> Unit = { _ -> },
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
@@ -53,20 +53,29 @@ fun FlexTopAppBar(
     actionIconContentColor: Color = MaterialTheme.colorScheme.onSurface,
     content: @Composable (paddingValues: PaddingValues) -> Unit
 ) {
+    val localDensity = LocalDensity.current
+
     val expandedHeight = remember(expandable) {
         if (expandable) expandedHeight else collapsedHeight
     }
 
-    val scrollBehavior: TopAppBarScrollBehavior =
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
-            rememberTopAppBarState()
-        )
+    val fullyCollapsedOffset = remember(collapsedHeight, expandedHeight) {
+        with(localDensity) { (collapsedHeight - expandedHeight).toPx() }
+    }
+
+    val topAppBarState = rememberTopAppBarState(
+        initialHeightOffset = if (collapsedByDefault && expandable) fullyCollapsedOffset else 0f
+    )
+
+
+    val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
+        topAppBarState
+    )
 
     Scaffold(
-        modifier = modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            // Dummy that consumes the scrollBehaviour
+            // Dummy LargeTopAppBar – consumes the scroll behavior and provides the background/colors
             LargeTopAppBar(
                 title = {},
                 collapsedHeight = collapsedHeight,
@@ -81,22 +90,23 @@ fun FlexTopAppBar(
                 scrollBehavior = scrollBehavior
             )
 
-            // fraction: 0 -> expanded, 1 -> collapsed
+            // fraction: 0f -> fully expanded, 1f -> fully collapsed
             val fraction = if (expandable) scrollBehavior.state.collapsedFraction else 1f
             val curHeight = collapsedHeight.times(fraction) +
                     expandedHeight.times(1 - fraction)
             val offset = curHeight - collapsedHeight
+
             var boxWidth by remember { mutableIntStateOf(0) }
             val titlePadding = when (titleAlignment) {
-                Alignment.CenterStart -> sqrt(fraction) * (boxWidth / LocalDensity.current.density) + 8
+                Alignment.CenterStart -> sqrt(fraction) * (boxWidth / localDensity.density) + 8
                 else -> 0f
             }
 
-            // Real AppBar that uses scrollBehaviour values
+            // Real visible TopAppBar (transparent background, custom content)
             CenterAlignedTopAppBar(
                 expandedHeight = curHeight,
                 title = {
-                    // navigationIcon
+                    // Navigation icon
                     Box(
                         modifier = Modifier
                             .height(curHeight)
@@ -107,37 +117,41 @@ fun FlexTopAppBar(
                                     else -> Modifier
                                 }
                             )
-                            .onGloballyPositioned { layoutCoordinates ->
-                                @Suppress("AssignedValueIsNeverRead")
-                                if(layoutCoordinates.size.width != boxWidth)
-                                    boxWidth = layoutCoordinates.size.width
+                            .onGloballyPositioned { coordinates ->
+                                if (coordinates.size.width != boxWidth) {
+                                    boxWidth = coordinates.size.width
+                                }
                             },
                         contentAlignment = Alignment.Center
                     ) {
                         navigationIcon()
                     }
-                    // title
+
+                    // Title
                     Box(
                         contentAlignment = titleAlignment,
                         modifier = Modifier
                             .fillMaxWidth()
                             .then(
                                 when (titleAlignment) {
-                                    Alignment.Center, Alignment.CenterStart, Alignment.CenterEnd ->
-                                        Modifier.height(curHeight)
-                                    Alignment.BottomStart, Alignment.BottomCenter, Alignment.BottomEnd ->
-                                        Modifier.padding(top = offset)
+                                    Alignment.Center,
+                                    Alignment.CenterStart,
+                                    Alignment.CenterEnd -> Modifier.height(curHeight)
+                                    Alignment.BottomStart,
+                                    Alignment.BottomCenter,
+                                    Alignment.BottomEnd -> Modifier.padding(top = offset)
                                     else -> Modifier
                                 }
-                                    .padding(start = titlePadding.dp)
-                            ),
+                            )
+                            .padding(start = titlePadding.dp)
                     ) {
                         Row {
                             title(fraction)
                             Spacer(modifier = Modifier.width(LargestPadding))
                         }
                     }
-                    // actions
+
+                    // Actions
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -164,7 +178,7 @@ fun FlexTopAppBar(
                     scrolledContainerColor = Color.Transparent,
                     navigationIconContentColor = navigationIconContentColor,
                     actionIconContentColor = actionIconContentColor
-                ),
+                )
             )
         }
     ) { paddingValues ->

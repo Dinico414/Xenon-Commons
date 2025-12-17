@@ -63,6 +63,8 @@ fun ActivityScreen(
     appBarActionIconContentColor: Color = MaterialTheme.colorScheme.onSurface,
     screenBackgroundColor: Color = MaterialTheme.colorScheme.surfaceDim,
     contentBackgroundColor: Color = MaterialTheme.colorScheme.surfaceContainer,
+    expandedContainerColor: Color = MaterialTheme.colorScheme.surfaceDim,
+    collapsedContainerColor: Color = MaterialTheme.colorScheme.surfaceDim,
     contentCornerRadius: Dp = LargerCornerRadius,
     navigationIconStartPadding: Dp = SmallPadding,
     navigationIconPadding: Dp = SmallPadding,

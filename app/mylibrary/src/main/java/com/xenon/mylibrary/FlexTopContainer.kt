@@ -1,5 +1,6 @@
 package com.xenon.mylibrary
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -53,7 +54,7 @@ fun FlexTopContainer(
     } else {
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
     }
-    
+
     val fraction = if (expandable) scrollBehavior.state.collapsedFraction else 1f
 
     Scaffold(
@@ -80,7 +81,7 @@ fun FlexTopContainer(
             ) {
                 val currentHeight = collapsedHeight * fraction + expandedHeight * (1f - fraction)
 
-                androidx.compose.foundation.layout.Box(
+                Box(
                     modifier = Modifier.height(currentHeight)
                 ) {
                     headerContent(fraction)

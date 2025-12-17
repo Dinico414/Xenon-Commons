@@ -67,10 +67,11 @@ fun FlexTopAppBar(
         initialHeightOffset = if (collapsedByDefault && expandable) fullyCollapsedOffset else 0f
     )
 
-
-    val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
-        topAppBarState
-    )
+    val scrollBehavior: TopAppBarScrollBehavior = if (collapsedByDefault && expandable) {
+        TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+    } else {
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
+    }
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),

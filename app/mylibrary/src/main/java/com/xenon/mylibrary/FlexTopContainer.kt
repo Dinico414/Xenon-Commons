@@ -48,10 +48,12 @@ fun FlexTopContainer(
     )
 
 
-    val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
-        topAppBarState
-    )
-
+    val scrollBehavior: TopAppBarScrollBehavior = if (collapsedByDefault && expandable) {
+        TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+    } else {
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
+    }
+    
     val fraction = if (expandable) scrollBehavior.state.collapsedFraction else 1f
 
     Scaffold(

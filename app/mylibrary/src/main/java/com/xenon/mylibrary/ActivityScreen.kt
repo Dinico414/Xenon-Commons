@@ -50,7 +50,7 @@ import kotlin.math.roundToInt
 fun ActivityScreen(
     modifier: Modifier = Modifier,
     contentModifier: Modifier = Modifier,
-    flexModel: String?,
+    flexModel: String? = "FlexTopAppBar",
     titleText: String = "",
     hasNavigationIconExtraContent: Boolean = false,
     navigationIcon: @Composable () -> Unit = {},
@@ -73,112 +73,139 @@ fun ActivityScreen(
     collapsedHeight: Dp = 64.dp,
     expandedHeight: Dp = LocalConfiguration.current.screenHeightDp.dp.times(0.3f),
     expandable: Boolean = true,
+    expand: Boolean = false,
     headerContent: @Composable (fraction: Float) -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
     dialogs: @Composable () -> Unit = {},
 ) {
-    val flexModel = flexModel != "FlexTopContainer"
-    if (flexModel) {
-        FlexTopAppBar(
-            collapsedHeight = collapsedHeight,
-            expandedHeight = expandedHeight,
-            collapsedByDefault = collapsedByDefault,
-            expandable = expandable,
-            title = { fraction ->
-                Text(
-                    text = titleText, fontFamily = QuicksandTitleVariable, color = lerp(
-                        expandedAppBarTextColor, collapsedAppBarTextColor, fraction
-                    ), fontSize = lerp(32F, 22F, fraction).sp, fontWeight = FontWeight(
-                        lerp(700F, 100F, fraction).roundToInt()
+    when (flexModel) {
+        "FlexTopAppBar" -> {
+            FlexTopAppBar(
+                collapsedHeight = collapsedHeight,
+                expandedHeight = expandedHeight,
+                collapsedByDefault = collapsedByDefault,
+                expandable = expandable,
+                title = { fraction ->
+                    Text(
+                        text = titleText, fontFamily = QuicksandTitleVariable, color = lerp(
+                            expandedAppBarTextColor, collapsedAppBarTextColor, fraction
+                        ), fontSize = lerp(32F, 22F, fraction).sp, fontWeight = FontWeight(
+                            lerp(700F, 100F, fraction).roundToInt()
+                        )
                     )
-                )
-            },
-            navigationIcon = {
-                val iconButtonContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
-                val interactionSource = remember { MutableInteractionSource() }
+                },
+                navigationIcon = {
+                    val iconButtonContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
+                    val interactionSource = remember { MutableInteractionSource() }
 
-                val minButtonSize = 32.dp
+                    val minButtonSize = 32.dp
 
-                var boxModifier =
-                    Modifier
-                        .defaultMinSize(minWidth = minButtonSize)
-                        .clip(RoundedCornerShape(100.0f))
-                        .background(iconButtonContainerColor)
+                    var boxModifier =
+                        Modifier
+                            .defaultMinSize(minWidth = minButtonSize)
+                            .clip(RoundedCornerShape(100.0f))
+                            .background(iconButtonContainerColor)
 
-                if (onNavigationIconClick != null) {
-                    boxModifier = boxModifier.clickable(
-                        onClick = onNavigationIconClick,
-                        role = Role.Button,
-                        interactionSource = interactionSource,
-                        indication = ripple(bounded = true)
-                    )
-                }
+                    if (onNavigationIconClick != null) {
+                        boxModifier = boxModifier.clickable(
+                            onClick = onNavigationIconClick,
+                            role = Role.Button,
+                            interactionSource = interactionSource,
+                            indication = ripple(bounded = true)
+                        )
+                    }
 
-                Box(
-                    Modifier.width(72.dp), contentAlignment = Alignment.Center
-                ) {
                     Box(
-                        modifier = boxModifier, contentAlignment = Alignment.Center
+                        Modifier.width(72.dp), contentAlignment = Alignment.Center
                     ) {
-                        CompositionLocalProvider(LocalContentColor provides appBarNavigationIconContentColor) {
-                            Row(
-                                modifier = Modifier
-                                    .padding(
-                                        start = navigationIconStartPadding,
-                                        end = navigationIconPadding
+                        Box(
+                            modifier = boxModifier, contentAlignment = Alignment.Center
+                        ) {
+                            CompositionLocalProvider(LocalContentColor provides appBarNavigationIconContentColor) {
+                                Row(
+                                    modifier = Modifier
+                                        .padding(
+                                            start = navigationIconStartPadding,
+                                            end = navigationIconPadding
+                                        )
+                                        .padding(vertical = navigationIconPadding),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(
+                                        navigationIconSpacing
                                     )
-                                    .padding(vertical = navigationIconPadding),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(navigationIconSpacing)
-                            ) {
-                                navigationIcon()
-                                if (hasNavigationIconExtraContent) {
-                                    navigationIconExtraContent()
+                                ) {
+                                    navigationIcon()
+                                    if (hasNavigationIconExtraContent) {
+                                        navigationIconExtraContent()
+                                    }
                                 }
                             }
-                        }
 
+                        }
                     }
-                }
-            },
-            actions = actions,
-            titleAlignment = if (onNavigationIconClick == null && !hasNavigationIconExtraContent) Alignment.Center else Alignment.CenterStart,
-            collapsedContainerColor = screenBackgroundColor,
-            expandedContainerColor = screenBackgroundColor,
-            navigationIconContentColor = appBarNavigationIconContentColor,
-            actionIconContentColor = appBarActionIconContentColor,
-            modifier = modifier,
-        ) { paddingValuesFromAppBar ->
-            SharedScreenContent(
-                modifier = contentModifier,
-                paddingValuesFromAppBar = paddingValuesFromAppBar,
-                screenBackgroundColor = screenBackgroundColor,
-                contentBackgroundColor = contentBackgroundColor,
-                contentCornerRadius = contentCornerRadius,
-                content = content,
-                dialogs = dialogs
-            )
+                },
+                actions = actions,
+                titleAlignment = if (onNavigationIconClick == null && !hasNavigationIconExtraContent) Alignment.Center else Alignment.CenterStart,
+                collapsedContainerColor = screenBackgroundColor,
+                expandedContainerColor = screenBackgroundColor,
+                navigationIconContentColor = appBarNavigationIconContentColor,
+                actionIconContentColor = appBarActionIconContentColor,
+                modifier = modifier,
+            ) { paddingValuesFromAppBar ->
+                SharedScreenContent(
+                    modifier = contentModifier,
+                    paddingValuesFromAppBar = paddingValuesFromAppBar,
+                    screenBackgroundColor = screenBackgroundColor,
+                    contentBackgroundColor = contentBackgroundColor,
+                    contentCornerRadius = contentCornerRadius,
+                    content = content,
+                    dialogs = dialogs
+                )
+            }
         }
-    } else {
-        FlexTopContainer(
-            modifier = modifier,
-            collapsedHeight = collapsedHeight,
-            expandedHeight = expandedHeight,
-            collapsedByDefault = collapsedByDefault,
-            expandable = expandable,
-            expandedContainerColor = screenBackgroundColor,
-            collapsedContainerColor = screenBackgroundColor,
-            headerContent = headerContent
-        ) { paddingValuesFromContainer ->
-            SharedScreenContent(
-                modifier = contentModifier,
-                paddingValuesFromAppBar = paddingValuesFromContainer,
-                screenBackgroundColor = screenBackgroundColor,
-                contentBackgroundColor = contentBackgroundColor,
-                contentCornerRadius = contentCornerRadius,
-                content = content,
-                dialogs = dialogs
-            )
+
+        "FlexTopContainer" -> {
+            FlexTopContainer(
+                modifier = modifier,
+                collapsedHeight = collapsedHeight,
+                expandedHeight = expandedHeight,
+                collapsedByDefault = collapsedByDefault,
+                expandable = expandable,
+                expandedContainerColor = screenBackgroundColor,
+                collapsedContainerColor = screenBackgroundColor,
+                headerContent = headerContent
+            ) { paddingValuesFromContainer ->
+                SharedScreenContent(
+                    modifier = contentModifier,
+                    paddingValuesFromAppBar = paddingValuesFromContainer,
+                    screenBackgroundColor = screenBackgroundColor,
+                    contentBackgroundColor = contentBackgroundColor,
+                    contentCornerRadius = contentCornerRadius,
+                    content = content,
+                    dialogs = dialogs
+                )
+            }
+        }
+        "TopContainer" -> {
+            TopContainer(
+                modifier = modifier,
+                collapsedHeight = collapsedHeight,
+                expandedHeight = expandedHeight,
+                expand = expand,
+                expandedContainerColor = expandedContainerColor,
+                collapsedContainerColor = collapsedContainerColor,
+                headerContent = headerContent
+            ) { paddingValuesFromContainer ->
+                SharedScreenContent(
+                    modifier = contentModifier,
+                    paddingValuesFromAppBar = paddingValuesFromContainer,
+                    screenBackgroundColor = screenBackgroundColor,
+                    contentBackgroundColor = contentBackgroundColor,
+                    contentCornerRadius = contentCornerRadius,
+                    content = content,
+                    dialogs = dialogs
+                )
+            }
         }
     }
 }

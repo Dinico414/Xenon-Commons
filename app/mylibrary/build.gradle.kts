@@ -37,9 +37,7 @@ android {
             println("Java version used by Gradle: ${System.getProperty("java.version")}")
         }
     }
-    kotlinOptions {
-        jvmTarget = "21"
-    }
+
     publishing {
         singleVariant("release")
     }
@@ -49,6 +47,7 @@ dependencies {
     implementation(libs.reorderable)
     implementation(libs.androidx.material3.window.size.class1.android)
     implementation(libs.androidx.material3.adaptive)
+    implementation(libs.androidx.compose.material3)
     val composeBom = platform("androidx.compose:compose-bom:2025.05.01")
     implementation(composeBom)
     androidTestImplementation(composeBom)

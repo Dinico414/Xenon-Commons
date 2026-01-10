@@ -23,6 +23,7 @@ material3comp = "1.5.0-alpha10"
 material3Adaptive = "1.0.0-alpha06"
 playServicesAuth = "21.4.0"
 reorderable = "3.0.0"
+material3 = "1.4.0"
 
 [libraries]
 
@@ -60,6 +61,7 @@ ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx-material3-window-size-class1-android = { group = "androidx.compose.material3", name = "material3-window-size-class-android", version.ref = "material3WindowSizeClassAndroid" }
 androidx-material3-adaptive = { group = "androidx.compose.material3", name = "material3-adaptive", version.ref = "material3Adaptive" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

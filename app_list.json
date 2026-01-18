@@ -30,6 +30,16 @@
       "icon": "@mipmap/notes",
       "githubUrl": "https://github.com/Dinico414/Notes",
       "packageName": "com.xenonware.notes"
+    },
+    {
+      "name": "Phone",
+      "names": {
+        "en": "Phone",
+        "de": "Telefonbuch"
+      },
+      "icon": "@mipmap/phone",
+      "githubUrl": "https://github.com/Dinico414/Dialer",
+      "packageName": "com.xenonware.phone"
     }
   ]
 }

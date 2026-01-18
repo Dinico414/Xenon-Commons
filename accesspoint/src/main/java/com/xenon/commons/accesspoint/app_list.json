@@ -3,31 +3,43 @@
   "appList": [
     {
       "name": "To-Do",
-      "names": {"en": "To-Do", "de": "To-Do"},
+      "names": {
+        "en": "To-Do",
+        "de": "To-Do"
+      },
       "icon": "@mipmap/todo_list",
       "githubUrl": "https://github.com/Dinico414/TodoListCompose",
       "packageName": "com.xenonware.todolist"
     },
     {
       "name": "Calculator",
-      "names": {"en": "Calculator", "de": "Rechner"},
+      "names": {
+        "en": "Calculator",
+        "de": "Rechner"
+      },
       "icon": "@mipmap/calculator",
       "githubUrl": "https://github.com/Dinico414/Calculator",
       "packageName": "com.xenonware.calculator"
     },
-    {"name": "Notes",
-      "names": {"en": "Notes", "de": "Notizen"},
+    {
+      "name": "Notes",
+      "names": {
+        "en": "Notes (alpha)",
+        "de": "Notizen (alpha)"
+      },
       "icon": "@mipmap/notes",
       "githubUrl": "https://github.com/Dinico414/Notes",
       "packageName": "com.xenonware.notes"
     },
     {
-      "name": "Nocturne",
-      "names" : {"en": "Nocturne (pre-alpha)",  "de": "Nocturne (pre-alpha)"},
-      "icon": "@mipmap/nocturne",
-      "githubUrl": "https://github.com/Dinico414/NocturneNative",
-      "packageName": "com.xenon.nocturne"
+      "name": "Phone",
+      "names": {
+        "en": "Phone",
+        "de": "Telefonbuch"
+      },
+      "icon": "@mipmap/phone",
+      "githubUrl": "https://github.com/Dinico414/Dialer",
+      "packageName": "com.xenonware.phone"
     }
-
   ]
 }

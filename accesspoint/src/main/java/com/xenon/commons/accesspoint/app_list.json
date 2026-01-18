@@ -35,7 +35,7 @@
       "name": "Phone",
       "names": {
         "en": "Phone",
-        "de": "Telefonbuch"
+        "de": "Telefon"
       },
       "icon": "@mipmap/phone",
       "githubUrl": "https://github.com/Dinico414/Dialer",

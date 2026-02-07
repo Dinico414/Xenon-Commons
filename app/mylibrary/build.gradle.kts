@@ -14,8 +14,6 @@ android {
 
     defaultConfig {
         minSdk = 29
-
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -23,8 +21,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -32,6 +29,11 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
+    }
+
+    // Enable Java 21 desugaring if needed for some APIs (optional but safe)
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
     }
 
     publishing {
@@ -43,7 +45,7 @@ android {
 }
 
 dependencies {
-    val composeBom = platform("androidx.compose:compose-bom:2025.05.01")
+    val composeBom = platform("androidx.compose:compose-bom:2026.01.01")
     implementation(composeBom)
     androidTestImplementation(composeBom)
 
@@ -51,7 +53,6 @@ dependencies {
     implementation(libs.androidx.material3)
 
     implementation(libs.reorderable)
-    implementation(libs.androidx.material3.window.size.class1.android)
     implementation(libs.androidx.material3.adaptive)
     implementation(libs.haze)
     implementation(libs.haze.materials)
@@ -80,6 +81,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
 
 tasks.register("printJavaVersion") {
@@ -100,7 +103,7 @@ afterEvaluate {
                 pom {
                     name.set("Xenon Commons")
                     description.set("A collection of reusable Android components")
-                    url.set("https://github.com/yourusername/Xenon-Commons")
+                    url.set("https://github.com/Xenon-Ware/Xenon-Commons")
                 }
             }
         }

@@ -1,9 +1,8 @@
 [versions]
 accompanistSystemuicontroller = "0.36.0"
-agp = "9.0.0"
+agp = "8.13.2"
 animationGraphics = "1.10.2"
 coilCompose = "2.7.0"
-desugar_jdk_libs = "2.1.5"
 firebaseAuthKtx = "23.2.1"
 hazeMaterials = "1.7.1"
 kotlin = "2.3.0"
@@ -35,7 +34,6 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
-desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "hazeMaterials" }
 haze-materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "hazeMaterials" }

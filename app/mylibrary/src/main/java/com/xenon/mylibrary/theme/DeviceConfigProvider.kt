@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 
 @SuppressLint("LocalContextResourcesRead")
-@Suppress("unused", "AssignedValueIsNeverRead")
+@Suppress("unused")
 @Composable
 fun DeviceConfigProvider(
     appSize: IntSize, // You already have this
@@ -37,6 +37,10 @@ fun DeviceConfigProvider(
         }
     }
     val isSurfaceDuo = duoGeneration != null
+    val isWing = modelUpper.contains("WING")
+    val isCommunicator = modelUpper.contains("COMMUNICATOR")
+    val isMindOne = modelUpper.contains("IKKO")
+
 
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -64,6 +68,9 @@ fun DeviceConfigProvider(
 
     val config = remember(isSurfaceDuo, isSpannedMode, hingeGapDp, fabOnLeft) {
         DeviceLayoutConfig(
+            isWing = isWing,
+            isCommunicator = isCommunicator,
+            isMindOne = isMindOne,
             isSurfaceDuo = isSurfaceDuo,
             isSpannedMode = isSpannedMode,
             hingeGapDp = hingeGapDp,

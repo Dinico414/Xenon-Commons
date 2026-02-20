@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.xenon.commons"
-version = "1.7"
+version = "1.8"
 
 android {
     namespace = "com.xenon.mylibrary"

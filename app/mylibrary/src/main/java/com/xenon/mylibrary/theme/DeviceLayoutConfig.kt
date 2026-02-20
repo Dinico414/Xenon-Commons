@@ -4,6 +4,9 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.Dp
 
 data class DeviceLayoutConfig(
+    val isWing: Boolean,
+    val isCommunicator: Boolean,
+    val isMindOne: Boolean,
     val isSurfaceDuo: Boolean,
     val isSpannedMode: Boolean,
     val hingeGapDp: Dp,

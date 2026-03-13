@@ -1,7 +1,9 @@
 package com.xenon.mylibrary
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -38,7 +40,14 @@ fun TopContainer(
 ) {
     val animatedHeight by animateDpAsState(
         targetValue = if (expand) expandedHeight else collapsedHeight,
-        animationSpec = tween(durationMillis = 400),
+        animationSpec = if (expand) {
+            spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessLow
+            )
+        } else {
+            tween(durationMillis = 400)
+        },
         label = "headerHeight"
     )
 

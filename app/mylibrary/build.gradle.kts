@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.LibraryExtension
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -8,15 +10,13 @@ plugins {
 group = "com.xenon.commons"
 version = "1.8"
 
-android {
+configure<LibraryExtension> {
     namespace = "com.xenon.mylibrary"
     compileSdk = 36
 
     defaultConfig {
         minSdk = 29
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {

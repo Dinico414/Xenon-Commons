@@ -42,12 +42,15 @@ fun TopContainer(
         targetValue = if (expand) expandedHeight else collapsedHeight,
         animationSpec = if (expand) {
             spring(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
+                dampingRatio = Spring.DampingRatioLowBouncy,
                 stiffness = Spring.StiffnessLow
             )
         } else {
-            tween(durationMillis = 400)
-        },
+            spring(
+                dampingRatio = Spring.DampingRatioLowBouncy,
+                stiffness = Spring.StiffnessLow
+            )
+               },
         label = "headerHeight"
     )
 

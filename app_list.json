@@ -40,6 +40,16 @@
       "icon": "@mipmap/phone",
       "githubUrl": "https://github.com/Dinico414/Dialer",
       "packageName": "com.xenonware.phone"
+    },
+    {
+      "name": "Cloud Remote",
+      "names": {
+        "en": "Cloud Remote",
+        "de": "Cloud Remote"
+      },
+      "icon": "@mipmap/cloud_remote",
+      "githubUrl": "https://github.com/Dinico414/CloudRemote",
+      "packageName": "com.xenonware.cloudremote"
     }
   ]
 }

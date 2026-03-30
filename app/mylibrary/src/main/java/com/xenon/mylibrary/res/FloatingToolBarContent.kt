@@ -90,7 +90,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import com.xenon.mylibrary.R
-import com.xenon.mylibrary.theme.extendedMaterialColorScheme
 import com.xenon.mylibrary.values.LargePadding
 import com.xenon.mylibrary.values.SmallElevation
 import dev.chrisbanes.haze.HazeState
@@ -233,7 +232,9 @@ fun FloatingToolbarContent(
     addModeContentOverride: @Composable (RowScope.() -> Unit)? = null,
     defaultContent: @Composable ((iconsAlphaDuration: Int, showActionIconsExceptSearch: Boolean) -> Unit)? = null,
     contentOverride: @Composable (RowScope.() -> Unit)? = null,
-    isSelectedColor: Color = extendedMaterialColorScheme.inverseErrorContainer,
+    defaultColor: Color = colorScheme.surfaceDim,
+    isSelectedColor: Color = colorScheme.secondaryContainer,
+    isAddModeColor: Color = colorScheme.secondaryContainer,
     // Spanned mode parameters
     isSpannedMode: Boolean = false,
     fabOnLeftInSpannedMode: Boolean = true,
@@ -267,7 +268,9 @@ fun FloatingToolbarContent(
                         addModeContentOverride = addModeContentOverride,
                         defaultContent = defaultContent,
                         contentOverride = contentOverride,
-                        isSelectedColor = isSelectedColor
+                        defaultColor = defaultColor,
+                        isSelectedColor = isSelectedColor,
+                        isAddModeColor = isAddModeColor
                     )
                 } else {
                     spannedModeFab?.invoke { }
@@ -301,7 +304,9 @@ fun FloatingToolbarContent(
                         addModeContentOverride = addModeContentOverride,
                         defaultContent = defaultContent,
                         contentOverride = contentOverride,
-                        isSelectedColor = isSelectedColor
+                        defaultColor = defaultColor,
+                        isSelectedColor = isSelectedColor,
+                        isAddModeColor = isAddModeColor
                     )
                 } else {
                     spannedModeFab?.invoke { }
@@ -332,13 +337,14 @@ fun FloatingToolbarContent(
             addModeContentOverride = addModeContentOverride,
             defaultContent = defaultContent,
             contentOverride = contentOverride,
-            isSelectedColor = isSelectedColor
+            defaultColor = defaultColor,
+            isSelectedColor = isSelectedColor,
+            isAddModeColor = isAddModeColor
         )
     }
 }
 
-@Suppress("AssignedValueIsNeverRead")
-@SuppressLint("ConfigurationScreenWidthHeight")
+@SuppressLint("ConfigurationScreenWidthHeight", "UseOfNonLambdaOffsetOverload")
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, FlowPreview::class,
     ExperimentalHazeMaterialsApi::class
 )
@@ -362,7 +368,9 @@ private fun SingleToolbarInstance(
     addModeContentOverride: @Composable (RowScope.() -> Unit)?,
     defaultContent: @Composable ((iconsAlphaDuration: Int, showActionIconsExceptSearch: Boolean) -> Unit)?,
     contentOverride: @Composable (RowScope.() -> Unit)?,
-    isSelectedColor: Color
+    defaultColor: Color,
+    isSelectedColor: Color,
+    isAddModeColor: Color
 ) {
     val isSelectionActive = selectedNoteIds.isNotEmpty()
     val isTextEditorActive = contentOverride != null
@@ -522,10 +530,10 @@ private fun SingleToolbarInstance(
     ) {
         val animatedToolbarColor by animateColorAsState(
             targetValue = when {
-                isTextEditorActive -> colorScheme.surfaceDim
+                isTextEditorActive -> defaultColor
                 isSelectionActive -> isSelectedColor
-                isAddModeActive -> colorScheme.secondaryContainer
-                else -> colorScheme.surfaceDim
+                isAddModeActive -> isAddModeColor
+                else -> defaultColor
             },
             animationSpec = tween(durationMillis = 500),
             label = "toolbarColor"

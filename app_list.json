@@ -47,7 +47,7 @@
         "en": "Cloud Remote",
         "de": "Cloud Remote"
       },
-      "icon": "@mipmap/cloudremote",
+      "icon": "@mipmap/cloud_remote",
       "githubUrl": "https://github.com/Dinico414/CloudRemote",
       "packageName": "com.xenonware.cloudremote"
     }

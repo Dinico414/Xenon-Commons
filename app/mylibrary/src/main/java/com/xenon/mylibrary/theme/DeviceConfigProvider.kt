@@ -39,7 +39,7 @@ fun DeviceConfigProvider(
     val isSurfaceDuo = duoGeneration != null
     val isWing = modelUpper.contains("WING")
     val isCommunicator = modelUpper.contains("COMMUNICATOR")
-    val isMindOne = modelUpper.contains("IKKO")
+    val isMindOne = modelUpper.contains("MINDONE")
 
 
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE

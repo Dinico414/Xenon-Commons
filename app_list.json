@@ -2,6 +2,16 @@
   "protocolVersion": "v0.0",
   "appList": [
     {
+      "name": "XenonStore",
+      "names": {
+        "en": "XenonStore",
+        "de": "XenonStore"
+      },
+      "icon": "@mipmap/store",
+      "githubUrl": "https://github.com/Dinico414/XenonStoreCompose",
+      "packageName": "com.xenonware.store"
+    },
+    {
       "name": "To-Do",
       "names": {
         "en": "To-Do",

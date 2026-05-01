@@ -1,4 +1,4 @@
-package com.xenon.mylibrary
+package com.xenonware.todolist.ui.res
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,6 +39,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import com.xenon.mylibrary.FlexTopAppBar
+import com.xenon.mylibrary.FlexTopContainer
+import com.xenon.mylibrary.TopContainer
 import com.xenon.mylibrary.theme.QuicksandTitleVariable
 import com.xenon.mylibrary.values.LargerCornerRadius
 import com.xenon.mylibrary.values.SmallPadding
@@ -75,6 +78,7 @@ fun ActivityScreen(
     expandable: Boolean = true,
     expand: Boolean = false,
     headerContent: @Composable (fraction: Float) -> Unit = {},
+    isLargeScreenLayout: Boolean = false,
     content: @Composable (PaddingValues) -> Unit,
     dialogs: @Composable () -> Unit = {},
 ) {
@@ -100,11 +104,10 @@ fun ActivityScreen(
 
                     val minButtonSize = 32.dp
 
-                    var boxModifier =
-                        Modifier
-                            .defaultMinSize(minWidth = minButtonSize)
-                            .clip(RoundedCornerShape(100.0f))
-                            .background(iconButtonContainerColor)
+                    var boxModifier = Modifier
+                        .defaultMinSize(minWidth = minButtonSize)
+                        .clip(RoundedCornerShape(100.0f))
+                        .background(iconButtonContainerColor)
 
                     if (onNavigationIconClick != null) {
                         boxModifier = boxModifier.clickable(
@@ -158,6 +161,7 @@ fun ActivityScreen(
                     screenBackgroundColor = screenBackgroundColor,
                     contentBackgroundColor = contentBackgroundColor,
                     contentCornerRadius = contentCornerRadius,
+                    isLargeScreenLayout = isLargeScreenLayout,
                     content = content,
                     dialogs = dialogs
                 )
@@ -181,11 +185,13 @@ fun ActivityScreen(
                     screenBackgroundColor = screenBackgroundColor,
                     contentBackgroundColor = contentBackgroundColor,
                     contentCornerRadius = contentCornerRadius,
+                    isLargeScreenLayout = isLargeScreenLayout,
                     content = content,
                     dialogs = dialogs
                 )
             }
         }
+
         "TopContainer" -> {
             TopContainer(
                 modifier = modifier,
@@ -202,6 +208,7 @@ fun ActivityScreen(
                     screenBackgroundColor = screenBackgroundColor,
                     contentBackgroundColor = contentBackgroundColor,
                     contentCornerRadius = contentCornerRadius,
+                    isLargeScreenLayout = isLargeScreenLayout,
                     content = content,
                     dialogs = dialogs
                 )
@@ -217,6 +224,7 @@ private fun SharedScreenContent(
     screenBackgroundColor: Color,
     contentBackgroundColor: Color,
     contentCornerRadius: Dp,
+    isLargeScreenLayout: Boolean,
     content: @Composable (PaddingValues) -> Unit,
     dialogs: @Composable () -> Unit,
 ) {
@@ -226,8 +234,11 @@ private fun SharedScreenContent(
             .background(screenBackgroundColor)
             .padding(top = paddingValuesFromAppBar.calculateTopPadding())
             .padding(
-                WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)
-                    .asPaddingValues()
+                if (isLargeScreenLayout) {
+                    WindowInsets.safeDrawing.only(WindowInsetsSides.End).asPaddingValues()
+                } else {
+                    WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues()
+                }
             )
     ) {
         Column(

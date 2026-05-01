@@ -11,7 +11,7 @@ version = "1.8"
 
 configure<LibraryExtension> {
     namespace = "com.xenon.mylibrary"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 29
@@ -63,7 +63,6 @@ dependencies {
     implementation(libs.mathparser.org.mxparser)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
-    implementation(libs.material3)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)

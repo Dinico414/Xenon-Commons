@@ -1,4 +1,4 @@
-package com.xenonware.todolist.ui.res
+package com.xenon.mylibrary
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,9 +39,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
-import com.xenon.mylibrary.FlexTopAppBar
-import com.xenon.mylibrary.FlexTopContainer
-import com.xenon.mylibrary.TopContainer
 import com.xenon.mylibrary.theme.QuicksandTitleVariable
 import com.xenon.mylibrary.values.LargerCornerRadius
 import com.xenon.mylibrary.values.SmallPadding

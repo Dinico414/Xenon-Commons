@@ -1,4 +1,4 @@
-package com.xenon.mylibrary.res
+package com.xenonware.mindcontrol
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
@@ -226,9 +226,9 @@ fun XenonDialog(
                                 onClick = onConfirmButtonClick,
                                 enabled = isConfirmButtonEnabled,
                                 modifier = if (isAction1Present && isAction2Present) {
-                                    Modifier.weight(1.2f)
-                                } else {
                                     Modifier.weight(1.5f)
+                                } else {
+                                    Modifier.weight(2.5f)
                                 },
                                 colors = ButtonDefaults.filledTonalButtonColors(
                                     containerColor = confirmContainerColor,

@@ -1,4 +1,4 @@
-package com.xenonware.mindcontrol
+package com.xenon.mylibrary.res
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement

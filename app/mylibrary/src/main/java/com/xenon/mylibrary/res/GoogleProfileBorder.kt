@@ -29,6 +29,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun GoogleProfilBorder(
@@ -95,7 +96,7 @@ fun GoogleProfilBorder(
         if (isSignedIn) {
             while (true) {
                 targetSweepAngles = generateRandomSweepAngles(numColors, gapAngle)
-                delay(angleChangeIntervalMillis)
+                delay(angleChangeIntervalMillis.milliseconds)
             }
         } else {
             targetSweepAngles = List(numColors) { equalSweepAngle }

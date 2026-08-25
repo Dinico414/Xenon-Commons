@@ -1,7 +1,14 @@
 package com.xenon.mylibrary.res
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -22,6 +29,7 @@ import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,14 +61,25 @@ fun SettingsSwitchTile(
     switchColors: SwitchColors = SwitchDefaults.colors(),
     iconSpacing: Dp = ExtraLargePadding,
     tileSpacing: Dp = LargerPadding,
+    enableRipple: Boolean = true
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     Row(
         modifier = modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
             .clip(shape)
             .background(backgroundColor)
-            .then(if (onClick != null) Modifier.clickable(onClick = onClick, role = Role.Button) else Modifier)
+            .then(
+                if (onClick != null) {
+                    Modifier.clickable(
+                        interactionSource = interactionSource,
+                        indication = if (enableRipple) LocalIndication.current else null,
+                        onClick = onClick,
+                        role = Role.Button
+                    )
+                } else Modifier
+            )
             .padding(horizontal = horizontalPadding, vertical = verticalPadding),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -101,6 +120,74 @@ fun SettingsSwitchTile(
                     }
                 }
             )
+        }
+    }
+}
+
+@Suppress("unused")
+@Composable
+fun SettingsSwitchTileContext(
+    modifier: Modifier = Modifier,
+    title: String,
+    subtitle: String = "",
+    checked: Boolean,
+    onCheckedChange: ((Boolean) -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
+    icon: (@Composable () -> Unit)? = null,
+    backgroundColor: Color = MaterialTheme.colorScheme.secondaryContainer,
+    contentColor: Color = MaterialTheme.colorScheme.onSurface,
+    subtitleColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    shape: Shape = RoundedCornerShape(LargeCornerRadius),
+    horizontalPadding: Dp = LargestPadding,
+    verticalPadding: Dp = ExtraLargePadding,
+    switchColors: SwitchColors = SwitchDefaults.colors(),
+    iconSpacing: Dp = ExtraLargePadding,
+    tileSpacing: Dp = LargerPadding,
+    enableRipple: Boolean = true,
+    showContext: Boolean = true,
+    contextContent: @Composable () -> Unit
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(shape)
+            .background(backgroundColor)
+            .then(
+                if (onClick != null) {
+                    Modifier.clickable(
+                        interactionSource = interactionSource,
+                        indication = if (enableRipple) LocalIndication.current else null,
+                        onClick = onClick,
+                        role = Role.Button
+                    )
+                } else Modifier
+            )
+    ) {
+        SettingsSwitchTile(
+            title = title,
+            subtitle = subtitle,
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            onClick = null,
+            icon = icon,
+            backgroundColor = Color.Transparent,
+            contentColor = contentColor,
+            subtitleColor = subtitleColor,
+            shape = androidx.compose.ui.graphics.RectangleShape,
+            horizontalPadding = horizontalPadding,
+            verticalPadding = verticalPadding,
+            switchColors = switchColors,
+            iconSpacing = iconSpacing,
+            tileSpacing = tileSpacing,
+            enableRipple = false
+        )
+        AnimatedVisibility(
+            visible = showContext,
+            enter = expandVertically() + fadeIn(),
+            exit = shrinkVertically() + fadeOut()
+        ) {
+            contextContent()
         }
     }
 }

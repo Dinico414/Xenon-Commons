@@ -74,7 +74,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.addOutline
 import androidx.compose.ui.graphics.asAndroidPath
@@ -101,6 +100,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlin.time.Duration.Companion.milliseconds
 
 data class ScrollState(
     val firstVisibleItemIndex: Int,
@@ -458,7 +458,7 @@ private fun SingleToolbarInstance(
 
     LaunchedEffect(lazyListState, allowToolbarScrollBehavior, isSearchActive) {
         if (!isSearchActive && allowToolbarScrollBehavior) {
-            snapshotFlow { lazyListState.isScrollInProgress }.debounce(2000L)
+            snapshotFlow { lazyListState.isScrollInProgress }.debounce(2000L.milliseconds)
                 .collect { isScrolling ->
                     if (!isScrolling) {
                         toolbarVisibleState = true
@@ -469,7 +469,7 @@ private fun SingleToolbarInstance(
 
     LaunchedEffect(isSearchActive) {
         if (isSearchActive) {
-            delay(iconsClearanceTime.toLong())
+            delay(iconsClearanceTime.toLong().milliseconds)
             showActionIconsExceptSearch = false
         } else {
             showActionIconsExceptSearch = true
@@ -478,7 +478,7 @@ private fun SingleToolbarInstance(
 
     LaunchedEffect(isSearchActive) {
         if (isSearchActive) {
-            delay(textFieldExistenceDelay.toLong())
+            delay(textFieldExistenceDelay.toLong().milliseconds)
             canShowTextField = true
             focusRequester.requestFocus()
         } else {
@@ -584,7 +584,7 @@ private fun SingleToolbarInstance(
                                 val outline = fabShape.createOutline(this.size, layoutDirection, density)
                                 val composePath = Path().apply { addOutline(outline) }
                                 drawIntoCanvas { canvas ->
-                                    val frameworkPaint = Paint().asFrameworkPaint().apply {
+                                    val frameworkPaint = android.graphics.Paint().apply {
                                         isAntiAlias = true
                                         style = android.graphics.Paint.Style.STROKE
                                         strokeWidth = with(this@Canvas) { 0.5.dp.toPx() }
@@ -603,7 +603,7 @@ private fun SingleToolbarInstance(
                             val rotationAngle = remember { Animatable(0f) }
                             LaunchedEffect(isSearchActive, isSelectionActive, isAddModeActive) {
                                 if (isSearchActive || isSelectionActive || isAddModeActive) {
-                                    delay(if (isSearchActive) 700 else 0)
+                                    delay((if (isSearchActive) 700 else 0).milliseconds)
                                     rotationAngle.animateTo(
                                         targetValue = 45f,
                                         animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow)

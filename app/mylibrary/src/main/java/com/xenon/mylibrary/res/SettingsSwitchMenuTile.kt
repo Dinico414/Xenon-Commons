@@ -1,7 +1,9 @@
 package com.xenon.mylibrary.res
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -25,6 +27,7 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,21 +62,35 @@ fun SettingsSwitchMenuTile(
     switchColors: SwitchColors = SwitchDefaults.colors(),
     iconSpacing: Dp = ExtraLargePadding,
     tileSpacing: Dp = LargerPadding,
+    enableRipple: Boolean = true,
 ) {
+    val leftInteractionSource = remember { MutableInteractionSource() }
+    val rightInteractionSource = remember { MutableInteractionSource() }
+
     Row(
         modifier = modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
             .clip(shape)
-            .background(backgroundColor)
-            .padding(horizontal = horizontalPadding, vertical = verticalPadding),
+            .background(backgroundColor),
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Left clickable area (icon + text + chevron)
         Row(
             modifier = Modifier
                 .weight(1f)
-                .then(if (onClick != null) Modifier.clickable(onClick = onClick, role = Role.Button) else Modifier),
+                .fillMaxHeight()
+                .then(
+                    if (onClick != null) {
+                        Modifier.clickable(
+                            interactionSource = leftInteractionSource,
+                            indication = if (enableRipple) LocalIndication.current else null,
+                            onClick = onClick,
+                            role = Role.Button
+                        )
+                    } else Modifier
+                )
+                .padding(start = horizontalPadding, top = verticalPadding, bottom = verticalPadding),
             verticalAlignment = Alignment.CenterVertically
         ) {
             icon?.invoke()
@@ -102,29 +119,50 @@ fun SettingsSwitchMenuTile(
         }
 
         // Switch with divider
-        onCheckedChange?.let {
+        onCheckedChange?.let { onCheckedChangeFunc ->
             VerticalDivider(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = verticalPadding + 8.dp),
                 thickness = 1.dp,
                 color = dividerColor
             )
-            Spacer(modifier = Modifier.width(tileSpacing))
-            Switch(
-                checked = checked,
-                onCheckedChange = it,
-                colors = switchColors,
-                thumbContent = {
-                    if (checked) {
-                        Icon(Icons.Filled.Check, "Checked", Modifier.size(SwitchDefaults.IconSize),
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer)
-                    } else {
-                        Icon(Icons.Filled.Close, "Not Checked", Modifier.size(SwitchDefaults.IconSize),
-                            tint = MaterialTheme.colorScheme.surfaceDim)
+
+            Row(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .clickable(
+                        interactionSource = rightInteractionSource,
+                        indication = if (enableRipple) LocalIndication.current else null,
+                        onClick = { onCheckedChangeFunc(!checked) },
+                        role = Role.Button
+                    )
+                    .padding(start = tileSpacing, end = horizontalPadding, top = verticalPadding, bottom = verticalPadding),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Switch(
+                    checked = checked,
+                    onCheckedChange = onCheckedChangeFunc,
+                    colors = switchColors,
+                    thumbContent = {
+                        if (checked) {
+                            Icon(
+                                Icons.Filled.Check,
+                                contentDescription = "Checked",
+                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                                tint = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                        } else {
+                            Icon(
+                                Icons.Filled.Close,
+                                contentDescription = "Not Checked",
+                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                                tint = MaterialTheme.colorScheme.surfaceDim
+                            )
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     }
 }

@@ -1,8 +1,15 @@
 package com.xenon.mylibrary.res
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -13,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,7 +49,9 @@ fun SettingsTile(
     horizontalPadding: Dp = LargestPadding,
     verticalPadding: Dp = ExtraLargePadding,
     iconSpacing: Dp = ExtraLargePadding,
+    enableRipple: Boolean = true
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -49,6 +59,8 @@ fun SettingsTile(
             .clip(shape)
             .background(backgroundColor)
             .combinedClickable(
+                interactionSource = interactionSource,
+                indication = if (enableRipple) LocalIndication.current else null,
                 enabled = onClick != null || onLongClick != null,
                 onClick = { onClick?.invoke() },
                 onLongClick = { onLongClick?.invoke() },
@@ -68,6 +80,67 @@ fun SettingsTile(
             if (subtitle.isNotEmpty()) {
                 Text(text = subtitle, style = MaterialTheme.typography.bodyMedium, color = subtitleColor)
             }
+        }
+    }
+}
+
+@Suppress("unused")
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun SettingsTileContext(
+    modifier: Modifier = Modifier,
+    title: String,
+    subtitle: String = "",
+    onClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null,
+    icon: (@Composable () -> Unit)? = null,
+    backgroundColor: Color = MaterialTheme.colorScheme.secondaryContainer,
+    contentColor: Color = MaterialTheme.colorScheme.onSurface,
+    subtitleColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    shape: Shape = RoundedCornerShape(LargeCornerRadius),
+    horizontalPadding: Dp = LargestPadding,
+    verticalPadding: Dp = ExtraLargePadding,
+    iconSpacing: Dp = ExtraLargePadding,
+    enableRipple: Boolean = true,
+    showContext: Boolean = true,
+    contextContent: @Composable () -> Unit
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(shape)
+            .background(backgroundColor)
+            .combinedClickable(
+                interactionSource = interactionSource,
+                indication = if (enableRipple) LocalIndication.current else null,
+                enabled = onClick != null || onLongClick != null,
+                onClick = { onClick?.invoke() },
+                onLongClick = { onLongClick?.invoke() },
+                role = Role.Button
+            )
+    ) {
+        SettingsTile(
+            title = title,
+            subtitle = subtitle,
+            onClick = null,
+            onLongClick = null,
+            icon = icon,
+            backgroundColor = Color.Transparent,
+            contentColor = contentColor,
+            subtitleColor = subtitleColor,
+            shape = androidx.compose.ui.graphics.RectangleShape,
+            horizontalPadding = horizontalPadding,
+            verticalPadding = verticalPadding,
+            iconSpacing = iconSpacing,
+            enableRipple = false
+        )
+        AnimatedVisibility(
+            visible = showContext,
+            enter = expandVertically() + fadeIn(),
+            exit = shrinkVertically() + fadeOut()
+        ) {
+            contextContent()
         }
     }
 }

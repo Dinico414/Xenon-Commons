@@ -7,7 +7,7 @@ plugins {
 
 configure<ApplicationExtension> {
     namespace = "com.xenon.commons"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.xenon.commons"

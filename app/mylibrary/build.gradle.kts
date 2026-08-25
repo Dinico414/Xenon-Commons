@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.xenon.commons"
-version = "3.0.1"
+version = "3.0.2"
 
 configure<LibraryExtension> {
     namespace = "com.xenon.mylibrary"
@@ -32,6 +32,7 @@ configure<LibraryExtension> {
         targetCompatibility = JavaVersion.VERSION_21
     }
     tasks.register("printJavaVersion") {
+        description = "Prints the Java version used by Gradle."
         doLast {
             println("Java version used by Gradle: ${System.getProperty("java.version")}")
         }
@@ -49,7 +50,6 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     val composeBom = platform("androidx.compose:compose-bom:2025.05.01")
     implementation(composeBom)
-    androidTestImplementation(composeBom)
     implementation(libs.haze)
     implementation(libs.androidx.animation.graphics)
     implementation(libs.kotlinx.serialization.json)
@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
+    androidTestImplementation(composeBom)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

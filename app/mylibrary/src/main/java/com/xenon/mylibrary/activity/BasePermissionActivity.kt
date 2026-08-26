@@ -6,9 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import com.xenon.mylibrary.res.AnimatedGradientBackground
 import com.xenon.mylibrary.res.PermissionScreen
 import com.xenon.mylibrary.theme.XenonTheme
 import com.xenon.mylibrary.utils.PermissionItem
@@ -30,15 +32,17 @@ abstract class BasePermissionActivity : ComponentActivity() {
 
         setContent {
             XenonTheme(darkTheme = isSystemInDarkTheme()) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    PermissionScreen(
-                        permissions = getPermissions(),
-                        isFirstLaunch = isFirstLaunch(),
-                        onFinish = { onPermissionsFinished() }
-                    )
+                AnimatedGradientBackground {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = Color.Transparent
+                    ) {
+                        PermissionScreen(
+                            permissions = getPermissions(),
+                            isFirstLaunch = isFirstLaunch(),
+                            onFinish = { onPermissionsFinished() }
+                        )
+                    }
                 }
             }
         }

@@ -48,6 +48,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
@@ -58,6 +59,11 @@ import com.xenon.mylibrary.R
 import com.xenon.mylibrary.theme.QuicksandTitleVariable
 import com.xenon.mylibrary.utils.PermissionItem
 import com.xenon.mylibrary.utils.openAppInfo
+import com.xenon.mylibrary.values.ExtraBigPadding
+import com.xenon.mylibrary.values.HugePadding
+import com.xenon.mylibrary.values.LargeButtonSize
+import com.xenon.mylibrary.values.LargestPadding
+import com.xenon.mylibrary.values.MediumPadding
 
 @Composable
 fun PermissionScreen(
@@ -70,6 +76,8 @@ fun PermissionScreen(
     showSkipButton: Boolean = true,
     showInfoButton: Boolean = true,
     defaultGuideText: String? = null,
+    mainContextFont: FontFamily = QuicksandTitleVariable,
+    subContextFont: FontFamily? = null,
     onSkip: ((PermissionItem) -> Unit)? = null,
     onFinish: () -> Unit,
 ) {
@@ -143,7 +151,7 @@ fun PermissionScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(WindowInsets.safeDrawing.asPaddingValues())
-                .padding(16.dp),
+                .padding(LargestPadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Column(
@@ -167,9 +175,9 @@ fun PermissionScreen(
                     ),
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center,
-                    fontFamily = QuicksandTitleVariable,
+                    fontFamily = mainContextFont,
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(LargestPadding))
                 Text(
                     text = currentPermission.description,
                     style = MaterialTheme.typography.bodyLarge.copy(
@@ -182,7 +190,8 @@ fun PermissionScreen(
                         )
                     ),
                     color = MaterialTheme.colorScheme.onSurface,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    fontFamily = subContextFont,
                 )
             }
 
@@ -191,7 +200,7 @@ fun PermissionScreen(
                     modifier = Modifier
                         .widthIn(max = 420.dp)
                         .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(LargestPadding),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Button(
@@ -202,12 +211,12 @@ fun PermissionScreen(
                         ),
                         modifier = Modifier
                             .weight(2f)
-                            .height(96.dp)
+                            .height(LargeButtonSize)
                     ) {
                         Text(
                             text = grantButtonText,
                             style = MaterialTheme.typography.headlineSmall,
-                            fontFamily = QuicksandTitleVariable,
+                            fontFamily = mainContextFont,
                             textAlign = TextAlign.Center,
                             maxLines = 2
                         )
@@ -225,12 +234,12 @@ fun PermissionScreen(
                         ),
                         modifier = Modifier
                             .weight(1f)
-                            .height(96.dp)
+                            .height(LargeButtonSize)
                     ) {
                         Text(
                             text = skipButtonText,
                             style = MaterialTheme.typography.titleLarge,
-                            fontFamily = QuicksandTitleVariable,
+                            fontFamily = mainContextFont,
                             textAlign = TextAlign.Center,
                             maxLines = 1
                         )
@@ -252,7 +261,7 @@ fun PermissionScreen(
                     modifier = Modifier
                         .widthIn(max = 420.dp)
                         .fillMaxWidth()
-                        .height(96.dp)
+                        .height(LargeButtonSize)
                 ) {
                     val allGranted = permissions.all { it.isGranted(context) }
                     Text(
@@ -262,7 +271,7 @@ fun PermissionScreen(
                             else -> grantButtonText
                         },
                         style = MaterialTheme.typography.headlineSmall,
-                        fontFamily = QuicksandTitleVariable,
+                        fontFamily = mainContextFont,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -292,7 +301,7 @@ fun PermissionScreen(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(WindowInsets.safeDrawing.asPaddingValues())
-                .padding(top = 8.dp, end = 16.dp)
+                .padding(top = MediumPadding, end = LargestPadding)
             ) {
                 Icon(
                     Icons.Rounded.Info,
@@ -309,23 +318,24 @@ fun PermissionScreen(
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(WindowInsets.safeDrawing.asPaddingValues())
-                .padding(top = 56.dp)
-                .padding(horizontal = 32.dp)
+                .padding(top = HugePadding)
+                .padding(horizontal = ExtraBigPadding)
         ) {
             Box(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(RoundedCornerShape(LargestPadding))
                     .background(MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.95f))
                     .clickable {
                         handleInfoClick()
                     }
-                    .padding(16.dp)
+                    .padding(LargestPadding)
             ) {
                 Text(
                     text = guideText,
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontFamily = subContextFont,
                 )
             }
         }

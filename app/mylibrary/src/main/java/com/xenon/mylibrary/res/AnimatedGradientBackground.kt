@@ -1,111 +1,111 @@
 package com.xenon.mylibrary.res
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import kotlin.math.cos
-import kotlin.math.sin
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlin.random.Random
 
-/**
- * A wrapper that adds an animated background with moving, blurred orbs.
- * Perfect for welcome and permission screens.
- */
 @Composable
 fun AnimatedGradientBackground(
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    colors: List<Color>? = null,
+    backgroundColor: Color = MaterialTheme.colorScheme.surface,
+    content: @Composable () -> Unit,
 ) {
-    val infiniteTransition = rememberInfiniteTransition(label = "orb_animation")
-    
-    val time by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(20000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "time"
-    )
+    Box(modifier = modifier) {
+        BlurryBlobsBackground(
+            modifier = Modifier.fillMaxSize(),
+            colors = colors,
+            backgroundColor = backgroundColor,
+        )
+        content()
+    }
+}
 
+@Composable
+fun BlurryBlobsBackground(
+    modifier: Modifier = Modifier,
+    colors: List<Color>? = null,
+    backgroundColor: Color = MaterialTheme.colorScheme.surface,
+) {
     val colorScheme = MaterialTheme.colorScheme
-    // Base color for the background
-    val baseColor = colorScheme.surface
-    
-    // Orb colors based on the theme
-    val orbColor1 = colorScheme.primary.copy(alpha = 0.35f)
-    val orbColor2 = colorScheme.secondary.copy(alpha = 0.25f)
-    val orbColor3 = colorScheme.tertiary.copy(alpha = 0.3f)
-    val orbColor4 = colorScheme.primaryContainer.copy(alpha = 0.2f)
+    val resolvedColors = remember(colors, colorScheme) {
+        colors ?: listOf(
+            colorScheme.primary.copy(alpha = 0.35f),
+            colorScheme.secondary.copy(alpha = 0.25f),
+            colorScheme.tertiary.copy(alpha = 0.3f),
+            colorScheme.primaryContainer.copy(alpha = 0.2f),
+        )
+    }
 
-    Box(modifier = modifier.fillMaxSize()) {
-        Canvas(modifier = Modifier.fillMaxSize().graphicsLayer(alpha = 0.99f)) {
-            drawRect(color = baseColor)
-            
-            val width = size.width
-            val height = size.height
-            val centerX = width / 2
-            val centerY = height / 2
+    val blobs = remember(resolvedColors) { resolvedColors.map { Blob(it) } }
 
-            // Orb 1: Larger, slower, primary
-            val x1 = centerX + cos(time * 2 * Math.PI.toFloat()) * (width * 0.35f)
-            val y1 = centerY + sin(time * 2 * Math.PI.toFloat() * 0.5f) * (height * 0.25f)
+    blobs.forEach { blob ->
+        LaunchedEffect(blob) {
+            blob.animate()
+        }
+    }
+
+    Canvas(modifier = modifier.background(backgroundColor)) {
+        blobs.forEach { blob ->
+            // A larger radius creates a softer, more spread-out "blur" effect
+            val radius = size.minDimension * 0.8f
+            val center = Offset(blob.x.value * size.width, blob.y.value * size.height)
             drawCircle(
                 brush = Brush.radialGradient(
-                    colors = listOf(orbColor1, Color.Transparent),
-                    center = Offset(x1, y1),
-                    radius = width * 0.7f
+                    colors = listOf(blob.color, Color.Transparent),
+                    center = center,
+                    radius = radius,
                 ),
-                center = Offset(x1, y1),
-                radius = width * 0.7f
-            )
-
-            // Orb 2: Medium, faster, secondary
-            val x2 = centerX + sin(time * 2 * Math.PI.toFloat() + 2f) * (width * 0.45f)
-            val y2 = centerY + cos(time * 2 * Math.PI.toFloat() * 1.2f + 1f) * (height * 0.35f)
-            drawCircle(
-                brush = Brush.radialGradient(
-                    colors = listOf(orbColor2, Color.Transparent),
-                    center = Offset(x2, y2),
-                    radius = width * 0.55f
-                ),
-                center = Offset(x2, y2),
-                radius = width * 0.55f
-            )
-
-            // Orb 3: Medium-Large, tertiary
-            val x3 = centerX + cos(time * 2 * Math.PI.toFloat() * 0.8f + 4f) * (width * 0.3f)
-            val y3 = centerY + sin(time * 2 * Math.PI.toFloat() + 3f) * (height * 0.45f)
-            drawCircle(
-                brush = Brush.radialGradient(
-                    colors = listOf(orbColor3, Color.Transparent),
-                    center = Offset(x3, y3),
-                    radius = width * 0.65f
-                ),
-                center = Offset(x3, y3),
-                radius = width * 0.65f
-            )
-            
-            // Orb 4: Smallest, primaryContainer
-            val x4 = centerX + sin(time * 2 * Math.PI.toFloat() * 1.5f) * (width * 0.2f)
-            val y4 = centerY + cos(time * 2 * Math.PI.toFloat() * 0.7f) * (height * 0.3f)
-            drawCircle(
-                brush = Brush.radialGradient(
-                    colors = listOf(orbColor4, Color.Transparent),
-                    center = Offset(x4, y4),
-                    radius = width * 0.4f
-                ),
-                center = Offset(x4, y4),
-                radius = width * 0.4f
+                radius = radius,
+                center = center,
             )
         }
-        content()
+    }
+}
+
+private class Blob(val color: Color) {
+    val x = Animatable(Random.nextFloat())
+    val y = Animatable(Random.nextFloat())
+
+    suspend fun animate() = coroutineScope {
+        // This will launch two infinite loops, one for x and one for y.
+        // They will run concurrently, creating smooth, diagonal movement.
+        launch {
+            while (true) {
+                x.animateTo(
+                    targetValue = Random.nextFloat(),
+                    animationSpec = tween(
+                        durationMillis = Random.nextInt(10_000, 20_000),
+                        easing = LinearEasing,
+                    ),
+                )
+            }
+        }
+        launch {
+            while (true) {
+                y.animateTo(
+                    targetValue = Random.nextFloat(),
+                    animationSpec = tween(
+                        durationMillis = Random.nextInt(10_000, 20_000),
+                        easing = LinearEasing,
+                    ),
+                )
+            }
+        }
     }
 }

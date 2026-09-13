@@ -27,7 +27,9 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 // REMOVE: import androidx.compose.ui.res.stringResource // No longer needed
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.window.DialogProperties
+import com.xenon.mylibrary.theme.QuicksandTitleVariable
 import com.xenon.mylibrary.values.LargerPadding
 
 data class LanguageOption(val displayName: String, val localeTag: String)
@@ -41,7 +43,9 @@ fun DialogLanguageSelection(
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
     dialogTitle: String,
-    confirmText: String
+    confirmText: String,
+    mainContextFont: FontFamily = QuicksandTitleVariable,
+    subContextFont: FontFamily? = null,
 ) {
     val initialSelectedIndex = remember(currentLanguageTag, availableLanguages) {
         availableLanguages.indexOfFirst { it.localeTag == currentLanguageTag }.coerceAtLeast(0)
@@ -53,6 +57,8 @@ fun DialogLanguageSelection(
         title = dialogTitle,
         confirmButtonText = confirmText,
         onConfirmButtonClick = { onConfirm() },
+        mainContextFont = mainContextFont,
+        subContextFont = subContextFont,
         properties = DialogProperties(usePlatformDefaultWidth = true),
         contentManagesScrolling = true,
     ) {
@@ -110,6 +116,7 @@ fun DialogLanguageSelection(
                         Text(
                             text = languageOption.displayName,
                             style = MaterialTheme.typography.bodyLarge,
+                            fontFamily = subContextFont,
                             modifier = Modifier.padding(start = LargerPadding)
                         )
                     }

@@ -34,13 +34,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import com.xenon.mylibrary.theme.QuicksandTitleVariable
-import com.xenon.mylibrary.values.LargerCornerRadius
+import com.xenon.mylibrary.values.ExtraBigCornerRadius
+import com.xenon.mylibrary.values.FullCornerRadius
+import com.xenon.mylibrary.values.HugeBiggerSpacing
+import com.xenon.mylibrary.values.HugerSpacing
+import com.xenon.mylibrary.values.SmallButtonSize
 import com.xenon.mylibrary.values.SmallPadding
 import kotlin.math.roundToInt
 
@@ -65,17 +70,19 @@ fun ActivityScreen(
     contentBackgroundColor: Color = MaterialTheme.colorScheme.surfaceContainer,
     expandedContainerColor: Color = MaterialTheme.colorScheme.surfaceDim,
     collapsedContainerColor: Color = MaterialTheme.colorScheme.surfaceDim,
-    contentCornerRadius: Dp = LargerCornerRadius,
+    contentCornerRadius: Dp = ExtraBigCornerRadius,
     navigationIconStartPadding: Dp = SmallPadding,
     navigationIconPadding: Dp = SmallPadding,
     navigationIconSpacing: Dp = SmallPadding,
     collapsedByDefault: Boolean = false,
-    collapsedHeight: Dp = 64.dp,
+    collapsedHeight: Dp = HugerSpacing,
     expandedHeight: Dp = LocalConfiguration.current.screenHeightDp.dp.times(0.3f),
     expandable: Boolean = true,
     expand: Boolean = false,
     headerContent: @Composable (fraction: Float) -> Unit = {},
     isLargeScreenLayout: Boolean = false,
+    mainContextFont: FontFamily = QuicksandTitleVariable,
+    subContextFont: FontFamily? = null,
     content: @Composable (PaddingValues) -> Unit,
     dialogs: @Composable () -> Unit = {},
 ) {
@@ -88,7 +95,7 @@ fun ActivityScreen(
                 expandable = expandable,
                 title = { fraction ->
                     Text(
-                        text = titleText, fontFamily = QuicksandTitleVariable, color = lerp(
+                        text = titleText, fontFamily = mainContextFont, color = lerp(
                             expandedAppBarTextColor, collapsedAppBarTextColor, fraction
                         ), fontSize = lerp(32F, 22F, fraction).sp, fontWeight = FontWeight(
                             lerp(700F, 100F, fraction).roundToInt()
@@ -99,11 +106,11 @@ fun ActivityScreen(
                     val iconButtonContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
                     val interactionSource = remember { MutableInteractionSource() }
 
-                    val minButtonSize = 32.dp
+                    val minButtonSize = SmallButtonSize
 
                     var boxModifier = Modifier
                         .defaultMinSize(minWidth = minButtonSize)
-                        .clip(RoundedCornerShape(100.0f))
+                        .clip(RoundedCornerShape(FullCornerRadius))
                         .background(iconButtonContainerColor)
 
                     if (onNavigationIconClick != null) {
@@ -116,7 +123,7 @@ fun ActivityScreen(
                     }
 
                     Box(
-                        Modifier.width(72.dp), contentAlignment = Alignment.Center
+                        Modifier.width(HugeBiggerSpacing), contentAlignment = Alignment.Center
                     ) {
                         Box(
                             modifier = boxModifier, contentAlignment = Alignment.Center
@@ -150,6 +157,8 @@ fun ActivityScreen(
                 expandedContainerColor = screenBackgroundColor,
                 navigationIconContentColor = appBarNavigationIconContentColor,
                 actionIconContentColor = appBarActionIconContentColor,
+                mainContextFont = mainContextFont,
+                subContextFont = subContextFont,
                 modifier = modifier,
             ) { paddingValuesFromAppBar ->
                 SharedScreenContent(
@@ -174,6 +183,8 @@ fun ActivityScreen(
                 expandable = expandable,
                 expandedContainerColor = screenBackgroundColor,
                 collapsedContainerColor = screenBackgroundColor,
+                mainContextFont = mainContextFont,
+                subContextFont = subContextFont,
                 headerContent = headerContent
             ) { paddingValuesFromContainer ->
                 SharedScreenContent(

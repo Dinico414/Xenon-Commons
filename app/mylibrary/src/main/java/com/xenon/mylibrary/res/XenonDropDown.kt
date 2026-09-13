@@ -38,12 +38,23 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
+import com.xenon.mylibrary.theme.QuicksandTitleVariable
+import com.xenon.mylibrary.values.ExtraLargerCornerRadius
+import com.xenon.mylibrary.values.LargeMediumPadding
+import com.xenon.mylibrary.values.LargestPadding
+import com.xenon.mylibrary.values.MediumPadding
+import com.xenon.mylibrary.values.MinTouchTargetSize
+import com.xenon.mylibrary.values.NoSpacing
+import com.xenon.mylibrary.values.SmallElevation
+import com.xenon.mylibrary.values.SmallPadding
+import com.xenon.mylibrary.values.SmallSpacing
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
@@ -86,15 +97,17 @@ fun XenonDropDown(
     onDismissRequest: () -> Unit,
     items: List<MenuItem>,
     hazeState: HazeState?,
-    offsetY: Dp = 0.dp,
-    offsetX: Dp = 0.dp,
+    offsetY: Dp = NoSpacing,
+    offsetX: Dp = NoSpacing,
     anchorPos: Offset? = null,
-    radius: Dp = 24.dp,
+    radius: Dp = ExtraLargerCornerRadius,
     widthMin: Dp = 150.dp,
     widthMax: Dp = 280.dp,
-    shadowElevation: Dp = 4.dp,
+    shadowElevation: Dp = SmallElevation,
     alignment: Alignment = Alignment.TopEnd,
     maxLines: Int = 1,
+    mainContextFont: FontFamily = QuicksandTitleVariable,
+    subContextFont: FontFamily? = null,
 ) {
     val expandedState = remember { MutableTransitionState(false) }
     expandedState.targetState = expanded
@@ -112,7 +125,7 @@ fun XenonDropDown(
         val configuration = LocalConfiguration.current
         val screenWidthPx = with(density) { configuration.screenWidthDp.dp.toPx() }
         val screenHeightPx = with(density) { configuration.screenHeightDp.dp.toPx() }
-        val marginPx = with(density) { 16.dp.toPx() }
+        val marginPx = with(density) { LargestPadding.toPx() }
 
         val actualAnchor = anchorPos ?: parentPos
 
@@ -123,7 +136,7 @@ fun XenonDropDown(
                 val touchY = actualAnchor.y + offsetY.toPx()
 
                 val mWidth = if (menuSize.width > 0) menuSize.width.toFloat() else widthMax.toPx()
-                val mHeight = if (menuSize.height > 0) menuSize.height.toFloat() else (items.size * 48).dp.toPx() + 8.dp.toPx()
+                val mHeight = if (menuSize.height > 0) menuSize.height.toFloat() else (items.size * MinTouchTargetSize.toPx()) + MediumPadding.toPx()
 
                 val pivotX = when (alignment) {
                     Alignment.TopStart, Alignment.CenterStart, Alignment.BottomStart -> 0f
@@ -198,14 +211,15 @@ fun XenonDropDown(
                         } else Modifier
                     )
                     .background(colorScheme.surfaceContainer.copy(alpha = if (hazeState != null) 0.4f else 1f))
-                    .padding(4.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                    .padding(SmallPadding),
+                verticalArrangement = Arrangement.spacedBy(SmallSpacing)
             ) {
                 items.forEach { item ->
                     DropdownMenuItem(
                         text = {
                             Text(
                                 text = item.text,
+                                fontFamily = mainContextFont,
                                 color = item.textColor ?: Color.Unspecified,
                                 maxLines = maxLines,
                             )
@@ -222,7 +236,7 @@ fun XenonDropDown(
                             trailingIconColor = item.textColor ?: colorScheme.onSurfaceVariant
                         ),
                         modifier = Modifier
-                            .clip(RoundedCornerShape(radius - 4.dp))
+                            .clip(RoundedCornerShape(radius - SmallSpacing))
                             .then(
                                 if (item.containerColor != null) {
                                     Modifier.background(item.containerColor)
@@ -231,7 +245,7 @@ fun XenonDropDown(
                         contentPadding = if (item.trailingIcon != null) {
                             MenuDefaults.DropdownMenuItemContentPadding
                         } else {
-                            PaddingValues(horizontal = 12.dp, vertical = 8.dp)
+                            PaddingValues(horizontal = LargeMediumPadding, vertical = MediumPadding)
                         },
                     )
                 }

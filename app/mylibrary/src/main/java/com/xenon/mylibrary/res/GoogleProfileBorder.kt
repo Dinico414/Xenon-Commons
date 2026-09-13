@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import com.xenon.mylibrary.values.SmallerSmallStroke
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -35,7 +35,7 @@ import kotlin.time.Duration.Companion.milliseconds
 fun GoogleProfilBorder(
     isSignedIn: Boolean,
     modifier: Modifier = Modifier,
-    strokeWidth: Dp = 2.5.dp,
+    strokeWidth: Dp = SmallerSmallStroke,
     gapAngle: Float = 15f,
     angleChangeIntervalMillis: Long = 2000L,
     sweepAnimationSpec: AnimationSpec<Float> = spring(

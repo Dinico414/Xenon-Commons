@@ -3,8 +3,9 @@ package com.xenon.mylibrary.res
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-// REMOVE: import androidx.compose.ui.res.stringResource // No longer needed
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.window.DialogProperties
+import com.xenon.mylibrary.theme.QuicksandTitleVariable
 
 @Suppress("unused")
 @Composable
@@ -13,7 +14,9 @@ fun DialogResetSettingsConfirmation(
     onDismiss: () -> Unit,
     dialogTitle: String,
     confirmText: String,
-    descriptionText: String
+    descriptionText: String,
+    mainContextFont: FontFamily = QuicksandTitleVariable,
+    subContextFont: FontFamily? = null,
 ) {
     val textColor = MaterialTheme.colorScheme.onErrorContainer
 
@@ -27,11 +30,15 @@ fun DialogResetSettingsConfirmation(
         confirmContentColor = MaterialTheme.colorScheme.onError,
         confirmButtonText = confirmText,
         onConfirmButtonClick = { onConfirm() },
+        mainContextFont = mainContextFont,
+        subContextFont = subContextFont,
         properties = DialogProperties(usePlatformDefaultWidth = true),
         contentManagesScrolling = false,
     ) {
         Text(
             text = descriptionText,
-            color = textColor)
+            fontFamily = subContextFont,
+            color = textColor,
+        )
     }
 }

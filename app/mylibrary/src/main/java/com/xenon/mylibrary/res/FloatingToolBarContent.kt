@@ -89,8 +89,23 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import com.xenon.mylibrary.R
-import com.xenon.mylibrary.values.LargePadding
-import com.xenon.mylibrary.values.SmallElevation
+import com.xenon.mylibrary.values.DefaultFABSize
+import com.xenon.mylibrary.values.ExtraBiggestSpacer
+import com.xenon.mylibrary.values.ExtraLargerSpacing
+import com.xenon.mylibrary.values.IconSizeExtraLarge
+import com.xenon.mylibrary.values.LargestPadding
+import com.xenon.mylibrary.values.MediumLargePadding
+import com.xenon.mylibrary.values.MediumPadding
+import com.xenon.mylibrary.values.MediumSpacer
+import com.xenon.mylibrary.values.MediumSpacing
+import com.xenon.mylibrary.values.NoElevation
+import com.xenon.mylibrary.values.NoPadding
+import com.xenon.mylibrary.values.NoSpacer
+import com.xenon.mylibrary.values.NoSpacing
+import com.xenon.mylibrary.values.SmallMediumSpacing
+import com.xenon.mylibrary.values.SmallerElevation
+import com.xenon.mylibrary.values.SmallestSpacing
+import com.xenon.mylibrary.values.ToolBarHeight
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
@@ -118,7 +133,7 @@ fun SpannedModeFAB(
     isSheetOpen: Boolean = false,
 ) {
     Box(
-        modifier = modifier.size(64.dp),
+        modifier = modifier.size(ToolBarHeight),
         contentAlignment = Alignment.Center
     ) {
         val density = LocalDensity.current
@@ -136,7 +151,7 @@ fun SpannedModeFAB(
         }
 
         val hazeThinColor = colorScheme.primary
-        val smallElevationPx = with(density) { SmallElevation.toPx() }
+        val smallElevationPx = with(density) { SmallerElevation.toPx() }
         val baseShadowAlpha = 0.7f
         val interactiveShadowAlpha = 0.9f
 
@@ -145,10 +160,10 @@ fun SpannedModeFAB(
         val currentShadowAlpha =
             if (isPressed || isHovered) interactiveShadowAlpha else baseShadowAlpha
         val currentShadowColor = colorScheme.scrim.copy(alpha = currentShadowAlpha)
-        val currentYOffsetPx = with(density) { 1.dp.toPx() }
+        val currentYOffsetPx = with(density) { SmallestSpacing.toPx() }
 
-        val fabSize = FloatingActionButtonDefaults.LargeIconSize + 24.dp
-        val extraSize = if (isPressed || isHovered) 8.dp else 5.dp
+        val fabSize = FloatingActionButtonDefaults.LargeIconSize + ExtraLargerSpacing
+        val extraSize = if (isPressed || isHovered) MediumSpacing else SmallMediumSpacing
         val canvasSize = fabSize + extraSize
 
         Canvas(modifier = Modifier.size(canvasSize)) {
@@ -238,7 +253,7 @@ fun FloatingToolbarContent(
     // Spanned mode parameters
     isSpannedMode: Boolean = false,
     fabOnLeftInSpannedMode: Boolean = true,
-    spannedModeHingeGap: Dp = 0.dp,
+    spannedModeHingeGap: Dp = NoSpacer,
     spannedModeFab: @Composable ((onClick: () -> Unit) -> Unit)? = null,
 ) {
     if (isSpannedMode) {
@@ -390,13 +405,13 @@ private fun SingleToolbarInstance(
     val screenWidthDp = configuration.screenWidthDp.dp
     val density = LocalDensity.current
 
-    val startPadding = 16.dp
-    val endPadding = 16.dp
-    val internalStartPadding = 8.dp
-    val internalEndPadding = 8.dp
-    val iconSize = 48.dp
-    val spaceBetweenToolbarAndFab = 8.dp
-    val fabSize = 56.dp
+    val startPadding = LargestPadding
+    val endPadding = LargestPadding
+    val internalStartPadding = MediumPadding
+    val internalEndPadding = MediumPadding
+    val iconSize = IconSizeExtraLarge
+    val spaceBetweenToolbarAndFab = MediumSpacer
+    val fabSize = DefaultFABSize
     val totalSubtractionInDp =
         startPadding + internalStartPadding + iconSize + internalEndPadding + spaceBetweenToolbarAndFab + fabSize + endPadding
 
@@ -493,11 +508,11 @@ private fun SingleToolbarInstance(
 
     val targetBottomPadding = remember(imeHeight, bottomPaddingNavigationBar, imePaddingValues) {
         val calculatedPadding = if (imeHeight > bottomPaddingNavigationBar) {
-            imeHeight + LargePadding
+            imeHeight + MediumLargePadding
         } else {
-            max(bottomPaddingNavigationBar, imePaddingValues.calculateTopPadding()) + LargePadding
+            max(bottomPaddingNavigationBar, imePaddingValues.calculateTopPadding()) + MediumLargePadding
         }
-        max(calculatedPadding, 0.dp)
+        max(calculatedPadding, NoPadding)
     }
 
     val animatedBottomPadding by animateDpAsState(
@@ -506,8 +521,8 @@ private fun SingleToolbarInstance(
         label = "bottomPaddingAnimation"
     )
 
-    val toolbarHeight = 64.dp
-    val toolbarOffsetTarget = if (toolbarVisibleState) 0.dp else toolbarHeight + LargePadding + 50.dp
+    val toolbarHeight = ToolBarHeight
+    val toolbarOffsetTarget = if (toolbarVisibleState) NoSpacer else toolbarHeight + MediumLargePadding + ExtraBiggestSpacer
 
     val animatedToolbarOffset by animateDpAsState(
         targetValue = toolbarOffsetTarget,
@@ -524,7 +539,7 @@ private fun SingleToolbarInstance(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = animatedBottomPadding.coerceAtLeast(0.dp))
+            .padding(bottom = animatedBottomPadding.coerceAtLeast(NoPadding))
             .offset(y = animatedToolbarOffset),
         contentAlignment = Alignment.Center
     ) {
@@ -541,7 +556,7 @@ private fun SingleToolbarInstance(
 
         val floatingBtnWidth by remember {
             derivedStateOf {
-                if (!isFabEnabled) 64.dp.times(1 - textFieldFraction) else 0.dp
+                if (!isFabEnabled) ToolBarHeight.times(1 - textFieldFraction) else NoSpacing
             }
         }
 
@@ -568,17 +583,17 @@ private fun SingleToolbarInstance(
                                 colorScheme.onPrimary
                             }
                             val hazeThinColor = colorScheme.primary
-                            val smallElevationPx = with(density) { SmallElevation.toPx() }
+                            val smallElevationPx = with(density) { SmallerElevation.toPx() }
                             val baseShadowAlpha = 0.7f
                             val interactiveShadowAlpha = 0.9f
                             val currentShadowRadius = if (isPressed || isHovered) smallElevationPx * 1.5f else smallElevationPx
                             val currentShadowAlpha = if (isPressed || isHovered) interactiveShadowAlpha else baseShadowAlpha
                             val currentShadowColor = colorScheme.scrim.copy(alpha = currentShadowAlpha)
-                            val currentYOffsetPx = with(density) { 1.dp.toPx() }
+                            val currentYOffsetPx = with(density) { SmallestSpacing.toPx() }
 
                             Canvas(
                                 modifier = Modifier.size(
-                                    FloatingActionButtonDefaults.LargeIconSize + 24.dp + if (isPressed || isHovered) 8.dp else 5.dp
+                                    FloatingActionButtonDefaults.LargeIconSize + ExtraLargerSpacing + if (isPressed || isHovered) MediumSpacing else SmallMediumSpacing
                                 )
                             ) {
                                 val outline = fabShape.createOutline(this.size, layoutDirection, density)
@@ -630,7 +645,7 @@ private fun SingleToolbarInstance(
                                 },
                                 containerColor = Color.Transparent,
                                 shape = fabShape,
-                                elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp),
+                                elevation = FloatingActionButtonDefaults.elevation(NoElevation, NoElevation, NoElevation, NoElevation),
                                 interactionSource = interactionSource,
                                 modifier = Modifier
                                     .clip(FloatingActionButtonDefaults.shape)

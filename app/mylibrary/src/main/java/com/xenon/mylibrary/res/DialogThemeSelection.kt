@@ -26,7 +26,9 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 // REMOVE: import androidx.compose.ui.res.stringResource // No longer needed
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.window.DialogProperties
+import com.xenon.mylibrary.theme.QuicksandTitleVariable
 import com.xenon.mylibrary.values.LargerPadding
 
 @Suppress("unused")
@@ -45,13 +47,17 @@ fun DialogThemeSelection(
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
     dialogTitle: String,
-    confirmText: String
+    confirmText: String,
+    mainContextFont: FontFamily = QuicksandTitleVariable,
+    subContextFont: FontFamily? = null,
 ) {
     XenonDialog(
         onDismissRequest = onDismiss,
         title = dialogTitle,
         confirmButtonText = confirmText,
         onConfirmButtonClick = onConfirm,
+        mainContextFont = mainContextFont,
+        subContextFont = subContextFont,
         properties = DialogProperties(usePlatformDefaultWidth = true),
         contentManagesScrolling = true,
     ) {
@@ -102,6 +108,7 @@ fun DialogThemeSelection(
                         Text(
                             text = theme.title,
                             style = MaterialTheme.typography.bodyLarge,
+                            fontFamily = subContextFont,
                             modifier = Modifier.padding(start = LargerPadding)
                         )
                     }

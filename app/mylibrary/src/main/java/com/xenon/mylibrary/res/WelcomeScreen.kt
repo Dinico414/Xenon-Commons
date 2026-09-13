@@ -29,11 +29,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.xenon.mylibrary.theme.QuicksandTitleVariable
+import com.xenon.mylibrary.values.LargeButtonSize
+import com.xenon.mylibrary.values.LargestPadding
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -43,7 +46,9 @@ fun WelcomeScreen(
     description: String,
     finishButtonText: String = "Finish",
     initialCountdown: Int = 5,
-    onFinish: () -> Unit
+    mainContextFont: FontFamily = QuicksandTitleVariable,
+    subContextFont: FontFamily? = null,
+    onFinish: () -> Unit,
 ) {
     var isButtonEnabled by remember { mutableStateOf(false) }
     var countdown by remember { mutableIntStateOf(initialCountdown) }
@@ -60,7 +65,7 @@ fun WelcomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(WindowInsets.safeDrawing.asPaddingValues())
-            .padding(16.dp),
+            .padding(LargestPadding),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column(
@@ -84,9 +89,9 @@ fun WelcomeScreen(
                 ),
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
-                fontFamily = QuicksandTitleVariable,
+                fontFamily = mainContextFont,
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(LargestPadding))
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodyLarge.copy(
@@ -99,7 +104,8 @@ fun WelcomeScreen(
                     )
                 ),
                 color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                fontFamily = subContextFont,
             )
         }
 
@@ -113,12 +119,12 @@ fun WelcomeScreen(
             modifier = Modifier
                 .widthIn(max = 420.dp)
                 .fillMaxWidth()
-                .height(96.dp)
+                .height(LargeButtonSize)
         ) {
             Text(
                 text = if (isButtonEnabled) finishButtonText else "$finishButtonText ($countdown)",
                 style = MaterialTheme.typography.headlineSmall,
-                fontFamily = QuicksandTitleVariable,
+                fontFamily = mainContextFont,
             )
         }
     }

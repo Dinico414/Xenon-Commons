@@ -35,14 +35,31 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
+import com.xenon.mylibrary.theme.QuicksandTitleVariable
+import com.xenon.mylibrary.values.ExtraLargerSpacing
+import com.xenon.mylibrary.values.LargeMediumCornerRadius
+import com.xenon.mylibrary.values.LargeMediumSpacing
+import com.xenon.mylibrary.values.LargestPadding
+import com.xenon.mylibrary.values.MediumCornerRadius
+import com.xenon.mylibrary.values.MediumSmallCornerRadius
+import com.xenon.mylibrary.values.MediumSpacing
+import com.xenon.mylibrary.values.SmallSpacing
+import com.xenon.mylibrary.values.SmallerSpacing
+import com.xenon.mylibrary.values.SmallerStroke
+import com.xenon.mylibrary.values.SmallestPadding
+import com.xenon.mylibrary.values.SmallestStroke
 
 @Composable
 fun XenonColorPicker(
     color: Color,
     onColorChanged: (Color) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    mainContextFont: FontFamily = QuicksandTitleVariable,
+    subContextFont: FontFamily? = null,
 ) {
     var hsv by remember(color) {
         val hsvArray = FloatArray(3)
@@ -69,13 +86,13 @@ fun XenonColorPicker(
                     onColorChanged(Color(android.graphics.Color.HSVToColor((alpha * 255).toInt(), floatArrayOf(hsv.first, hsv.second, hsv.third))))
                 },
                 modifier = Modifier
-                    .width(24.dp)
+                    .width(ExtraLargerSpacing)
                     .fillMaxHeight()
                     .clip(CircleShape)
-                    .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f), CircleShape)
+                    .border(SmallestPadding, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f), CircleShape)
             )
 
-            Spacer(Modifier.width(12.dp))
+            Spacer(Modifier.width(LargeMediumSpacing))
 
             // SV Area (Center)
             SaturationValueArea(
@@ -89,11 +106,11 @@ fun XenonColorPicker(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
-                    .clip(RoundedCornerShape(12.dp))
-                    .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f), RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(LargeMediumCornerRadius))
+                    .border(SmallestPadding, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f), RoundedCornerShape(LargeMediumCornerRadius))
             )
 
-            Spacer(Modifier.width(12.dp))
+            Spacer(Modifier.width(LargeMediumSpacing))
 
             // Hue Slider (Right, Vertical)
             HueSlider(
@@ -103,14 +120,14 @@ fun XenonColorPicker(
                     onColorChanged(Color(android.graphics.Color.HSVToColor((alpha * 255).toInt(), floatArrayOf(h, hsv.second, hsv.third))))
                 },
                 modifier = Modifier
-                    .width(24.dp)
+                    .width(ExtraLargerSpacing)
                     .fillMaxHeight()
                     .clip(CircleShape)
-                    .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f), CircleShape)
+                    .border(SmallestPadding, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f), CircleShape)
             )
         }
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(LargestPadding))
 
         // Hex Input
         var hexText by remember(color) {
@@ -135,10 +152,11 @@ fun XenonColorPicker(
                     }
                 } catch (_: Exception) {}
             },
-            label = { Text("Hex Code") },
+            label = { Text("Hex Code", fontFamily = subContextFont ?: mainContextFont) },
+            textStyle = TextStyle(fontFamily = mainContextFont),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(LargeMediumCornerRadius)
         )
     }
 }
@@ -194,15 +212,15 @@ fun SaturationValueArea(
             val selectorY = (1f - value) * height
             drawCircle(
                 color = Color.White,
-                radius = 8.dp.toPx(),
+                radius = MediumCornerRadius.toPx(),
                 center = Offset(selectorX, selectorY),
-                style = Stroke(width = 2.dp.toPx())
+                style = Stroke(width = SmallerStroke.toPx())
             )
             drawCircle(
                 color = Color.Black,
-                radius = 7.dp.toPx(),
+                radius = MediumSmallCornerRadius.toPx(),
                 center = Offset(selectorX, selectorY),
-                style = Stroke(width = 1.dp.toPx())
+                style = Stroke(width = SmallestStroke.toPx())
             )
         }
     }
@@ -245,9 +263,9 @@ fun HueSlider(
             val selectorY = (hue / 360f) * height
             drawRect(
                 color = Color.White,
-                topLeft = Offset(0f, selectorY - 2.dp.toPx()),
-                size = Size(size.width, 4.dp.toPx()),
-                style = Stroke(width = 2.dp.toPx())
+                topLeft = Offset(0f, selectorY - SmallerSpacing.toPx()),
+                size = Size(size.width, SmallSpacing.toPx()),
+                style = Stroke(width = SmallerStroke.toPx())
             )
         }
     }
@@ -280,7 +298,7 @@ fun AlphaSlider(
                 }
         ) {
             // Checkerboard pattern for alpha (simplified)
-            val gridSize = 8.dp.toPx()
+            val gridSize = MediumSpacing.toPx()
             for (x in 0 until (size.width / gridSize).toInt() + 1) {
                 for (y in 0 until (size.height / gridSize).toInt() + 1) {
                     if ((x + y) % 2 == 0) {
@@ -301,9 +319,9 @@ fun AlphaSlider(
             val selectorY = (1f - alpha) * height
             drawRect(
                 color = Color.White,
-                topLeft = Offset(0f, selectorY - 2.dp.toPx()),
-                size = Size(size.width, 4.dp.toPx()),
-                style = Stroke(width = 2.dp.toPx())
+                topLeft = Offset(0f, selectorY - SmallerSpacing.toPx()),
+                size = Size(size.width, SmallSpacing.toPx()),
+                style = Stroke(width = SmallerStroke.toPx())
             )
         }
     }

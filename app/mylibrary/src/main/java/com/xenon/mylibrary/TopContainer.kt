@@ -24,17 +24,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.xenon.mylibrary.values.NoSpacing
 
 @Composable
 fun TopContainer(
     modifier: Modifier = Modifier,
-    collapsedHeight: Dp = 0.dp,
+    collapsedHeight: Dp = NoSpacing,
     expandedHeight: Dp = LocalConfiguration.current.screenHeightDp.dp * 0.3f,
     expand: Boolean = false,
     expandedContainerColor: Color = MaterialTheme.colorScheme.surfaceDim,
     collapsedContainerColor: Color = MaterialTheme.colorScheme.surfaceDim,
     headerContent: @Composable (fraction: Float) -> Unit = {},
-    content: @Composable (paddingValues: PaddingValues) -> Unit
+    content: @Composable (paddingValues: PaddingValues) -> Unit,
 ) {
     val animatedHeight by animateDpAsState(
         targetValue = if (expand) expandedHeight else collapsedHeight,

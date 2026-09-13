@@ -29,9 +29,13 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.dp
-import com.xenon.mylibrary.values.TextFieldCornerRadius
+import com.xenon.mylibrary.theme.QuicksandTitleVariable
+import com.xenon.mylibrary.values.BigCornerRadius
+import com.xenon.mylibrary.values.ExtraBiggerSpacing
+import com.xenon.mylibrary.values.LargeMediumPadding
+import com.xenon.mylibrary.values.LargestPadding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,10 +57,12 @@ fun XenonTextField(
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     minLines: Int = 1,
     interactionSource: MutableInteractionSource? = null,
-    shape: Shape = RoundedCornerShape(TextFieldCornerRadius),
+    shape: Shape = RoundedCornerShape(BigCornerRadius),
     colors: TextFieldColors = xenonTextFieldColors(),
     selectionColor: Color = MaterialTheme.colorScheme.primary,
-    forceRequest: Boolean = false
+    forceRequest: Boolean = false,
+    mainContextFont: FontFamily = QuicksandTitleVariable,
+    subContextFont: FontFamily? = null,
 ) {
     @Suppress("NAME_SHADOWING")
     val internalInteractionSource = interactionSource ?: remember { MutableInteractionSource() }
@@ -77,14 +83,15 @@ fun XenonTextField(
         focused = isFocused
     )
     val finalTextColor: Color = textStyle.color.takeOrElse { resolvedTextColor }
-    val mergedTextStyle = textStyle.merge(TextStyle(color = finalTextColor))
+    val effectiveFontFamily = textStyle.fontFamily ?: mainContextFont
+    val mergedTextStyle = textStyle.merge(TextStyle(color = finalTextColor, fontFamily = effectiveFontFamily))
 
     val finalModifier = modifier
         .fillMaxWidth()
-        .heightIn(min = 48.dp)
+        .heightIn(min = ExtraBiggerSpacing)
         .defaultMinSize(
             minWidth = OutlinedTextFieldDefaults.MinWidth,
-            minHeight = 48.dp
+            minHeight = ExtraBiggerSpacing
         )
         .focusRequester(focusRequester)
 
@@ -96,6 +103,17 @@ fun XenonTextField(
     }
 
     val cursorActualColor: Color = colors.cursorColor(isError)
+
+    val decoratedPlaceholder: @Composable (() -> Unit)? = if (placeholder != null) {
+        {
+            val placeholderStyle = LocalTextStyle.current
+            CompositionLocalProvider(
+                LocalTextStyle provides (subContextFont?.let { placeholderStyle.copy(fontFamily = it) } ?: placeholderStyle)
+            ) {
+                placeholder()
+            }
+        }
+    } else null
 
     CompositionLocalProvider(LocalTextSelectionColors provides currentSelectionColors) {
         BasicTextField(
@@ -118,7 +136,7 @@ fun XenonTextField(
                     value = value,
                     visualTransformation = visualTransformation,
                     innerTextField = innerTextField,
-                    placeholder = placeholder,
+                    placeholder = decoratedPlaceholder,
                     label = null,
                     leadingIcon = leadingIcon,
                     trailingIcon = trailingIcon,
@@ -128,7 +146,7 @@ fun XenonTextField(
                     singleLine = singleLine,
                     enabled = enabled,
                     isError = isError,
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                    contentPadding = PaddingValues(horizontal = LargestPadding, vertical = LargeMediumPadding),
                     interactionSource = internalInteractionSource,
                     colors = colors,
                     container = {

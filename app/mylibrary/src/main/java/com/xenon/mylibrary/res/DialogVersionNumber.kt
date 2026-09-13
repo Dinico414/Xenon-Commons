@@ -12,9 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import com.xenon.mylibrary.theme.QuicksandTitleVariable
+import com.xenon.mylibrary.values.SmallPadding
 
 @Suppress("unused")
 @Composable
@@ -28,6 +31,8 @@ fun DialogVersionNumber(
     xenonUIVersion: String,
     xenonCommonsString: String,
     xenonCommonsVersion: String,
+    mainContextFont: FontFamily = QuicksandTitleVariable,
+    subContextFont: FontFamily? = null,
 ) {
     val context = LocalContext.current
 
@@ -46,23 +51,24 @@ fun DialogVersionNumber(
         title = dialogTitle,
         confirmButtonText = confirmText,
         onConfirmButtonClick = onMoreInfoClick,
+        mainContextFont = mainContextFont,
+        subContextFont = subContextFont,
         properties = DialogProperties(usePlatformDefaultWidth = true),
-
-        ) {
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp)
+                .padding(vertical = SmallPadding)
         ) {
-            VersionItem(label = appString, version = appVersion)
-            VersionItem(label = xenonUiString, version = xenonUIVersion)
-            VersionItem(label = xenonCommonsString, version = xenonCommonsVersion)
+            VersionItem(label = appString, version = appVersion, font = subContextFont)
+            VersionItem(label = xenonUiString, version = xenonUIVersion, font = subContextFont)
+            VersionItem(label = xenonCommonsString, version = xenonCommonsVersion, font = subContextFont)
         }
     }
 }
 
 @Composable
-private fun VersionItem(label: String, version: String) {
+private fun VersionItem(label: String, version: String, font: FontFamily? = null) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -71,12 +77,14 @@ private fun VersionItem(label: String, version: String) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge,
+            fontFamily = font,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.weight(1f)
         )
         Text(
             text = version,
             style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+            fontFamily = font,
             color = MaterialTheme.colorScheme.primary
         )
     }

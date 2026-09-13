@@ -26,12 +26,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.xenon.mylibrary.theme.QuicksandTitleVariable
+import com.xenon.mylibrary.values.BiggerCornerRadius
+import com.xenon.mylibrary.values.ExtraLargeIconSize
 import com.xenon.mylibrary.values.ExtraLargePadding
-import com.xenon.mylibrary.values.LargeCornerRadius
+import com.xenon.mylibrary.values.IconSizeExtraLarge
+import com.xenon.mylibrary.values.IconSizeMedium
 import com.xenon.mylibrary.values.LargestPadding
+import com.xenon.mylibrary.values.SmallerSmallStroke
 
 @Suppress("unused")
 @OptIn(ExperimentalFoundationApi::class)
@@ -47,12 +51,14 @@ fun SettingsGoogleTile(
     backgroundColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     contentColor: Color = MaterialTheme.colorScheme.onSurface,
     subtitleColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    mainContextFont: FontFamily = QuicksandTitleVariable,
+    subContextFont: FontFamily = QuicksandTitleVariable,
     arrowColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
-    shape: Shape = RoundedCornerShape(LargeCornerRadius),
+    shape: Shape = RoundedCornerShape(BiggerCornerRadius),
     horizontalPadding: Dp = LargestPadding,
     verticalPadding: Dp = ExtraLargePadding,
     iconContentDescription: String = "Profile picture",
-    noAccIcon: Painter
+    noAccIcon: Painter,
 ) {
     Row(
         modifier = modifier
@@ -73,31 +79,29 @@ fun SettingsGoogleTile(
         Box(contentAlignment = Alignment.Center) {
             GoogleProfilBorder(
                 isSignedIn = isSignedIn,
-                modifier = Modifier.size(48.dp),
-                strokeWidth = 2.5.dp
+                modifier = Modifier.size(IconSizeExtraLarge),
+                strokeWidth = SmallerSmallStroke
             )
             GoogleProfilePicture(
                 noAccIcon = noAccIcon,
                 profilePictureUrl = profilePictureUrl,
                 contentDescription = iconContentDescription,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(ExtraLargeIconSize)
             )
         }
 
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontFamily = QuicksandTitleVariable
-                ),
+                style = MaterialTheme.typography.titleLarge,
+                fontFamily = mainContextFont,
                 color = contentColor
             )
             if (!subtitle.isNullOrEmpty()) {
                 Text(
                     text = subtitle,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontFamily = QuicksandTitleVariable
-                    ),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontFamily = subContextFont,
                     color = subtitleColor
                 )
             }
@@ -107,7 +111,7 @@ fun SettingsGoogleTile(
             imageVector = Icons.Rounded.ChevronRight,
             contentDescription = "Navigate",
             tint = arrowColor,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(IconSizeMedium)
         )
     }
 }

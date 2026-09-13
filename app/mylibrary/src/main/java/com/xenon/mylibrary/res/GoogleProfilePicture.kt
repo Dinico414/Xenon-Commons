@@ -10,8 +10,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.xenon.mylibrary.values.CompactButtonSize
 
 @Composable
 fun GoogleProfilePicture(
@@ -27,7 +27,7 @@ fun GoogleProfilePicture(
             model = profilePictureUrl,
             contentDescription = contentDescription,
             modifier = modifier
-                .size(40.dp)
+                .size(CompactButtonSize)
                 .clip(CircleShape)
                 .background(loadingBackground),
             contentScale = ContentScale.Crop,
@@ -37,7 +37,7 @@ fun GoogleProfilePicture(
             painter = noAccIcon,
             contentDescription = contentDescription,
             modifier = modifier
-                .size(40.dp)
+                .size(CompactButtonSize)
                 .clip(CircleShape)
         )
     }

@@ -34,11 +34,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
+import com.xenon.mylibrary.values.BiggerCornerRadius
 import com.xenon.mylibrary.values.ExtraLargePadding
-import com.xenon.mylibrary.values.LargeCornerRadius
 import com.xenon.mylibrary.values.LargerPadding
 import com.xenon.mylibrary.values.LargestPadding
 
@@ -55,15 +57,18 @@ fun SettingsSwitchTile(
     backgroundColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     contentColor: Color = MaterialTheme.colorScheme.onSurface,
     subtitleColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
-    shape: Shape = RoundedCornerShape(LargeCornerRadius),
+    mainContextFont: FontFamily? = null,
+    subContextFont: FontFamily? = null,
+    shape: Shape = RoundedCornerShape(BiggerCornerRadius),
     horizontalPadding: Dp = LargestPadding,
     verticalPadding: Dp = ExtraLargePadding,
     switchColors: SwitchColors = SwitchDefaults.colors(),
     iconSpacing: Dp = ExtraLargePadding,
     tileSpacing: Dp = LargerPadding,
-    enableRipple: Boolean = true
+    enableRipple: Boolean = true,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -90,9 +95,19 @@ fun SettingsSwitchTile(
                 .weight(1f)
                 .padding(start = iconSpacing)
         ) {
-            Text(text = title, style = MaterialTheme.typography.titleMedium, color = contentColor)
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                fontFamily = mainContextFont,
+                color = contentColor
+            )
             if (subtitle.isNotEmpty()) {
-                Text(text = subtitle, style = MaterialTheme.typography.bodyMedium, color = subtitleColor)
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontFamily = subContextFont,
+                    color = subtitleColor
+                )
             }
         }
 
@@ -137,7 +152,9 @@ fun SettingsSwitchTileContext(
     backgroundColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     contentColor: Color = MaterialTheme.colorScheme.onSurface,
     subtitleColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
-    shape: Shape = RoundedCornerShape(LargeCornerRadius),
+    mainContextFont: FontFamily? = null,
+    subContextFont: FontFamily? = null,
+    shape: Shape = RoundedCornerShape(BiggerCornerRadius),
     horizontalPadding: Dp = LargestPadding,
     verticalPadding: Dp = ExtraLargePadding,
     switchColors: SwitchColors = SwitchDefaults.colors(),
@@ -145,7 +162,7 @@ fun SettingsSwitchTileContext(
     tileSpacing: Dp = LargerPadding,
     enableRipple: Boolean = true,
     showContext: Boolean = true,
-    contextContent: @Composable () -> Unit
+    contextContent: @Composable () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     Column(
@@ -174,7 +191,9 @@ fun SettingsSwitchTileContext(
             backgroundColor = Color.Transparent,
             contentColor = contentColor,
             subtitleColor = subtitleColor,
-            shape = androidx.compose.ui.graphics.RectangleShape,
+            mainContextFont = mainContextFont,
+            subContextFont = subContextFont,
+            shape = RectangleShape,
             horizontalPadding = horizontalPadding,
             verticalPadding = verticalPadding,
             switchColors = switchColors,

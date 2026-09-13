@@ -32,9 +32,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import com.xenon.mylibrary.theme.QuicksandTitleVariable
+import com.xenon.mylibrary.values.IconSizeSmaller
+import com.xenon.mylibrary.values.LargeMediumCornerRadius
+import com.xenon.mylibrary.values.MassiveCornerRadius
+import com.xenon.mylibrary.values.MediumPadding
+import com.xenon.mylibrary.values.MinMediumButtonHeight
+import com.xenon.mylibrary.values.NoCornerRadius
+import com.xenon.mylibrary.values.SmallCornerRadius
+import com.xenon.mylibrary.values.SmallSpacing
 import kotlinx.coroutines.delay
 import kotlin.math.abs
 import kotlin.time.Duration.Companion.milliseconds
@@ -47,7 +56,7 @@ fun <T> XenonSingleChoiceButtonGroup(
     onOptionSelect: (T) -> Unit,
     label: @Composable (T) -> String,
     modifier: Modifier = Modifier,
-    buttonHeight: Dp = 40.dp,
+    buttonHeight: Dp = MinMediumButtonHeight,
     containerColor: Color = colorScheme.surfaceDim,
     selectedContainerColor: Color = colorScheme.primary,
     contentColor: Color = colorScheme.onSurface,
@@ -58,21 +67,23 @@ fun <T> XenonSingleChoiceButtonGroup(
             contentDescription = "Selected",
             tint = selectedContentColor,
             modifier = Modifier
-                .size(18.dp)
+                .size(IconSizeSmaller)
         )
     },
     unselectedIcon: @Composable ((T) -> Unit)? = null,
     icon: @Composable (T, Boolean) -> Unit = { option, isSelected ->
         if (isSelected) {
-            Box(modifier = Modifier.padding(end = 8.dp)) {
+            Box(modifier = Modifier.padding(end = MediumPadding)) {
                 selectedIcon?.invoke(option)
             }
         } else if (unselectedIcon != null) {
-            Box(modifier = Modifier.padding(end = 8.dp)) {
+            Box(modifier = Modifier.padding(end = MediumPadding)) {
                 unselectedIcon.invoke(option)
             }
         }
     },
+    mainContextFont: FontFamily = QuicksandTitleVariable,
+    subContextFont: FontFamily? = null,
 ) {
     val interactionSources = remember(options) { options.map { MutableInteractionSource() } }
 
@@ -110,7 +121,7 @@ fun <T> XenonSingleChoiceButtonGroup(
 
     Row(
         modifier = modifier.height(buttonHeight),
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(SmallSpacing),
         verticalAlignment = Alignment.CenterVertically
     ) {
         options.forEachIndexed { index, option ->
@@ -141,9 +152,9 @@ fun <T> XenonSingleChoiceButtonGroup(
             )
 
             val targetRadius = when {
-                isPressed -> 4.dp
-                isSelected -> 12.dp
-                else -> 100.dp
+                isPressed -> SmallCornerRadius
+                isSelected -> LargeMediumCornerRadius
+                else -> MassiveCornerRadius
             }
 
             val cornerRadius by animateDpAsState(
@@ -169,7 +180,7 @@ fun <T> XenonSingleChoiceButtonGroup(
                 modifier = Modifier
                     .weight(weight)
                     .fillMaxHeight()
-                    .clip(RoundedCornerShape(cornerRadius.coerceAtLeast(0.dp)))
+                    .clip(RoundedCornerShape(cornerRadius.coerceAtLeast(NoCornerRadius)))
                     .background(animatedContainerColor)
                     .clickable(
                         interactionSource = interactionSources[index],
@@ -181,11 +192,12 @@ fun <T> XenonSingleChoiceButtonGroup(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.padding(horizontal = 8.dp)
+                    modifier = Modifier.padding(horizontal = MediumPadding)
                 ) {
                     icon(option, isSelected)
                     Text(
                         text = label(option),
+                        fontFamily = mainContextFont,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         color = animatedContentColor

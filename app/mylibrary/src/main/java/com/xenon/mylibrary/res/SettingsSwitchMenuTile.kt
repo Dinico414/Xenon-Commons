@@ -34,13 +34,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.xenon.mylibrary.values.BiggerCornerRadius
 import com.xenon.mylibrary.values.ExtraLargePadding
-import com.xenon.mylibrary.values.LargeCornerRadius
 import com.xenon.mylibrary.values.LargerPadding
 import com.xenon.mylibrary.values.LargestPadding
 import com.xenon.mylibrary.values.MediumPadding
+
 @Suppress("unused")
 @Composable
 fun SettingsSwitchMenuTile(
@@ -54,9 +56,11 @@ fun SettingsSwitchMenuTile(
     backgroundColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     contentColor: Color = MaterialTheme.colorScheme.onSurface,
     subtitleColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    mainContextFont: FontFamily? = null,
+    subContextFont: FontFamily? = null,
     arrowColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     dividerColor: Color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
-    shape: Shape = RoundedCornerShape(LargeCornerRadius),
+    shape: Shape = RoundedCornerShape(BiggerCornerRadius),
     horizontalPadding: Dp = LargestPadding,
     verticalPadding: Dp = ExtraLargePadding,
     switchColors: SwitchColors = SwitchDefaults.colors(),
@@ -100,9 +104,19 @@ fun SettingsSwitchMenuTile(
                     .weight(1f)
                     .padding(start = iconSpacing)
             ) {
-                Text(text = title, style = MaterialTheme.typography.titleMedium, color = contentColor)
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontFamily = mainContextFont,
+                    color = contentColor
+                )
                 if (subtitle.isNotEmpty()) {
-                    Text(text = subtitle, style = MaterialTheme.typography.bodyMedium, color = subtitleColor)
+                    Text(
+                        text = subtitle,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontFamily = subContextFont,
+                        color = subtitleColor
+                    )
                 }
             }
 

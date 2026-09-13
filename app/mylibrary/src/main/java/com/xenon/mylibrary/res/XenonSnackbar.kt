@@ -17,20 +17,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xenon.mylibrary.theme.QuicksandTitleVariable
+import com.xenon.mylibrary.values.ExtraBiggestBigPadding
+import com.xenon.mylibrary.values.LargestPadding
+import com.xenon.mylibrary.values.MediumSmallPadding
 
 object XenonSnackbarDefault {
     val backgroundColor: Color @Composable get() = MaterialTheme.colorScheme.inverseSurface
     val contentColor: Color @Composable get() = MaterialTheme.colorScheme.inverseOnSurface
     val actionContainerColor: Color @Composable get() = MaterialTheme.colorScheme.inversePrimary
     val actionContentColor: Color @Composable get() = MaterialTheme.colorScheme.onPrimaryContainer
-    val startPadding: Dp = 16.dp
-    val endPadding: Dp = 6.dp
+    val startPadding: Dp = LargestPadding
+    val endPadding: Dp = MediumSmallPadding
     val textStyle: TextStyle @Composable get() = TextStyle(
         fontFamily = QuicksandTitleVariable,
         fontWeight = FontWeight.Thin,
@@ -54,13 +57,28 @@ fun XenonSnackbar(
     actionContentColor: Color = XenonSnackbarDefault.actionContentColor,
     contentTextStyle: TextStyle = XenonSnackbarDefault.textStyle,
     actionTextStyle: TextStyle = XenonSnackbarDefault.actionTextStyle,
+    mainContextFont: FontFamily = QuicksandTitleVariable,
+    subContextFont: FontFamily? = null,
     padding: Dp = XenonSnackbarDefault.startPadding,
     actionPadding: Dp = XenonSnackbarDefault.endPadding,
-    maxLines: Int = 1
+    maxLines: Int = 1,
 ) {
+    val resolvedContentStyle = if (mainContextFont != QuicksandTitleVariable) {
+        contentTextStyle.copy(fontFamily = mainContextFont)
+    } else {
+        contentTextStyle
+    }
+    val resolvedActionStyle = if (subContextFont != null) {
+        actionTextStyle.copy(fontFamily = subContextFont)
+    } else if (mainContextFont != QuicksandTitleVariable) {
+        actionTextStyle.copy(fontFamily = mainContextFont)
+    } else {
+        actionTextStyle
+    }
+
     Row(
         modifier = modifier
-            .height(52.dp)
+            .height(ExtraBiggestBigPadding)
             .fillMaxWidth()
             .clip(CircleShape)
             .background(backgroundColor),
@@ -68,7 +86,7 @@ fun XenonSnackbar(
     ) {
         Text(
             text = snackbarData.visuals.message,
-            style = contentTextStyle,
+            style = resolvedContentStyle,
             color = contentColor,
             modifier = Modifier
                 .weight(1f)
@@ -87,7 +105,7 @@ fun XenonSnackbar(
             ) {
                 Text(
                     text = actionLabel,
-                    style = actionTextStyle
+                    style = resolvedActionStyle
                 )
             }
         }

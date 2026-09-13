@@ -57,6 +57,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -65,9 +66,11 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.graphics.drawable.toBitmap
 import com.xenon.mylibrary.theme.QuicksandTitleVariable
-import com.xenon.mylibrary.values.DialogCornerRadius
-import com.xenon.mylibrary.values.DialogPadding
+import com.xenon.mylibrary.values.BigCornerRadius
+import com.xenon.mylibrary.values.ExtraLargerPadding
 import com.xenon.mylibrary.values.LargestPadding
+import com.xenon.mylibrary.values.MediumSmallElevation
+import com.xenon.mylibrary.values.NoPadding
 
 private const val FALLBACK_DRAWABLE_PX = 128
 
@@ -207,17 +210,17 @@ fun XenonDialog(
     properties: DialogProperties = DialogProperties(
         usePlatformDefaultWidth = false, dismissOnClickOutside = true, dismissOnBackPress = true
     ),
-    shape: Shape = RoundedCornerShape(DialogCornerRadius),
+    shape: Shape = RoundedCornerShape(BigCornerRadius),
     containerColor: Color = MaterialTheme.colorScheme.surface,
-    tonalElevation: Dp = 6.dp,
+    tonalElevation: Dp = MediumSmallElevation,
 
-    dialogPadding: PaddingValues = PaddingValues(DialogPadding / 2),
+    dialogPadding: PaddingValues = PaddingValues(ExtraLargerPadding / 2),
     dialogTitleRowPadding: PaddingValues = PaddingValues(
-        start = DialogPadding, end = DialogPadding, top = 0.dp, bottom = LargestPadding
+        start = ExtraLargerPadding, end = ExtraLargerPadding, top = NoPadding, bottom = LargestPadding
     ),
-    contentPadding: PaddingValues = PaddingValues(horizontal = DialogPadding),
+    contentPadding: PaddingValues = PaddingValues(horizontal = ExtraLargerPadding),
     buttonRowPadding: PaddingValues = PaddingValues(
-        horizontal = DialogPadding, vertical = 0.dp
+        horizontal = ExtraLargerPadding, vertical = NoPadding
     ),
 
     actionButton1Text: String? = null,
@@ -248,6 +251,8 @@ fun XenonDialog(
     dismissIcon: XenonIcon = XenonIcon(Icons.Rounded.Close, "Dismiss Dialog (Close)"),
     dismissIconButtonContainerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     dismissIconButtonContentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
+    mainContextFont: FontFamily = QuicksandTitleVariable,
+    subContextFont: FontFamily? = null,
     contentManagesScrolling: Boolean = false,
     externalShowTopDivider: Boolean = false,
     externalShowBottomDivider: Boolean = false,
@@ -294,7 +299,7 @@ fun XenonDialog(
                     Text(
                         text = title,
                         style = MaterialTheme.typography.headlineSmall.copy(
-                            fontFamily = QuicksandTitleVariable
+                            fontFamily = mainContextFont
                         ),
                         modifier = Modifier
                             .weight(1f)
@@ -395,7 +400,8 @@ fun XenonDialog(
                                 icon = actionButton1Icon,
                                 trailingIcon = actionButton1TrailingIcon,
                                 sizing = actionButton1Sizing,
-                                contentColor = actionButton1ContentColor
+                                contentColor = actionButton1ContentColor,
+                                font = subContextFont
                             )
                         }
                     } else null
@@ -416,7 +422,8 @@ fun XenonDialog(
                                     text = confirmButtonText,
                                     leadIcon = confirmButtonLeadIcon,
                                     icon = confirmButtonIcon,
-                                    trailingIcon = confirmButtonTrailingIcon
+                                    trailingIcon = confirmButtonTrailingIcon,
+                                    font = subContextFont
                                 )
                             }
                         }
@@ -432,7 +439,8 @@ fun XenonDialog(
                                 icon = actionButton2Icon,
                                 trailingIcon = actionButton2TrailingIcon,
                                 sizing = actionButton2Sizing,
-                                contentColor = actionButton2ContentColor
+                                contentColor = actionButton2ContentColor,
+                                font = subContextFont
                             )
                         }
                     } else null
@@ -486,6 +494,7 @@ private fun RowScope.DialogActionButton(
     trailingIcon: XenonIcon?,
     sizing: DialogActionSizing,
     contentColor: Color,
+    font: FontFamily? = null,
 ) {
     val onlyIcon = if (text == null && leadIcon == null && trailingIcon == null) icon else null
 
@@ -504,7 +513,7 @@ private fun RowScope.DialogActionButton(
             modifier = Modifier.weight(1f),
             colors = ButtonDefaults.textButtonColors(contentColor = contentColor)
         ) {
-            DialogButtonContent(text, leadIcon, icon, trailingIcon)
+            DialogButtonContent(text, leadIcon, icon, trailingIcon, font)
         }
     }
 }
@@ -530,6 +539,7 @@ private fun DialogButtonContent(
     leadIcon: XenonIcon?,
     icon: XenonIcon?,
     trailingIcon: XenonIcon?,
+    font: FontFamily? = null,
 ) {
     val iconModifier = Modifier.size(ButtonDefaults.IconSize)
     val iconOnly = text == null && leadIcon == null && trailingIcon == null
@@ -550,6 +560,7 @@ private fun DialogButtonContent(
         text?.let {
             Text(
                 it,
+                fontFamily = font,
                 maxLines = 2,
                 textAlign = TextAlign.Center
             )

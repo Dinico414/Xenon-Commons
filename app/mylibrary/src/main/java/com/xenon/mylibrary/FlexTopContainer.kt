@@ -20,21 +20,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.xenon.mylibrary.theme.QuicksandTitleVariable
+import com.xenon.mylibrary.values.HugerSpacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlexTopContainer(
     modifier: Modifier = Modifier,
-    collapsedHeight: Dp = 64.dp,
+    collapsedHeight: Dp = HugerSpacing,
     expandedHeight: Dp = LocalConfiguration.current.screenHeightDp.dp.times(0.3f),
     collapsedByDefault: Boolean = false,
     expandable: Boolean = true,
     expandedContainerColor: Color = MaterialTheme.colorScheme.surfaceDim,
     collapsedContainerColor: Color = MaterialTheme.colorScheme.surfaceDim,
+    mainContextFont: FontFamily = QuicksandTitleVariable,
+    subContextFont: FontFamily? = null,
     headerContent: @Composable (fraction: Float) -> Unit = {},
-    content: @Composable (paddingValues: PaddingValues) -> Unit
+    content: @Composable (paddingValues: PaddingValues) -> Unit,
 ) {
     val localDensity = LocalDensity.current
 

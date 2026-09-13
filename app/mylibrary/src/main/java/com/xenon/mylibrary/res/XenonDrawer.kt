@@ -50,14 +50,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.xenon.mylibrary.theme.QuicksandTitleVariable
+import com.xenon.mylibrary.values.ExtraBigCornerRadius
 import com.xenon.mylibrary.values.ExtraLargePadding
-import com.xenon.mylibrary.values.LargerCornerRadius
+import com.xenon.mylibrary.values.LargeIconSize
 import com.xenon.mylibrary.values.LargerPadding
+import com.xenon.mylibrary.values.MediumLargeCornerRadius
+import com.xenon.mylibrary.values.MediumLargeIconSize
 import com.xenon.mylibrary.values.NoPadding
-import com.xenon.mylibrary.values.SmallerCornerRadius
+import com.xenon.mylibrary.values.SmallerSmallStroke
+import com.xenon.mylibrary.values.SmallestStroke
 
 val LocalXenonDrawerCollapsed = compositionLocalOf { false }
 
@@ -78,17 +83,19 @@ fun XenonDrawer(
     isCollapsed: Boolean = false,
     isExpandedWidth: Boolean = false,
     isLargeScreenLayout: Boolean = false,
+    mainContextFont: FontFamily = QuicksandTitleVariable,
+    subContextFont: FontFamily? = null,
     content: @Composable (scrollState: ScrollState?) -> Unit
 ) {
     val layoutDirection = LocalLayoutDirection.current
     val safeDrawingInsets = WindowInsets.safeDrawing.asPaddingValues()
 
     val startPadding =
-        if (floating) if (safeDrawingInsets.calculateStartPadding(layoutDirection) > 0.dp) NoPadding else LargerPadding else NoPadding
+        if (floating) if (safeDrawingInsets.calculateStartPadding(layoutDirection) > NoPadding) NoPadding else LargerPadding else NoPadding
     val topPadding =
-        if (floating) if (safeDrawingInsets.calculateTopPadding() > 0.dp) NoPadding else LargerPadding else NoPadding
+        if (floating) if (safeDrawingInsets.calculateTopPadding() > NoPadding) NoPadding else LargerPadding else NoPadding
     val bottomPadding =
-        if (floating) if (safeDrawingInsets.calculateBottomPadding() > 0.dp) NoPadding else LargerPadding else NoPadding
+        if (floating) if (safeDrawingInsets.calculateBottomPadding() > NoPadding) NoPadding else LargerPadding else NoPadding
 
     val targetWidth = if (collapsable && isCollapsed) 80.dp else 360.dp
     val animatedWidth by animateDpAsState(
@@ -106,10 +113,10 @@ fun XenonDrawer(
                 .padding(start = startPadding, top = topPadding, bottom = bottomPadding)
                 .clip(
                     RoundedCornerShape(
-                        topStart = SmallerCornerRadius,
-                        bottomStart = SmallerCornerRadius,
-                        topEnd = LargerCornerRadius,
-                        bottomEnd = LargerCornerRadius
+                        topStart = MediumLargeCornerRadius,
+                        bottomStart = MediumLargeCornerRadius,
+                        topEnd = ExtraBigCornerRadius,
+                        bottomEnd = ExtraBigCornerRadius
                     )
                 )
                 .background(if (floating) backgroundColor else colorScheme.surfaceDim)
@@ -137,7 +144,7 @@ fun XenonDrawer(
                             Text(
                                 text = title,
                                 style = MaterialTheme.typography.titleLarge.copy(
-                                    fontFamily = QuicksandTitleVariable, color = colorScheme.onSurface
+                                    fontFamily = mainContextFont, color = colorScheme.onSurface
                                 ),
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
@@ -147,19 +154,19 @@ fun XenonDrawer(
                             Box(contentAlignment = Alignment.Center) {
                                 GoogleProfilBorder(
                                     isSignedIn = isSignedIn,
-                                    modifier = Modifier.size(32.dp),
-                                    strokeWidth = 2.5.dp
+                                    modifier = Modifier.size(LargeIconSize),
+                                    strokeWidth = SmallerSmallStroke
                                 )
                                 GoogleProfilePicture(
                                     noAccIcon = noAccIcon,
                                     profilePictureUrl = profilePictureUrl,
                                     contentDescription = profilePicDesc ?: "",
-                                    modifier = Modifier.size(26.dp)
+                                    modifier = Modifier.size(MediumLargeIconSize)
                                 )
                             }
                         }
                     }
-                    HorizontalDivider(thickness = 1.dp, color = colorScheme.outlineVariant)
+                    HorizontalDivider(thickness = SmallestStroke, color = colorScheme.outlineVariant)
                 }
                 if (contentManagesScrolling) {
                     Box(modifier = Modifier.weight(1f)) {
@@ -185,7 +192,7 @@ fun XenonDrawer(
                                 .align(Alignment.BottomCenter)
                                 .padding(horizontal = ExtraLargePadding)
                                 .alpha(if (showDivider) 1f else 0f),
-                            thickness = 1.dp,
+                            thickness = SmallestStroke,
                             color = colorScheme.outlineVariant
                         )
                     }
@@ -193,7 +200,7 @@ fun XenonDrawer(
                 if (hasBottomContent) {
                     HorizontalDivider(
                         modifier = Modifier.padding(horizontal = ExtraLargePadding),
-                        thickness = 1.dp,
+                        thickness = SmallestStroke,
                         color = colorScheme.outlineVariant
                     )
                 }

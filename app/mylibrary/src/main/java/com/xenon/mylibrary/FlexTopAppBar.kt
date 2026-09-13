@@ -14,6 +14,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
@@ -29,8 +30,11 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.xenon.mylibrary.theme.QuicksandTitleVariable
+import com.xenon.mylibrary.values.HugerSpacing
 import com.xenon.mylibrary.values.LargestPadding
 import kotlin.math.sqrt
 
@@ -38,9 +42,10 @@ import kotlin.math.sqrt
 @Composable
 fun FlexTopAppBar(
     modifier: Modifier = Modifier,
-    collapsedHeight: Dp = 64.dp,
+    collapsedHeight: Dp = HugerSpacing,
     expandedHeight: Dp = LocalConfiguration.current.screenHeightDp.dp.times(0.3f),
     collapsedByDefault: Boolean = false,
+    titleText: String? = null,
     title: @Composable (fraction: Float) -> Unit = { _ -> },
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
@@ -51,7 +56,9 @@ fun FlexTopAppBar(
     collapsedContainerColor: Color = MaterialTheme.colorScheme.surfaceDim,
     navigationIconContentColor: Color = MaterialTheme.colorScheme.onSurface,
     actionIconContentColor: Color = MaterialTheme.colorScheme.onSurface,
-    content: @Composable (paddingValues: PaddingValues) -> Unit
+    mainContextFont: FontFamily = QuicksandTitleVariable,
+    subContextFont: FontFamily? = null,
+    content: @Composable (paddingValues: PaddingValues) -> Unit,
 ) {
     val localDensity = LocalDensity.current
 
@@ -146,7 +153,15 @@ fun FlexTopAppBar(
                             )
                             .padding(start = titlePadding.dp)
                     ) {
-                        Row {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            if (titleText != null) {
+                                Text(
+                                    text = titleText,
+                                    fontFamily = mainContextFont,
+                                    style = MaterialTheme.typography.titleLarge,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                )
+                            }
                             title(fraction)
                             Spacer(modifier = Modifier.width(LargestPadding))
                         }

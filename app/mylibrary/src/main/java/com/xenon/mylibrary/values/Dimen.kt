@@ -1,3 +1,4 @@
+@file:JvmName("Dimen")
 @file:Suppress("unused")
 
 package com.xenon.mylibrary.values

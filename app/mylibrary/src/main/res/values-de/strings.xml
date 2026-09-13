@@ -30,6 +30,7 @@
     <string name="delete">Löschen</string>
     <string name="search">Suche</string>
     <string name="add">hinzufügen</string>
-
-
+    <string name="skip">Überspringen</string>
+    <string name="grant_permission">Berechtigung erteilen</string>
+    <string name="accessibility_guide">Falls Einstellungen auf deinem Gerät eingeschränkt sind, tippe erneut auf dieses Symbol, um die App-Info zu öffnen. Tippe dort oben rechts auf die drei Punkte und wähle \"Eingeschränkte Einstellungen zulassen\".</string>
 </resources>

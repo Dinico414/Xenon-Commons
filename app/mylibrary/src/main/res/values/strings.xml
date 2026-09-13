@@ -30,6 +30,7 @@
     <string name="delete">Delete</string>
     <string name="search">Search</string>
     <string name="add">add</string>
-
-
+    <string name="skip">Skip</string>
+    <string name="grant_permission">Grant Permission</string>
+    <string name="accessibility_guide">If settings are restricted on your device, tap this icon again to open App Info. From there, tap the three dots in the top right corner and select \"Allow restricted settings\".</string>
 </resources>

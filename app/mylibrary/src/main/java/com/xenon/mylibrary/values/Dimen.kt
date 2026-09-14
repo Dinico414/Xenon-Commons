@@ -6,7 +6,7 @@ package com.xenon.mylibrary.values
 import androidx.compose.ui.unit.dp
 
 // =============================================================================
-// Padding (Progressive scale: 0, 1, 2, 4, 5, 6, 8, 10, 12, 14, 15, 16, 20, 24, 26, 28, 30, 32, 40, 48, 50, 56, 64, 80, 100)
+// Padding (Progressive scale: 0, 1, 2, 4, 5, 6, 8, 10, 12, 14, 15, 16, 18, 20, 24, 26, 28, 30, 32, 36, 40, 44, 48, 50, 52, 56, 64, 72, 80, 100)
 // =============================================================================
 val NoPadding = 0.dp
 val SmallestPadding = 1.dp
@@ -20,13 +20,16 @@ val LargeMediumPadding = 12.dp
 val LargePadding = 14.dp
 val LargerPadding = 15.dp
 val LargestPadding = 16.dp
+val LargestBiggerPadding = 18.dp
 val ExtraLargePadding = 20.dp
 val ExtraLargerPadding = 24.dp // DialogPadding
 val ExtraLargestPadding = 26.dp
 val BigPadding = 28.dp
 val BiggerPadding = 30.dp
 val BiggestPadding = 32.dp
+val BiggestBiggerPadding = 36.dp
 val ExtraBigPadding = 40.dp // SmallTextFieldPadding
+val ExtraBigBiggerPadding = 44.dp
 val ExtraBiggerPadding = 48.dp
 val ExtraBiggestPadding = 50.dp // LargeTextFieldPadding
 val ExtraBiggestBigPadding = 52.dp
@@ -39,7 +42,7 @@ val MassivePadding = 100.dp
 val ButtonBoxPadding = (-48).dp
 
 // =============================================================================
-// Spacing (Progressive scale: 0, 1, 2, 4, 5, 6, 8, 10, 12, 14, 15, 16, 20, 24, 26, 28, 30, 32, 40, 48, 50, 56, 64, 80, 100)
+// Spacing (Progressive scale: 0, 1, 2, 4, 5, 6, 8, 10, 12, 14, 15, 16, 18, 20, 24, 26, 28, 30, 32, 36, 40, 44, 48, 50, 52, 56, 64, 72, 80, 100)
 // =============================================================================
 val NoSpacing = 0.dp
 val SmallestSpacing = 1.dp
@@ -53,13 +56,16 @@ val LargeMediumSpacing = 12.dp // LargestSpacing
 val LargeSpacing = 14.dp
 val LargerSpacing = 15.dp
 val LargestSpacing = 16.dp // ExtraLargeSpacing
+val LargestBiggerSpacing = 18.dp
 val ExtraLargeSpacing = 20.dp
 val ExtraLargerSpacing = 24.dp
 val ExtraLargestSpacing = 26.dp
 val BigSpacing = 28.dp
 val BiggerSpacing = 30.dp
 val BiggestSpacing = 32.dp
+val BiggestBiggerSpacing = 36.dp
 val ExtraBigSpacing = 40.dp // SmallButtonSizeSpacing
+val ExtraBigBiggerSpacing = 44.dp
 val ExtraBiggerSpacing = 48.dp
 val ExtraBiggestSpacing = 50.dp
 val ExtraBiggestBigSpacing = 52.dp
@@ -70,7 +76,7 @@ val HugestSpacing = 80.dp
 val MassiveSpacing = 100.dp
 
 // =============================================================================
-// Spacers (Progressive scale: 0, 1, 2, 4, 5, 6, 8, 10, 12, 14, 15, 16, 20, 24, 26, 28, 30, 32, 40, 48, 50, 56, 64, 80, 100)
+// Spacers (Progressive scale: 0, 1, 2, 4, 5, 6, 8, 10, 12, 14, 15, 16, 18, 20, 24, 26, 28, 30, 32, 36, 40, 44, 48, 50, 52, 56, 64, 72, 80, 100)
 // =============================================================================
 val NoSpacer = 0.dp
 val SmallestSpacer = 1.dp
@@ -84,13 +90,16 @@ val LargeMediumSpacer = 12.dp
 val LargeSpacer = 14.dp
 val LargerSpacer = 15.dp
 val LargestSpacer = 16.dp
+val LargestBiggerSpacer = 18.dp
 val ExtraLargeSpacer = 20.dp
 val ExtraLargerSpacer = 24.dp
 val ExtraLargestSpacer = 26.dp
 val BigSpacer = 28.dp
 val BiggerSpacer = 30.dp
 val BiggestSpacer = 32.dp
+val BiggestBiggerSpacer = 36.dp
 val ExtraBigSpacer = 40.dp
+val ExtraBigBiggerSpacer = 44.dp
 val ExtraBiggerSpacer = 48.dp
 val ExtraBiggestSpacer = 50.dp
 val ExtraBiggestBigSpacer = 52.dp
@@ -106,7 +115,7 @@ val HorizontalSpacerSmall = 8.dp
 val HorizontalSpacerMedium = 16.dp
 
 // =============================================================================
-// Stroke (Progressive scale: 0, 1, 2, 4, 5, 6, 8, 10, 12, 14, 15, 16, 20, 24, 26, 28, 30, 32, 40, 48, 50, 52, 56, 64, 72, 80, 100)
+// Stroke (Progressive scale: 0, 1, 2, 4, 5, 6, 8, 10, 12, 14, 15, 16, 18, 20, 24, 26, 28, 30, 32, 36, 40, 44, 48, 50, 52, 56, 64, 72, 80, 100)
 // =============================================================================
 val NoStroke = 0.dp
 val SmallestStroke = 1.dp
@@ -121,13 +130,16 @@ val LargeMediumStroke = 12.dp
 val LargeStroke = 14.dp
 val LargerStroke = 15.dp
 val LargestStroke = 16.dp
+val LargestBiggerStroke = 18.dp
 val ExtraLargeStroke = 20.dp
 val ExtraLargerStroke = 24.dp
 val ExtraLargestStroke = 26.dp
 val BigStroke = 28.dp
 val BiggerStroke = 30.dp
 val BiggestStroke = 32.dp
+val BiggestBiggerStroke = 36.dp
 val ExtraBigStroke = 40.dp
+val ExtraBigBiggerStroke = 44.dp
 val ExtraBiggerStroke = 48.dp
 val ExtraBiggestStroke = 50.dp
 val ExtraBiggestBigStroke = 52.dp
@@ -138,7 +150,7 @@ val HugestStroke = 80.dp
 val MassiveStroke = 100.dp
 
 // =============================================================================
-// Elevation (Progressive scale: 0, 1, 2, 4, 5, 6, 8, 10, 12, 14, 15, 16, 20, 24, 26, 28, 30, 32, 40, 48, 50, 56, 64, 80, 100)
+// Elevation (Progressive scale: 0, 1, 2, 4, 5, 6, 8, 10, 12, 14, 15, 16, 18, 20, 24, 26, 28, 30, 32, 36, 40, 44, 48, 50, 52, 56, 64, 72, 80, 100)
 // =============================================================================
 val NoElevation = 0.dp
 val SmallestElevation = 1.dp
@@ -153,13 +165,16 @@ val LargeMediumElevation = 12.dp
 val LargeElevation = 14.dp
 val LargerElevation = 15.dp
 val LargestElevation = 16.dp
+val LargestBiggerElevation = 18.dp
 val ExtraLargeElevation = 20.dp
 val ExtraLargerElevation = 24.dp
 val ExtraLargestElevation = 26.dp
 val BigElevation = 28.dp
 val BiggerElevation = 30.dp
 val BiggestElevation = 32.dp
+val BiggestBiggerElevation = 36.dp
 val ExtraBigElevation = 40.dp
+val ExtraBigBiggerElevation = 44.dp
 val ExtraBiggerElevation = 48.dp
 val ExtraBiggestElevation = 50.dp
 val ExtraBiggestBigElevation = 52.dp
@@ -170,7 +185,7 @@ val HugestElevation = 80.dp
 val MassiveElevation = 100.dp
 
 // =============================================================================
-// Corner Radius (Progressive scale: 0, 1, 2, 4, 5, 6, 8, 10, 12, 14, 15, 16, 20, 24, 26, 28, 30, 32, 40, 48, 50, 56, 64, 80, 100)
+// Corner Radius (Progressive scale: 0, 1, 2, 4, 5, 6, 8, 10, 12, 14, 15, 16, 18, 20, 24, 26, 28, 30, 32, 36, 40, 44, 48, 50, 52, 56, 64, 72, 80, 100)
 // =============================================================================
 val NoCornerRadius = 0.dp
 val SmallestCornerRadius = 1.dp
@@ -185,13 +200,16 @@ val LargeMediumCornerRadius = 12.dp
 val LargeCornerRadius = 14.dp
 val LargerCornerRadius = 15.dp
 val LargestCornerRadius = 16.dp
+val LargestBiggerCornerRadius = 18.dp
 val ExtraLargeCornerRadius = 20.dp // SmallCornerRadius
 val ExtraLargerCornerRadius = 24.dp // MediumCornerRadius
 val ExtraLargestCornerRadius = 26.dp
 val BigCornerRadius = 28.dp // DialogCornerRadius, TextFieldCornerRadius
 val BiggerCornerRadius = 30.dp // LargeCornerRadius
 val BiggestCornerRadius = 32.dp
+val BiggestBiggerCornerRadius = 36.dp
 val ExtraBigCornerRadius = 40.dp // LargerCornerRadius
+val ExtraBigBiggerCornerRadius = 44.dp
 val ExtraBiggerCornerRadius = 48.dp
 val ExtraBiggestCornerRadius = 50.dp
 val ExtraBiggestBigCornerRadius = 52.dp

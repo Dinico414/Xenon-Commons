@@ -53,6 +53,7 @@ import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.size
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.xenon.mylibrary.R
@@ -63,6 +64,7 @@ import com.xenon.mylibrary.values.ExtraBigPadding
 import com.xenon.mylibrary.values.HugePadding
 import com.xenon.mylibrary.values.LargeButtonSize
 import com.xenon.mylibrary.values.LargestPadding
+import com.xenon.mylibrary.values.MediumIconSize
 import com.xenon.mylibrary.values.MediumPadding
 
 @Composable
@@ -78,6 +80,7 @@ fun PermissionScreen(
     defaultGuideText: String? = null,
     mainContextFont: FontFamily = QuicksandTitleVariable,
     subContextFont: FontFamily? = null,
+    skipIcon: XenonIcon? = null,
     onSkip: ((PermissionItem) -> Unit)? = null,
     onFinish: () -> Unit,
 ) {
@@ -236,13 +239,18 @@ fun PermissionScreen(
                             .weight(1f)
                             .height(LargeButtonSize)
                     ) {
-                        Text(
-                            text = skipButtonText,
-                            style = MaterialTheme.typography.titleLarge,
-                            fontFamily = mainContextFont,
-                            textAlign = TextAlign.Center,
-                            maxLines = 1
-                        )
+                        val effectiveSkipIcon = currentPermission.skipIcon ?: skipIcon
+                        if (effectiveSkipIcon != null) {
+                            effectiveSkipIcon.Render(Modifier.size(MediumIconSize))
+                        } else {
+                            Text(
+                                text = skipButtonText,
+                                style = MaterialTheme.typography.titleLarge,
+                                fontFamily = mainContextFont,
+                                textAlign = TextAlign.Center,
+                                maxLines = 1
+                            )
+                        }
                     }
                 }
             } else {

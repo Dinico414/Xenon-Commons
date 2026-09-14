@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import com.xenon.mylibrary.res.XenonIcon
 
 data class PermissionItem(
     val name: String,
@@ -12,7 +13,8 @@ data class PermissionItem(
     val request: (Context) -> Unit,
     val guideText: String? = null,
     val infoText: String? = guideText,
-    val onInfoClick: ((Context) -> Unit)? = null
+    val onInfoClick: ((Context) -> Unit)? = null,
+    val skipIcon: XenonIcon? = null
 )
 
 fun openAppInfo(context: Context) {

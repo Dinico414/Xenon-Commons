@@ -61,8 +61,8 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.xenon.mylibrary.theme.QuicksandTitleVariable
+import com.xenon.mylibrary.values.ExtraLargeSpacing
 import com.xenon.mylibrary.values.ExtraLargerCornerRadius
-import com.xenon.mylibrary.values.ExtraLargerSpacing
 import com.xenon.mylibrary.values.IconSizeMedium
 import com.xenon.mylibrary.values.LargeMediumElevation
 import com.xenon.mylibrary.values.LargestPadding
@@ -79,7 +79,6 @@ import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
 import dev.chrisbanes.haze.materials.HazeMaterials
 
-
 /**
  * Universal TopContentBar for search bars, title bars, and editable headers.
  */
@@ -89,7 +88,7 @@ fun TopContentBar(
     modifier: Modifier = Modifier,
     // Outside paddings (Inside padding is fixed)
     outsidePadding: PaddingValues = PaddingValues(horizontal = LargestPadding, vertical = NoSpacing),
-    // Haze and styling
+    // Haze and styling for the bar
     hazeState: HazeState? = null,
     blurEnabled: Boolean = true,
     containerColor: Color = colorScheme.surfaceContainer,
@@ -139,8 +138,10 @@ fun TopContentBar(
     menuMainContextFont: FontFamily = fontFamily,
     menuSubContextFont: FontFamily? = null,
     menuAnchorPos: Offset? = null,
+    menuContainerColor: Color = colorScheme.surfaceContainer,
+    menuBlurAlpha: Float = 0.4f,
+    menuHazeStyle: HazeStyle? = null,
     dropdownContent: (@Composable (expanded: Boolean, onDismiss: () -> Unit, anchor: Offset) -> Unit)? = null,
-    // Trailing actions & callbacks
     actions: (@Composable RowScope.() -> Unit)? = null,
     onBarSizeChanged: ((IntSize) -> Unit)? = null,
     onBarAnchorChanged: ((Offset) -> Unit)? = null,
@@ -337,6 +338,9 @@ fun TopContentBar(
                             alignment = menuAlignment,
                             maxLines = menuMaxLines,
                             mainContextFont = menuMainContextFont,
+                            containerColor = menuContainerColor,
+                            blurAlpha = menuBlurAlpha,
+                            hazeStyle = menuHazeStyle,
                         )
                     }
                 }
@@ -352,7 +356,7 @@ fun MorphingBackCloseIcon(
     progress: Float,
     color: Color,
     modifier: Modifier = Modifier,
-    size: Dp = ExtraLargerSpacing
+    size: Dp = ExtraLargeSpacing
 ) {
     Canvas(modifier = modifier.size(size)) {
         val strokeWidth = SmallerStroke.toPx()

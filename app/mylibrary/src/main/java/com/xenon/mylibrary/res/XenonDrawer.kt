@@ -31,6 +31,8 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -39,6 +41,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -47,9 +51,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -85,10 +94,29 @@ fun XenonDrawer(
     isLargeScreenLayout: Boolean = false,
     mainContextFont: FontFamily = QuicksandTitleVariable,
     subContextFont: FontFamily? = null,
+    drawerState: DrawerState? = null,
     content: @Composable (scrollState: ScrollState?) -> Unit
 ) {
     val layoutDirection = LocalLayoutDirection.current
     val safeDrawingInsets = WindowInsets.safeDrawing.asPaddingValues()
+
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Dismiss keyboard and clear focus when drawer starts closing or is closed
+    LaunchedEffect(drawerState?.targetValue, drawerState?.isOpen) {
+        if (drawerState != null && (!drawerState.isOpen || drawerState.targetValue == DrawerValue.Closed)) {
+            focusManager.clearFocus()
+            keyboardController?.hide()
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            focusManager.clearFocus()
+            keyboardController?.hide()
+        }
+    }
 
     val startPadding =
         if (floating) if (safeDrawingInsets.calculateStartPadding(layoutDirection) > NoPadding) NoPadding else LargerPadding else NoPadding
@@ -109,7 +137,15 @@ fun XenonDrawer(
             modifier = Modifier
                 .background(if (floating) Color.Transparent else colorScheme.surfaceDim)
                 .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.safeDrawing.only(if(isLargeScreenLayout) {WindowInsetsSides.Start + WindowInsetsSides.Top + WindowInsetsSides.Bottom} else WindowInsetsSides.Vertical + WindowInsetsSides.Horizontal))
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(
+                        if (isLargeScreenLayout) {
+                            WindowInsetsSides.Start + WindowInsetsSides.Top + WindowInsetsSides.Bottom
+                        } else {
+                            WindowInsetsSides.Vertical + WindowInsetsSides.Horizontal
+                        }
+                    )
+                )
                 .padding(start = startPadding, top = topPadding, bottom = bottomPadding)
                 .clip(
                     RoundedCornerShape(
@@ -223,14 +259,32 @@ fun XenonDrawer(
         if (floating) {
             ModalDrawerSheet(
                 drawerContainerColor = Color.Transparent,
-                modifier = if (isExpandedWidth) Modifier.fillMaxWidth() else if (collapsable) Modifier.width(animatedWidth) else Modifier
+                modifier = (if (isExpandedWidth) Modifier.fillMaxWidth() else if (collapsable) Modifier.width(animatedWidth) else Modifier)
+                    .focusProperties {
+                        onEnter = { cancelFocusChange() }
+                    }
+                    .onGloballyPositioned { coordinates ->
+                        if (coordinates.size.width > 0 && coordinates.positionInWindow().x + coordinates.size.width <= 0) {
+                            focusManager.clearFocus()
+                            keyboardController?.hide()
+                        }
+                    }
             ) {
                 innerContent()
             }
         } else {
             Surface(
                 color = Color.Transparent,
-                modifier = if (isExpandedWidth) Modifier.fillMaxSize() else (if (collapsable) Modifier.width(animatedWidth) else Modifier.width(360.dp)).fillMaxSize()
+                modifier = (if (isExpandedWidth) Modifier.fillMaxSize() else (if (collapsable) Modifier.width(animatedWidth) else Modifier.width(360.dp)).fillMaxSize())
+                    .focusProperties {
+                        onEnter = { cancelFocusChange() }
+                    }
+                    .onGloballyPositioned { coordinates ->
+                        if (coordinates.size.width > 0 && coordinates.positionInWindow().x + coordinates.size.width <= 0) {
+                            focusManager.clearFocus()
+                            keyboardController?.hide()
+                        }
+                    }
             ) {
                 innerContent()
             }

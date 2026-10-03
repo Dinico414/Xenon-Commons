@@ -56,6 +56,7 @@ import com.xenon.mylibrary.values.SmallElevation
 import com.xenon.mylibrary.values.SmallPadding
 import com.xenon.mylibrary.values.SmallSpacing
 import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
 import dev.chrisbanes.haze.materials.HazeMaterials
@@ -107,6 +108,9 @@ fun XenonDropDown(
     alignment: Alignment = Alignment.TopEnd,
     maxLines: Int = 1,
     mainContextFont: FontFamily = QuicksandTitleVariable,
+    containerColor: Color = colorScheme.surfaceContainer,
+    blurAlpha: Float = 0.4f,
+    hazeStyle: HazeStyle? = null,
 ) {
     val expandedState = remember { MutableTransitionState(false) }
     expandedState.targetState = expanded
@@ -151,7 +155,7 @@ fun XenonDropDown(
                 var targetAbsX = touchX - (mWidth * pivotX)
                 var targetAbsY = touchY - (mHeight * pivotY)
 
-                // Clamp to screen edges with 16dp margin
+                // Clamp to screen edges with margin
                 targetAbsX = targetAbsX.coerceIn(marginPx, (screenWidthPx - mWidth - marginPx).coerceAtLeast(marginPx))
                 targetAbsY = targetAbsY.coerceIn(marginPx, (screenHeightPx - mHeight - marginPx).coerceAtLeast(marginPx))
 
@@ -206,10 +210,16 @@ fun XenonDropDown(
                     .clip(RoundedCornerShape(radius))
                     .then(
                         if (hazeState != null) {
-                            Modifier.hazeEffect(state = hazeState, style = HazeMaterials.ultraThin())
+                            Modifier.hazeEffect(
+                                state = hazeState,
+                                style = hazeStyle ?: HazeMaterials.ultraThin()
+                            )
                         } else Modifier
                     )
-                    .background(colorScheme.surfaceContainer.copy(alpha = if (hazeState != null) 0.4f else 1f))
+                    .background(
+                        if (hazeState != null) containerColor.copy(alpha = blurAlpha)
+                        else containerColor
+                    )
                     .padding(SmallPadding),
                 verticalArrangement = Arrangement.spacedBy(SmallSpacing)
             ) {

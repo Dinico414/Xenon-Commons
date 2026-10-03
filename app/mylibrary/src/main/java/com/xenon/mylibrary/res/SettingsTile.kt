@@ -5,7 +5,6 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -13,10 +12,16 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,12 +34,13 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.xenon.mylibrary.values.BiggerCornerRadius
 import com.xenon.mylibrary.values.ExtraLargePadding
 import com.xenon.mylibrary.values.LargestPadding
+import com.xenon.mylibrary.values.MediumPadding
 
 @Suppress("unused")
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SettingsTile(
     modifier: Modifier = Modifier,
@@ -43,6 +49,10 @@ fun SettingsTile(
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
     icon: (@Composable () -> Unit)? = null,
+    showArrow: Boolean = false,
+    showTrailingIcon: Boolean = showArrow,
+    arrowColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    trailingIcon: (@Composable () -> Unit)? = null,
     backgroundColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     contentColor: Color = MaterialTheme.colorScheme.onSurface,
     subtitleColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -55,6 +65,16 @@ fun SettingsTile(
     enableRipple: Boolean = true,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+    val actualTrailingIcon: (@Composable () -> Unit)? = trailingIcon ?: if (showArrow || showTrailingIcon) {
+        {
+            Icon(
+                imageVector = Icons.Filled.ChevronRight,
+                contentDescription = "Navigate",
+                tint = arrowColor,
+                modifier = Modifier.size(24.dp),
+            )
+        }
+    } else null
 
     Row(
         modifier = modifier
@@ -95,11 +115,15 @@ fun SettingsTile(
                 )
             }
         }
+
+        actualTrailingIcon?.let {
+            Spacer(modifier = Modifier.width(MediumPadding))
+            it()
+        }
     }
 }
 
 @Suppress("unused")
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SettingsTileContext(
     modifier: Modifier = Modifier,
@@ -108,6 +132,10 @@ fun SettingsTileContext(
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
     icon: (@Composable () -> Unit)? = null,
+    showArrow: Boolean = false,
+    showTrailingIcon: Boolean = showArrow,
+    arrowColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    trailingIcon: (@Composable () -> Unit)? = null,
     backgroundColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     contentColor: Color = MaterialTheme.colorScheme.onSurface,
     subtitleColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -142,6 +170,10 @@ fun SettingsTileContext(
             onClick = null,
             onLongClick = null,
             icon = icon,
+            showArrow = showArrow,
+            showTrailingIcon = showTrailingIcon,
+            arrowColor = arrowColor,
+            trailingIcon = trailingIcon,
             backgroundColor = Color.Transparent,
             contentColor = contentColor,
             subtitleColor = subtitleColor,

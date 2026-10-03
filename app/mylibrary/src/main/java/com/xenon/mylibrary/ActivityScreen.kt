@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -50,7 +49,6 @@ import com.xenon.mylibrary.values.SmallPadding
 import kotlin.math.roundToInt
 
 @Suppress("unused")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ActivityScreen(
     modifier: Modifier = Modifier,
@@ -183,8 +181,6 @@ fun ActivityScreen(
                 expandable = expandable,
                 expandedContainerColor = screenBackgroundColor,
                 collapsedContainerColor = screenBackgroundColor,
-                mainContextFont = mainContextFont,
-                subContextFont = subContextFont,
                 headerContent = headerContent
             ) { paddingValuesFromContainer ->
                 SharedScreenContent(

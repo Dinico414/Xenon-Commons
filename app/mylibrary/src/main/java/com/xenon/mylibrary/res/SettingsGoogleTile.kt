@@ -1,6 +1,5 @@
 package com.xenon.mylibrary.res
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,7 +37,6 @@ import com.xenon.mylibrary.values.LargestPadding
 import com.xenon.mylibrary.values.SmallerSmallStroke
 
 @Suppress("unused")
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SettingsGoogleTile(
     modifier: Modifier = Modifier,

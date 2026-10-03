@@ -38,7 +38,6 @@ import com.xenon.mylibrary.values.HugerSpacing
 import com.xenon.mylibrary.values.LargestPadding
 import kotlin.math.sqrt
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlexTopAppBar(
     modifier: Modifier = Modifier,

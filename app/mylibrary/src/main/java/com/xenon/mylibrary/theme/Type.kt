@@ -1,7 +1,6 @@
 package com.xenon.mylibrary.theme
 
 import androidx.compose.material3.Typography
-import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -19,7 +18,6 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     )
 )
-@OptIn(ExperimentalTextApi::class)
 val QuicksandTitleVariable = FontFamily(
     Font(
         R.font.quicksand_variable_font_wght,

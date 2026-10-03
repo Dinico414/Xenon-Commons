@@ -12,7 +12,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -37,7 +36,6 @@ import com.xenon.mylibrary.values.ExtraBiggerSpacing
 import com.xenon.mylibrary.values.LargeMediumPadding
 import com.xenon.mylibrary.values.LargestPadding
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun XenonTextField(
     value: String,
@@ -166,7 +164,6 @@ fun XenonTextField(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun xenonTextFieldColors(): TextFieldColors {
     val colorScheme = MaterialTheme.colorScheme

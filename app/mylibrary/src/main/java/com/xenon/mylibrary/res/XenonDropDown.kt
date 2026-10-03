@@ -107,7 +107,6 @@ fun XenonDropDown(
     alignment: Alignment = Alignment.TopEnd,
     maxLines: Int = 1,
     mainContextFont: FontFamily = QuicksandTitleVariable,
-    subContextFont: FontFamily? = null,
 ) {
     val expandedState = remember { MutableTransitionState(false) }
     expandedState.targetState = expanded

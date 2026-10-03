@@ -109,7 +109,6 @@ fun XenonDropDown(
     maxLines: Int = 1,
     mainContextFont: FontFamily = QuicksandTitleVariable,
     containerColor: Color = colorScheme.surfaceContainer,
-    blurAlpha: Float = 0.4f,
     hazeStyle: HazeStyle? = null,
 ) {
     val expandedState = remember { MutableTransitionState(false) }
@@ -208,6 +207,7 @@ fun XenonDropDown(
                     }
                     .shadow(shadowElevation, RoundedCornerShape(radius))
                     .clip(RoundedCornerShape(radius))
+                    .background(containerColor)
                     .then(
                         if (hazeState != null) {
                             Modifier.hazeEffect(
@@ -215,10 +215,6 @@ fun XenonDropDown(
                                 style = hazeStyle ?: HazeMaterials.ultraThin()
                             )
                         } else Modifier
-                    )
-                    .background(
-                        if (hazeState != null) containerColor.copy(alpha = blurAlpha)
-                        else containerColor
                     )
                     .padding(SmallPadding),
                 verticalArrangement = Arrangement.spacedBy(SmallSpacing)

@@ -92,7 +92,6 @@ fun TopContentBar(
     hazeState: HazeState? = null,
     blurEnabled: Boolean = true,
     containerColor: Color = colorScheme.surfaceContainer,
-    blurAlpha: Float = 0.4f,
     elevation: Dp = if (blurEnabled) NoElevation else LargeMediumElevation,
     shape: Shape = CircleShape,
     hazeStyle: HazeStyle? = null,
@@ -139,9 +138,9 @@ fun TopContentBar(
     menuSubContextFont: FontFamily? = null,
     menuAnchorPos: Offset? = null,
     menuContainerColor: Color = colorScheme.surfaceContainer,
-    menuBlurAlpha: Float = 0.4f,
     menuHazeStyle: HazeStyle? = null,
     dropdownContent: (@Composable (expanded: Boolean, onDismiss: () -> Unit, anchor: Offset) -> Unit)? = null,
+    // Trailing actions & callbacks
     actions: (@Composable RowScope.() -> Unit)? = null,
     onBarSizeChanged: ((IntSize) -> Unit)? = null,
     onBarAnchorChanged: ((Offset) -> Unit)? = null,
@@ -181,6 +180,7 @@ fun TopContentBar(
                 }
                 .shadow(elevation = elevation, shape = shape)
                 .clip(shape)
+                .background(containerColor)
                 .then(
                     if (blurEnabled && hazeState != null) {
                         Modifier.hazeEffect(
@@ -188,10 +188,6 @@ fun TopContentBar(
                             style = hazeStyle ?: HazeMaterials.ultraThin()
                         )
                     } else Modifier
-                )
-                .background(
-                    if (blurEnabled && hazeState != null) containerColor.copy(alpha = blurAlpha)
-                    else containerColor
                 )
                 .pointerInput(Unit) {
                     detectDragGestures { _, _ -> }
@@ -339,7 +335,6 @@ fun TopContentBar(
                             maxLines = menuMaxLines,
                             mainContextFont = menuMainContextFont,
                             containerColor = menuContainerColor,
-                            blurAlpha = menuBlurAlpha,
                             hazeStyle = menuHazeStyle,
                         )
                     }

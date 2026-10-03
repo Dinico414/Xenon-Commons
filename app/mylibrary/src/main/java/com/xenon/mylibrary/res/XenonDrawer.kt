@@ -51,11 +51,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -103,7 +101,7 @@ fun XenonDrawer(
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    // Dismiss keyboard and clear focus when drawer starts closing or is closed
+    // Dismiss keyboard and clear focus when drawer is closed or starts closing
     LaunchedEffect(drawerState?.targetValue, drawerState?.isOpen) {
         if (drawerState != null && (!drawerState.isOpen || drawerState.targetValue == DrawerValue.Closed)) {
             focusManager.clearFocus()
@@ -135,6 +133,7 @@ fun XenonDrawer(
     val innerContent = @Composable {
         Box(
             modifier = Modifier
+                .focusTarget() // Absorbs initial focus so child text fields are not auto-focused
                 .background(if (floating) Color.Transparent else colorScheme.surfaceDim)
                 .fillMaxSize()
                 .windowInsetsPadding(
@@ -260,15 +259,7 @@ fun XenonDrawer(
             ModalDrawerSheet(
                 drawerContainerColor = Color.Transparent,
                 modifier = (if (isExpandedWidth) Modifier.fillMaxWidth() else if (collapsable) Modifier.width(animatedWidth) else Modifier)
-                    .focusProperties {
-                        onEnter = { cancelFocusChange() }
-                    }
-                    .onGloballyPositioned { coordinates ->
-                        if (coordinates.size.width > 0 && coordinates.positionInWindow().x + coordinates.size.width <= 0) {
-                            focusManager.clearFocus()
-                            keyboardController?.hide()
-                        }
-                    }
+                    .focusTarget()
             ) {
                 innerContent()
             }
@@ -276,15 +267,7 @@ fun XenonDrawer(
             Surface(
                 color = Color.Transparent,
                 modifier = (if (isExpandedWidth) Modifier.fillMaxSize() else (if (collapsable) Modifier.width(animatedWidth) else Modifier.width(360.dp)).fillMaxSize())
-                    .focusProperties {
-                        onEnter = { cancelFocusChange() }
-                    }
-                    .onGloballyPositioned { coordinates ->
-                        if (coordinates.size.width > 0 && coordinates.positionInWindow().x + coordinates.size.width <= 0) {
-                            focusManager.clearFocus()
-                            keyboardController?.hide()
-                        }
-                    }
+                    .focusTarget()
             ) {
                 innerContent()
             }

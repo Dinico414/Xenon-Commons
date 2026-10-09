@@ -1,9 +1,10 @@
 package com.xenon.mylibrary.res
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ButtonDefaults
@@ -51,6 +52,8 @@ object XenonSnackbarDefault {
 fun XenonSnackbar(
     snackbarData: SnackbarData,
     modifier: Modifier = Modifier,
+    contentIcon: (@Composable () -> Unit)? = null,
+    actionIcon: (@Composable () -> Unit)? = null,
     backgroundColor: Color = XenonSnackbarDefault.backgroundColor,
     contentColor: Color = XenonSnackbarDefault.contentColor,
     actionContainerColor: Color = XenonSnackbarDefault.actionContainerColor,
@@ -78,22 +81,38 @@ fun XenonSnackbar(
 
     Row(
         modifier = modifier
-            .height(ExtraBiggestBigPadding)
+            .heightIn(min = ExtraBiggestBigPadding)
             .fillMaxWidth()
             .clip(CircleShape)
             .background(backgroundColor),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        // 1. Icon at the start (if present)
+        contentIcon?.let {
+            Box(
+                modifier = Modifier.padding(start = padding),
+                contentAlignment = Alignment.Center
+            ) {
+                it()
+            }
+        }
+
+        // 2. Message text in the middle
         Text(
             text = snackbarData.visuals.message,
             style = resolvedContentStyle,
             color = contentColor,
             modifier = Modifier
                 .weight(1f)
-                .padding(horizontal = padding),
+                .padding(
+                    start = padding,
+                    end = if (snackbarData.visuals.actionLabel == null) padding else MediumSmallPadding
+                ),
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis
         )
+
+        // 3. Action button at the end (if present)
         snackbarData.visuals.actionLabel?.let { actionLabel ->
             FilledTonalButton(
                 onClick = { snackbarData.performAction() },
@@ -103,6 +122,14 @@ fun XenonSnackbar(
                 ),
                 modifier = Modifier.padding(end = actionPadding)
             ) {
+                actionIcon?.let {
+                    Box(
+                        modifier = Modifier.padding(start = padding),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        it()
+                    }
+                }
                 Text(
                     text = actionLabel,
                     style = resolvedActionStyle

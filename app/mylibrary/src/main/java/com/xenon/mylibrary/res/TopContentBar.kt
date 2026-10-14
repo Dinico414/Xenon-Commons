@@ -190,12 +190,19 @@ fun TopContentBar(
                     } else Modifier
                 )
                 .pointerInput(Unit) {
-                    detectDragGestures { _, _ -> }
+                    detectDragGestures(
+                        onDragStart = {},
+                        onDragEnd = {},
+                        onDragCancel = {}
+                    ) { _, _ -> }
                 }
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
-                    onClick = { onBarClick?.invoke() }
+                    onClick = {
+                        focusRequester?.requestFocus()
+                        onBarClick?.invoke()
+                    }
                 ),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -242,6 +249,11 @@ fun TopContentBar(
                         onValueChange = onValueChange,
                         modifier = Modifier
                             .weight(1f)
+                            .fillMaxWidth()
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) { focusRequester?.requestFocus() }
                             .then(if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier)
                             .onFocusChanged {
                                 isSearchFocused = it.isFocused

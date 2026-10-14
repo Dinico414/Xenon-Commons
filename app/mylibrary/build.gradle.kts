@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.xenon.commons"
-version = "3.1.3"
+version = "3.1.4"
 
 configure<LibraryExtension> {
     namespace = "com.xenon.mylibrary"

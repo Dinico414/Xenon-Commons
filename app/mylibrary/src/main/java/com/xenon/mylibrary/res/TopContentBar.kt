@@ -45,6 +45,8 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.awaitEachGesture
+import androidx.compose.ui.input.pointer.awaitFirstDown
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -244,21 +246,32 @@ fun TopContentBar(
 
                 if (onValueChange != null) {
                     // Search / editable title mode
+                    //
+                    // The field must win the gesture over the parent Row's clickable so it
+                    // actually receives input focus (and therefore becomes a focused
+                    // `android.widget.EditText` node for accessibility services). A plain
+                    // child `clickable` was not enough because the parent clickable + the
+                    // drag detector still consumed the initial down first. Requesting focus
+                    // on the pointer *down* (before any drag slop is crossed) fixes that.
+                    val fieldFocusModifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .pointerInput(Unit) {
+                            awaitEachGesture {
+                                val down = awaitFirstDown(requireUnconsumed = false)
+                                down.consume()
+                                focusRequester?.requestFocus()
+                            }
+                        }
+                        .then(if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier)
+                        .onFocusChanged {
+                            isSearchFocused = it.isFocused
+                            onFocusChanged?.invoke(it)
+                        }
                     BasicTextField(
                         value = value,
                         onValueChange = onValueChange,
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth()
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null
-                            ) { focusRequester?.requestFocus() }
-                            .then(if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier)
-                            .onFocusChanged {
-                                isSearchFocused = it.isFocused
-                                onFocusChanged?.invoke(it)
-                            },
+                        modifier = fieldFocusModifier,
                         interactionSource = interactionSource ?: remember { MutableInteractionSource() },
                         singleLine = singleLine,
                         readOnly = readOnly,

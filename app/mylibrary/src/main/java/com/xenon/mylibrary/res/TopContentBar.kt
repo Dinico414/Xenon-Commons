@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Icon
@@ -106,6 +108,10 @@ fun TopContentBar(
     // Content: Title / Search
     value: String = "",
     onValueChange: ((String) -> Unit)? = null,
+    // Keyboard configuration, so a search bar can offer a Search/Go/Next key and react to it
+    // instead of being stuck with the default Done action (which only hides the keyboard).
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     title: String? = null,
     placeholder: String = "",
     placeholderColor: Color = contentColor.copy(alpha = 0.6f),
@@ -265,6 +271,8 @@ fun TopContentBar(
                         readOnly = readOnly,
                         enabled = enabled,
                         textStyle = effectiveTextStyle,
+                        keyboardOptions = keyboardOptions,
+                        keyboardActions = keyboardActions,
                         cursorBrush = cursorBrush,
                         decorationBox = { innerTextField ->
                             Box(

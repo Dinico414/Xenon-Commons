@@ -44,6 +44,7 @@ import com.xenon.mylibrary.values.ExtraBigCornerRadius
 import com.xenon.mylibrary.values.FullCornerRadius
 import com.xenon.mylibrary.values.HugeBiggerSpacing
 import com.xenon.mylibrary.values.HugerSpacing
+import com.xenon.mylibrary.values.NoPadding
 import com.xenon.mylibrary.values.SmallButtonSize
 import com.xenon.mylibrary.values.SmallPadding
 import kotlin.math.roundToInt
@@ -56,7 +57,7 @@ fun ActivityScreen(
     flexModel: String? = "FlexTopAppBar",
     titleText: String = "",
     hasNavigationIconExtraContent: Boolean = false,
-    navigationIcon: @Composable () -> Unit = {},
+    navigationIcon: (@Composable () -> Unit)? = null,
     onNavigationIconClick: (() -> Unit)? = null,
     navigationIconExtraContent: @Composable RowScope.() -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
@@ -70,7 +71,7 @@ fun ActivityScreen(
     collapsedContainerColor: Color = MaterialTheme.colorScheme.surfaceDim,
     contentCornerRadius: Dp = ExtraBigCornerRadius,
     navigationIconStartPadding: Dp = SmallPadding,
-    navigationIconPadding: Dp = SmallPadding,
+    navigationIconPadding: Dp = if (navigationIcon != null || hasNavigationIconExtraContent) SmallPadding else NoPadding,
     navigationIconSpacing: Dp = SmallPadding,
     collapsedByDefault: Boolean = false,
     collapsedHeight: Dp = HugerSpacing,
@@ -139,7 +140,7 @@ fun ActivityScreen(
                                         navigationIconSpacing
                                     )
                                 ) {
-                                    navigationIcon()
+                                    navigationIcon?.invoke()
                                     if (hasNavigationIconExtraContent) {
                                         navigationIconExtraContent()
                                     }

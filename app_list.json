@@ -70,6 +70,16 @@
       "icon": "@mipmap/launcher",
       "githubUrl": "https://github.com/Dinico414/XenonLauncher",
       "packageName": "com.xenonware.launcher"
+    },
+    {
+      "name": "Shizuku",
+      "names": {
+        "en": "Shizuku",
+        "de": "Shizuku"
+      },
+      "icon": "@mipmap/shizuku",
+      "githubUrl": "https://github.com/Dinico414/Shizuku",
+      "packageName": "moe.shizuku.privileged.api"
     }
   ]
 }

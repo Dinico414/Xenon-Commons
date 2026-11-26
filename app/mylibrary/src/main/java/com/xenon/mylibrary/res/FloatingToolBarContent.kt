@@ -25,19 +25,27 @@ import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -49,6 +57,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.FloatingToolbarDefaults
 import androidx.compose.material3.HorizontalFloatingToolbar
+import androidx.compose.material3.VerticalFloatingToolbar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -708,6 +717,479 @@ private fun SingleToolbarInstance(
                                 )
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+fun VerticalFloatingToolbarContent(
+    hazeState: HazeState,
+    onSearchQueryChanged: (String) -> Unit,
+    currentSearchQuery: String,
+    lazyListState: LazyListState,
+    allowToolbarScrollBehavior: Boolean,
+    selectedNoteIds: List<Int>,
+    onClearSelection: () -> Unit,
+    isAddModeActive: Boolean,
+    onAddModeToggle: () -> Unit,
+    isSearchActive: Boolean,
+    onIsSearchActiveChange: (Boolean) -> Unit,
+    isSearchEnabled: Boolean = true,
+    isFabEnabled: Boolean = true,
+    fabOverride: @Composable (() -> Unit)? = null,
+    selectionContentOverride: @Composable (ColumnScope.() -> Unit)? = null,
+    addModeContentOverride: @Composable (ColumnScope.() -> Unit)? = null,
+    defaultContent: @Composable ((iconsAlphaDuration: Int, showActionIconsExceptSearch: Boolean) -> Unit)? = null,
+    contentOverride: @Composable (ColumnScope.() -> Unit)? = null,
+    defaultColor: Color = colorScheme.surfaceDim,
+    isSelectedColor: Color = colorScheme.secondaryContainer,
+    isAddModeColor: Color = colorScheme.secondaryContainer,
+    docked: Boolean = false,
+    dockedWidth: Dp = 80.dp,
+) {
+    VerticalSingleToolbarInstance(
+        hazeState = hazeState,
+        onSearchQueryChanged = onSearchQueryChanged,
+        currentSearchQuery = currentSearchQuery,
+        lazyListState = lazyListState,
+        allowToolbarScrollBehavior = allowToolbarScrollBehavior,
+        selectedNoteIds = selectedNoteIds,
+        onClearSelection = onClearSelection,
+        isAddModeActive = isAddModeActive,
+        onAddModeToggle = onAddModeToggle,
+        isSearchActive = isSearchActive,
+        onIsSearchActiveChange = onIsSearchActiveChange,
+        isSearchEnabled = isSearchEnabled,
+        isFabEnabled = isFabEnabled,
+        fabOverride = fabOverride,
+        selectionContentOverride = selectionContentOverride,
+        addModeContentOverride = addModeContentOverride,
+        defaultContent = defaultContent,
+        contentOverride = contentOverride,
+        defaultColor = defaultColor,
+        isSelectedColor = isSelectedColor,
+        isAddModeColor = isAddModeColor,
+        docked = docked,
+        dockedWidth = dockedWidth,
+    )
+}
+
+@SuppressLint("ConfigurationScreenWidthHeight", "UseOfNonLambdaOffsetOverload")
+@OptIn(
+    FlowPreview::class,
+    ExperimentalHazeMaterialsApi::class
+)
+@Composable
+private fun VerticalSingleToolbarInstance(
+    hazeState: HazeState,
+    onSearchQueryChanged: (String) -> Unit,
+    currentSearchQuery: String,
+    lazyListState: LazyListState,
+    allowToolbarScrollBehavior: Boolean,
+    selectedNoteIds: List<Int>,
+    onClearSelection: () -> Unit,
+    isAddModeActive: Boolean,
+    onAddModeToggle: () -> Unit,
+    isSearchActive: Boolean,
+    onIsSearchActiveChange: (Boolean) -> Unit,
+    isSearchEnabled: Boolean,
+    isFabEnabled: Boolean,
+    fabOverride: @Composable (() -> Unit)?,
+    selectionContentOverride: @Composable (ColumnScope.() -> Unit)?,
+    addModeContentOverride: @Composable (ColumnScope.() -> Unit)?,
+    defaultContent: @Composable ((iconsAlphaDuration: Int, showActionIconsExceptSearch: Boolean) -> Unit)?,
+    contentOverride: @Composable (ColumnScope.() -> Unit)?,
+    defaultColor: Color,
+    isSelectedColor: Color,
+    isAddModeColor: Color,
+    docked: Boolean,
+    dockedWidth: Dp,
+) {
+    val isSelectionActive = selectedNoteIds.isNotEmpty()
+    val isTextEditorActive = contentOverride != null
+
+    var showActionIconsExceptSearch by rememberSaveable { mutableStateOf(true) }
+    var canShowTextField by rememberSaveable { mutableStateOf(false) }
+
+    val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    val iconsAlphaDuration = 500
+    val iconsClearanceTime = iconsAlphaDuration + 200
+    val textFieldExistenceDelay = iconsAlphaDuration - 100
+    val textFieldAnimationDuration = 500
+
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp.dp
+    val density = LocalDensity.current
+
+    val startPadding = LargestPadding
+    val endPadding = LargestPadding
+    val internalStartPadding = MediumPadding
+    val internalEndPadding = MediumPadding
+    val iconSize = IconSizeExtraLarge
+    val spaceBetweenToolbarAndFab = MediumSpacer
+    val fabSize = DefaultFABSize
+    val totalSubtractionInDp =
+        startPadding + internalStartPadding + iconSize + internalEndPadding + spaceBetweenToolbarAndFab + fabSize + endPadding
+
+    val maxTextFieldWidth = (screenWidthDp - totalSubtractionInDp).coerceIn(0.dp, 280.dp)
+
+    var toolbarVisibleState by rememberSaveable { mutableStateOf(true) }
+
+    LaunchedEffect(isSelectionActive) {
+        if (isSelectionActive && isSearchActive) {
+            onIsSearchActiveChange(false)
+            onSearchQueryChanged("")
+            keyboardController?.hide()
+        }
+    }
+
+    LaunchedEffect(
+        lazyListState,
+        isSearchActive,
+        allowToolbarScrollBehavior,
+        isSelectionActive,
+        isAddModeActive
+    ) {
+        if (isSearchActive || !allowToolbarScrollBehavior || isSelectionActive || isAddModeActive) {
+            toolbarVisibleState = true
+        } else {
+            var previousOffset = lazyListState.firstVisibleItemScrollOffset
+            var previousIndex = lazyListState.firstVisibleItemIndex
+
+            snapshotFlow {
+                ScrollState(
+                    firstVisibleItemIndex = lazyListState.firstVisibleItemIndex,
+                    firstVisibleItemScrollOffset = lazyListState.firstVisibleItemScrollOffset,
+                    isScrollInProgress = lazyListState.isScrollInProgress,
+                    canScrollForward = lazyListState.canScrollForward
+                )
+            }.distinctUntilChanged().map { currentState ->
+                val isAtBottom = !currentState.canScrollForward
+                val scrollingUp = currentState.firstVisibleItemIndex < previousIndex || currentState.firstVisibleItemIndex <= previousIndex && currentState.firstVisibleItemScrollOffset < previousOffset
+                previousOffset = currentState.firstVisibleItemScrollOffset
+                previousIndex = currentState.firstVisibleItemIndex
+
+                Triple(scrollingUp, currentState.isScrollInProgress, isAtBottom)
+            }.collect { (scrollingUp, isScrolling, isAtBottom) ->
+                if (isScrolling) {
+                    toolbarVisibleState = scrollingUp
+                }
+                if (isAtBottom) {
+                    toolbarVisibleState = true
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(lazyListState, allowToolbarScrollBehavior, isSearchActive) {
+        if (!isSearchActive && allowToolbarScrollBehavior) {
+            snapshotFlow { lazyListState.isScrollInProgress }.debounce(2000L.milliseconds)
+                .collect { isScrolling ->
+                    if (!isScrolling) {
+                        toolbarVisibleState = true
+                    }
+                }
+        }
+    }
+
+    LaunchedEffect(isSearchActive) {
+        if (isSearchActive) {
+            delay(iconsClearanceTime.toLong().milliseconds)
+            showActionIconsExceptSearch = false
+        } else {
+            showActionIconsExceptSearch = true
+        }
+    }
+
+    LaunchedEffect(isSearchActive) {
+        if (isSearchActive) {
+            delay(textFieldExistenceDelay.toLong().milliseconds)
+            canShowTextField = true
+            focusRequester.requestFocus()
+        } else {
+            canShowTextField = false
+        }
+    }
+
+    val bottomPaddingNavigationBar =
+        WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+    val imePaddingValues = WindowInsets.ime.asPaddingValues()
+    val imeHeight = imePaddingValues.calculateBottomPadding()
+
+    val targetBottomPadding = remember(imeHeight, bottomPaddingNavigationBar, imePaddingValues) {
+        val calculatedPadding = if (imeHeight > bottomPaddingNavigationBar) {
+            imeHeight + MediumLargePadding
+        } else {
+            max(bottomPaddingNavigationBar, imePaddingValues.calculateTopPadding()) + MediumLargePadding
+        }
+        max(calculatedPadding, NoPadding)
+    }
+
+    val animatedBottomPadding by animateDpAsState(
+        targetValue = targetBottomPadding,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessLow),
+        label = "bottomPaddingAnimation"
+    )
+
+    val toolbarHeight = ToolBarHeight
+    val toolbarOffsetTarget = if (toolbarVisibleState) NoSpacer else toolbarHeight + MediumLargePadding + ExtraBiggestSpacer
+
+    val animatedToolbarOffset by animateDpAsState(
+        targetValue = toolbarOffsetTarget,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessMediumLow),
+        label = "toolbarOffsetAnimation"
+    )
+
+    val textFieldFraction by animateFloatAsState(
+        targetValue = if (canShowTextField) 1F else 0F,
+        animationSpec = tween(durationMillis = textFieldAnimationDuration),
+        label = ""
+    )
+
+    val animatedToolbarColor by animateColorAsState(
+        targetValue = when {
+            isTextEditorActive -> defaultColor
+            isSelectionActive -> isSelectedColor
+            isAddModeActive -> isAddModeColor
+            else -> defaultColor
+        },
+        animationSpec = tween(durationMillis = 500),
+        label = "toolbarColor"
+    )
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // 1. Vertical actions container on the right side
+        Box(
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .then(
+                    if (docked) {
+                        Modifier
+                            .width(dockedWidth)
+                            .fillMaxHeight()
+                            .windowInsetsPadding(
+                                WindowInsets.safeDrawing.only(
+                                    WindowInsetsSides.End + WindowInsetsSides.Vertical
+                                )
+                            )
+                            .background(animatedToolbarColor)
+                    } else {
+                        Modifier
+                            .padding(end = LargestPadding)
+                            .offset(x = animatedToolbarOffset)
+                    }
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            val verticalContent = @Composable {
+                Crossfade(
+                    targetState = Triple(isSelectionActive, isAddModeActive, isTextEditorActive),
+                    label = "vertical-toolbar-crossfade"
+                ) { (selectionActive, addModeActive, textEditorActive) ->
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(MediumSpacer)
+                    ) {
+                        when {
+                            textEditorActive -> {
+                                contentOverride?.invoke(this)
+                            }
+                            selectionActive -> {
+                                selectionContentOverride?.invoke(this)
+                            }
+                            addModeActive -> {
+                                addModeContentOverride?.invoke(this)
+                            }
+                            else -> {
+                                AnimatedVisibility(
+                                    visible = showActionIconsExceptSearch,
+                                    enter = fadeIn(animationSpec = tween(durationMillis = 450)),
+                                    exit = fadeOut(animationSpec = tween(durationMillis = 100))
+                                ) {
+                                    defaultContent?.invoke(iconsAlphaDuration, showActionIconsExceptSearch)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (docked) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(vertical = MediumPadding),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    verticalContent()
+                }
+            } else {
+                VerticalFloatingToolbar(
+                    expanded = true,
+                    colors = FloatingToolbarDefaults.standardFloatingToolbarColors(animatedToolbarColor),
+                    contentPadding = FloatingToolbarDefaults.ContentPadding,
+                    modifier = Modifier.hazeEffect(state = hazeState, style = HazeMaterials.ultraThin())
+                ) {
+                    verticalContent()
+                }
+            }
+        }
+
+        // 2. Searchbar + FAB at the bottom (exact same position, animation, IME, focus, and FAB placement as horizontal bar)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(bottom = animatedBottomPadding.coerceAtLeast(NoPadding))
+                .offset(y = animatedToolbarOffset),
+            contentAlignment = Alignment.Center
+        ) {
+            val floatingBtnWidth by remember {
+                derivedStateOf {
+                    if (!isFabEnabled) ToolBarHeight.times(1 - textFieldFraction) else NoSpacing
+                }
+            }
+
+            HorizontalFloatingToolbar(
+                expanded = true,
+                floatingActionButton = {
+                    if (fabOverride != null) {
+                        fabOverride()
+                    } else {
+                        AnimatedVisibility(
+                            visible = isSearchActive || isFabEnabled,
+                            enter = slideInHorizontally { fullWidth -> -fullWidth / 2 } + fadeIn(animationSpec = tween(delayMillis = 600)),
+                            exit = slideOutHorizontally { fullWidth -> -fullWidth / 2 } + fadeOut()
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                val fabShape = FloatingActionButtonDefaults.shape
+                                val interactionSource = remember { MutableInteractionSource() }
+                                val isPressed by interactionSource.collectIsPressedAsState()
+                                val isHovered by interactionSource.collectIsHoveredAsState()
+
+                                val fabIconTint = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                    colorScheme.onPrimaryContainer
+                                } else {
+                                    colorScheme.onPrimary
+                                }
+                                val hazeThinColor = colorScheme.primary
+                                val smallElevationPx = with(density) { SmallerElevation.toPx() }
+                                val baseShadowAlpha = 0.7f
+                                val interactiveShadowAlpha = 0.9f
+                                val currentShadowRadius = if (isPressed || isHovered) smallElevationPx * 1.5f else smallElevationPx
+                                val currentShadowAlpha = if (isPressed || isHovered) interactiveShadowAlpha else baseShadowAlpha
+                                val currentShadowColor = colorScheme.scrim.copy(alpha = currentShadowAlpha)
+                                val currentYOffsetPx = with(density) { SmallestSpacing.toPx() }
+
+                                Canvas(
+                                    modifier = Modifier.size(
+                                        FloatingActionButtonDefaults.LargeIconSize + ExtraLargerSpacing + if (isPressed || isHovered) MediumSpacing else SmallMediumSpacing
+                                    )
+                                ) {
+                                    val outline = fabShape.createOutline(this.size, layoutDirection, density)
+                                    val composePath = Path().apply { addOutline(outline) }
+                                    drawIntoCanvas { canvas ->
+                                        val frameworkPaint = android.graphics.Paint().apply {
+                                            isAntiAlias = true
+                                            style = android.graphics.Paint.Style.STROKE
+                                            strokeWidth = with(this@Canvas) { 0.5.dp.toPx() }
+                                            color = Color.Transparent.toArgb()
+                                            setShadowLayer(
+                                                currentShadowRadius,
+                                                0f,
+                                                currentYOffsetPx,
+                                                currentShadowColor.toArgb()
+                                            )
+                                        }
+                                        canvas.nativeCanvas.drawPath(composePath.asAndroidPath(), frameworkPaint)
+                                    }
+                                }
+
+                                val rotationAngle = remember { Animatable(0f) }
+                                LaunchedEffect(isSearchActive, isSelectionActive, isAddModeActive) {
+                                    if (isSearchActive || isSelectionActive || isAddModeActive) {
+                                        delay((if (isSearchActive) 700 else 0).milliseconds)
+                                        rotationAngle.animateTo(
+                                            targetValue = 45f,
+                                            animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow)
+                                        )
+                                    } else {
+                                        rotationAngle.animateTo(
+                                            targetValue = 0f,
+                                            animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow)
+                                        )
+                                    }
+                                }
+
+                                FloatingActionButton(
+                                    onClick = {
+                                        when {
+                                            isSelectionActive -> onClearSelection()
+                                            isSearchActive -> {
+                                                onSearchQueryChanged("")
+                                                keyboardController?.hide()
+                                                onIsSearchActiveChange(false)
+                                            }
+                                            else -> onAddModeToggle()
+                                        }
+                                    },
+                                    containerColor = Color.Transparent,
+                                    shape = fabShape,
+                                    elevation = FloatingActionButtonDefaults.elevation(NoElevation, NoElevation, NoElevation, NoElevation),
+                                    interactionSource = interactionSource,
+                                    modifier = Modifier
+                                        .clip(FloatingActionButtonDefaults.shape)
+                                        .background(colorScheme.primary)
+                                        .hazeEffect(state = hazeState, style = HazeMaterials.ultraThin(hazeThinColor))
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Add,
+                                        contentDescription = if (isSearchActive || isSelectionActive) stringResource(R.string.cancel) else stringResource(R.string.add),
+                                        tint = fabIconTint,
+                                        modifier = Modifier.rotate(rotationAngle.value)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                },
+                colors = FloatingToolbarDefaults.standardFloatingToolbarColors(animatedToolbarColor),
+                contentPadding = FloatingToolbarDefaults.ContentPadding,
+                modifier = Modifier
+                    .height(toolbarHeight)
+                    .padding(start = floatingBtnWidth)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (isSearchEnabled) {
+                        IconButton(onClick = { onIsSearchActiveChange(true) }) {
+                            Icon(
+                                Icons.Filled.Search,
+                                contentDescription = stringResource(R.string.search),
+                                tint = colorScheme.onSurface
+                            )
+                        }
+                    }
+                    Box(contentAlignment = Alignment.Center) {
+                        XenonTextField(
+                            value = currentSearchQuery,
+                            enabled = canShowTextField,
+                            onValueChange = onSearchQueryChanged,
+                            modifier = Modifier
+                                .width(maxTextFieldWidth.times(textFieldFraction))
+                                .alpha(textFieldFraction * textFieldFraction)
+                                .focusRequester(focusRequester),
+                            placeholder = { Text(stringResource(R.string.search)) },
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                            keyboardActions = KeyboardActions(onSearch = { keyboardController?.hide() })
+                        )
                     }
                 }
             }
